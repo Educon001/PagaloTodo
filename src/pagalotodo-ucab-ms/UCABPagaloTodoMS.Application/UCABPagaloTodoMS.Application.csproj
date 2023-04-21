@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>0.2.0</Version>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Queries\GetBanksQuery.cs" />
+    <Compile Remove="Validators\AddTaxPayerValidator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.1.0" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UCABPagaloTodoMS.Core\UCABPagaloTodoMS.Core.csproj" />
+    <ProjectReference Include="..\UCABPagaloTodoMS.Infrastructure\UCABPagaloTodoMS.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\Queries\" />
+    <Folder Include="Mappers\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Requests\" />
+    <Folder Include="Responses\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
+</Project>

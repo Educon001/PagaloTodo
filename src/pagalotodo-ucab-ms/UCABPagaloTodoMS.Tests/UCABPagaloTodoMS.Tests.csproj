@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>0.2.0</Version>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="StressTests\**" />
+    <Compile Remove="UnitTests\BusinessLogic\**" />
+    <Compile Remove="UnitTests\ServicesBus\**" />
+    <Compile Remove="UnitTests\Services\**" />
+    <EmbeddedResource Remove="StressTests\**" />
+    <EmbeddedResource Remove="UnitTests\BusinessLogic\**" />
+    <EmbeddedResource Remove="UnitTests\ServicesBus\**" />
+    <EmbeddedResource Remove="UnitTests\Services\**" />
+    <None Remove="StressTests\**" />
+    <None Remove="UnitTests\BusinessLogic\**" />
+    <None Remove="UnitTests\ServicesBus\**" />
+    <None Remove="UnitTests\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnitTests\Controllers\StarterControllerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Bogus" Version="34.0.1" />
+
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+
+
+    <PackageReference Include="MockQueryable.Moq" Version="5.0.1" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="XunitXml.TestLogger" Version="3.0.70" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UCABPagaloTodoMS.Application\UCABPagaloTodoMS.Application.csproj" />
+    <ProjectReference Include="..\UCABPagaloTodoMS.Core\UCABPagaloTodoMS.Core.csproj" />
+    <ProjectReference Include="..\UCABPagaloTodoMS.Infrastructure\UCABPagaloTodoMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\UCABPagaloTodoMS\UCABPagaloTodoMS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UnitTestsApplication\Handlers\Commands\" />
+    <Folder Include="UnitTestsInfrastructure\Services\" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>0.2.0</Version>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repository\**" />
+    <Compile Remove="ServiceBus\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <EmbeddedResource Remove="ServiceBus\**" />
+    <None Remove="Repository\**" />
+    <None Remove="ServiceBus\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Database\Configuration\StarterConfiguration.cs" />
+    <Compile Remove="DependencyInjection.cs" />
+    <Compile Remove="Settings\AzureServiceBusSettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.3.0" />
+    <PackageReference Include="MassTransit.Analyzers" Version="7.3.0" />
+    <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="NASSA.Core.Utils" Version="1.0.0.2945" />
+    <PackageReference Include="NASSA.CoreModels" Version="0.1.0-116615" />
+    <PackageReference Include="NASSA.Documents.SDK" Version="1.0.0" />
+    <PackageReference Include="NASSA.Notification.Email" Version="1.9.0" />
+    <PackageReference Include="NASSA.Notification.Sendgrid" Version="1.8.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="6.0.0" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="106.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UCABPagaloTodoMS.Core\UCABPagaloTodoMS.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\Configuration\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+</Project>
