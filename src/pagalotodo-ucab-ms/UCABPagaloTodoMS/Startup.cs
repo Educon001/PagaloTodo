@@ -5,6 +5,8 @@ using UCABPagaloTodoMS.Infrastructure.Settings;
 using UCABPagaloTodoMS.Providers.Implementation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
+using MediatR;
+using UCABPagaloTodoMS.Application.Handlers.Queries;
 
 namespace UCABPagaloTodoMS;
 
@@ -47,6 +49,9 @@ public class Startup
         services.AddTransient<IUCABPagaloTodoDbContext, UCABPagaloTodoDbContext>();
 
         services.AddProviders(Configuration, Folder, _appSettings, environment);
+
+        services.AddMediatR(
+       typeof(ConsultarValoresQueryHandler).GetTypeInfo().Assembly);
     }
 
     public void Configure(IApplicationBuilder app)

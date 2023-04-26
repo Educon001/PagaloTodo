@@ -19,10 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
-    <PackageReference Include="NASSA.Common.Models" Version="0.46.3-106256" />
-    <PackageReference Include="NASSA.Core.Utils" Version="1.0.0.2945" />
-    <PackageReference Include="NASSA.CoreModels" Version="0.1.0-116615" />
-    <PackageReference Include="NASSA.Utils" Version="0.4.0-50560" />
   </ItemGroup>
 
   <ItemGroup>

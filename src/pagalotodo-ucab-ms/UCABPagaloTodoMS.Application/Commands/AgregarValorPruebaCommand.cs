@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using UCABPagaloTodoMS.Application.Requests;
+using UCABPagaloTodoMS.Application.Responses;
 
 namespace UCABPagaloTodoMS.Application.Commands
 {
-    public class AgregarValorPruebaCommand : IRequest<List<string>>
+    public class AgregarValorPruebaCommand : IRequest<Guid>
     {
-        public string valor { get; set; }
+        public ValoresRequest _request { get; set; }
 
-        public AgregarValorPruebaCommand(string request)
+        public AgregarValorPruebaCommand(ValoresRequest request)
         {
-            valor = request;
+            _request = request;
         }
     }
 }

@@ -25,11 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Queries\" />
-    <Folder Include="Mappers\" />
     <Folder Include="Queries\" />
-    <Folder Include="Requests\" />
-    <Folder Include="Responses\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

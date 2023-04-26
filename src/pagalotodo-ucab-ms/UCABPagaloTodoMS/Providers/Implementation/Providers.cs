@@ -1,13 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using UCABPagaloTodoMS.Infrastructure.Database;
 using UCABPagaloTodoMS.Infrastructure.Settings;
 using UCABPagaloTodoMS.Providers.Interface;
-using UCABPagaloTodoMS.Settings;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Npgsql;
-using SendGrid;
 
 namespace UCABPagaloTodoMS.Providers.Implementation
 {
@@ -33,8 +28,7 @@ namespace UCABPagaloTodoMS.Providers.Implementation
         public IServiceCollection AddControllers(IServiceCollection services, IConfiguration configuration,
             AppSettings appSettings)
         {
-            services.AddControllers()
-                .AddNewtonsoftJson();
+            services.AddControllers();
            
             return services;
         }
@@ -58,27 +52,8 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             string environment, bool isRequired)
         {
             string DBConnectionString = configuration["DBConnectionString"];
-            if (environment.Contains("Local"))
-            {
-                var azurePostgresServerSetting = configuration.GetSection("AzurePostgresServerSettings");
-                var azurePostgresServerSettings = azurePostgresServerSetting.Get<AzurePostgresServerSettings>();
-                var csb = new NpgsqlConnectionStringBuilder
-                {
-                    Host = azurePostgresServerSettings.Host,
-                    Database = azurePostgresServerSettings.Database,
-                    Port = 5432,
-                    Username = azurePostgresServerSettings.Username,
-                    SslMode = SslMode.Require,
-                    Passfile = azurePostgresServerSettings.Passfile
-                };
-                services.AddDbContext<UCABPagaloTodoDbContext>(
-                    options => options.UseNpgsql(csb.ConnectionString), ServiceLifetime.Transient
-                );
-            }
-            else
-            {
-                services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseNpgsql(DBConnectionString));
-            }
+            services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseNpgsql(DBConnectionString));
+           
 
             services.AddHealthChecks()
                 .AddDbContextCheck<UCABPagaloTodoDbContext>(null, null, new[] { "ready" });
@@ -92,13 +67,6 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             return services;
         }
 
-        public IServiceCollection AddSendGrid(IServiceCollection services, IConfiguration configuration,
-            AppSettings appSettings)
-        {
-            services.AddSingleton<ISendGridClient>(new SendGridClient(
-                new SendGridClientOptions { ApiKey = appSettings.SengridKey, HttpErrorAsException = true }));
-            return services;
-        }
 
         public IServiceCollection AddSwagger(IServiceCollection services, string versionNumber, AppSettings appSettings)
         {
@@ -110,14 +78,13 @@ namespace UCABPagaloTodoMS.Providers.Implementation
                         Title = "API Starter",
                         Version = versionNumber,
                         Description = "An API to perform The Starter Ops",
-                        TermsOfService = new Uri(appSettings.TermsOfService),
                         Contact = new OpenApiContact
                         {
-                            Name = "Nassa Lab",
+                            Name = "Ucab DS",
                             Email = appSettings.SharedMail,
-                            Url = new Uri(appSettings.AssaUrl)
+                            Url = new Uri(appSettings.UCABUrl)
                         },
-                        License = new OpenApiLicense { Name = "Assa Seguros", Url = new Uri(appSettings.AssaUrl) }
+                        License = new OpenApiLicense { Name = "UCAB", Url = new Uri(appSettings.UCABUrl) }
                     });
                 c.AddSecurityDefinition("Authorization",
                     new OpenApiSecurityScheme
