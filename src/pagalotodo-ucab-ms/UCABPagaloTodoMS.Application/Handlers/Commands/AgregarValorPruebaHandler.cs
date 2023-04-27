@@ -1,4 +1,4 @@
-﻿using UCABPagaloTodoMS.Application.Commands;
+﻿/*using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Core.Database;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -49,7 +49,7 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
                 var billingId = taxpayer.Id;
                 await _context.SaveEfContextChanges(_appSettings?.Value?.ApiUserName ?? string.Empty);
                 transaction.Commit();
-                return billingId;*/
+                return billingId;#1#
                 return Task.FromResult("".Split(",").ToList());
             }
             catch (Exception ex)
@@ -60,4 +60,4 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
             }
         }
     }
-}
+}*/
