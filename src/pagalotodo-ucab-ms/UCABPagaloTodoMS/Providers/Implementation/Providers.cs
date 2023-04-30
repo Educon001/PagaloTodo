@@ -52,7 +52,7 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             string environment, bool isRequired)
         {
             string DBConnectionString = configuration["DBConnectionString"];
-            services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseNpgsql(DBConnectionString));
+            services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseSqlServer(DBConnectionString));
            
 
             services.AddHealthChecks()
