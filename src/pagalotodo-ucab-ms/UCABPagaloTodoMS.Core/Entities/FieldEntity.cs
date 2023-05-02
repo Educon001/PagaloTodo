@@ -5,4 +5,5 @@ public class FieldEntity : BaseEntity
     public string? Name { get; set; }
     public uint? Length { get; set; }
     public string? Format { get; set; }
+    public ServiceEntity? Service { get; set; }
 }

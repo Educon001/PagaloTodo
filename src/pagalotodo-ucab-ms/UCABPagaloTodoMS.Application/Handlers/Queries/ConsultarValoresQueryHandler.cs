@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Responses;
 using Microsoft.EntityFrameworkCore;
+using UCABPagaloTodoMS.Application.Mappers;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries
 {
@@ -12,13 +13,15 @@ namespace UCABPagaloTodoMS.Application.Handlers.Queries
         private readonly IUCABPagaloTodoDbContext _dbContext;
         private readonly ILogger<ConsultarValoresQueryHandler> _logger;
 
-        public ConsultarValoresQueryHandler(IUCABPagaloTodoDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
+        public ConsultarValoresQueryHandler(IUCABPagaloTodoDbContext dbContext,
+            ILogger<ConsultarValoresQueryHandler> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
 
-        public Task<List<ValoresResponse>> Handle(ConsultarValoresPruebaQuery request, CancellationToken cancellationToken)
+        public Task<List<ValoresResponse>> Handle(ConsultarValoresPruebaQuery request,
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -45,12 +48,7 @@ namespace UCABPagaloTodoMS.Application.Handlers.Queries
             {
                 _logger.LogInformation("ConsultarValoresQueryHandler.HandleAsync");
 
-                var result = _dbContext.Valores.Select(c => new ValoresResponse()
-                {
-                    Id = c.Id,
-                    Nombre = c.Nombre + " " + c.Apellido,
-                    Identificacion = c.Identificacion,
-                });
+                var result = _dbContext.Valores.Select(c => ValoresMapper.MapEntityAResponse(c));
 
                 return await result.ToListAsync();
             }

@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace UCABPagaloTodoMS.Application.Requests;
 
-namespace UCABPagaloTodoMS.Core.Entities;
-
-public class UserEntity : BaseEntity
+public class UserRequest
 {
     public string? Username { get; set; }
     public string? PasswordHash { get; set; }
