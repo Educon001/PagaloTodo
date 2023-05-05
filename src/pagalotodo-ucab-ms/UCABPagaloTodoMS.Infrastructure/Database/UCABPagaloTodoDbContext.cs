@@ -15,13 +15,13 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     }
 
     public virtual DbSet<ValoresEntity> Valores { get; set; } = null!;
-    public virtual DbSet<AdminEntity> Admins { get; } = null!;
-    public virtual DbSet<ConsumerEntity> Consumers { get; } = null!;
-    public virtual DbSet<DebtorsEntity> Debtors { get; } = null!;
-    public virtual DbSet<FieldEntity> Fields { get; } = null!;
-    public virtual DbSet<PaymentEntity> Payments { get; } = null!;
-    public virtual DbSet<ProviderEntity> Providers { get; } = null!;
-    public virtual DbSet<ServiceEntity> Services { get; } = null!;
+    public virtual DbSet<AdminEntity> Admins { get; set; } = null!;
+    public virtual DbSet<ConsumerEntity> Consumers { get; set; } = null!;
+    public virtual DbSet<DebtorsEntity> Debtors { get; set; } = null!;
+    public virtual DbSet<FieldEntity> Fields { get; set; } = null!;
+    public virtual DbSet<PaymentEntity> Payments { get; set; } = null!;
+    public virtual DbSet<ProviderEntity> Providers { get; set; } = null!;
+    public virtual DbSet<ServiceEntity> Services { get; set; } = null!;
 
     public DbContext DbContext
     {
