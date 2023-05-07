@@ -12,7 +12,7 @@ using UCABPagaloTodoMS.Infrastructure.Database;
 namespace UCABPagaloTodoMS.Infrastructure.Migrations
 {
     [DbContext(typeof(UCABPagaloTodoDbContext))]
-    [Migration("20230427042157_InitialMigration")]
+    [Migration("20230505015149_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,14 +45,11 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -92,14 +89,11 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -133,7 +127,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Identifier")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ServiceEntityId")
+                    b.Property<Guid?>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Status")
@@ -147,7 +141,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceEntityId");
+                    b.HasIndex("ServiceId");
 
                     b.ToTable("Debtors");
                 });
@@ -173,7 +167,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ServiceEntityId")
+                    b.Property<Guid?>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -184,7 +178,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceEntityId");
+                    b.HasIndex("ServiceId");
 
                     b.ToTable("Fields");
                 });
@@ -258,7 +252,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Rif")
@@ -266,9 +260,6 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -359,22 +350,26 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
             modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.DebtorsEntity", b =>
                 {
-                    b.HasOne("UCABPagaloTodoMS.Core.Entities.ServiceEntity", null)
+                    b.HasOne("UCABPagaloTodoMS.Core.Entities.ServiceEntity", "Service")
                         .WithMany("ConfirmationList")
-                        .HasForeignKey("ServiceEntityId");
+                        .HasForeignKey("ServiceId");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.FieldEntity", b =>
                 {
-                    b.HasOne("UCABPagaloTodoMS.Core.Entities.ServiceEntity", null)
+                    b.HasOne("UCABPagaloTodoMS.Core.Entities.ServiceEntity", "Service")
                         .WithMany("ConciliationFormat")
-                        .HasForeignKey("ServiceEntityId");
+                        .HasForeignKey("ServiceId");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.PaymentEntity", b =>
                 {
                     b.HasOne("UCABPagaloTodoMS.Core.Entities.ConsumerEntity", "Consumer")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("ConsumerId");
 
                     b.HasOne("UCABPagaloTodoMS.Core.Entities.ServiceEntity", "Service")
@@ -393,6 +388,11 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         .HasForeignKey("ProviderId");
 
                     b.Navigation("Provider");
+                });
+
+            modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.ConsumerEntity", b =>
+                {
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.ProviderEntity", b =>
