@@ -98,7 +98,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna el objeto eliminado</returns>
+        /// <returns>Retorna el id del objeto eliminado</returns>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -114,7 +114,40 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        /// <summary>
+        ///     Endpoint que actualiza un prestador.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Actualizar prestador.
+        ///     ## Url
+        ///     PUT /providers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el objeto actualizado</returns>
+        [HttpPut("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProviderResponse>> UpdateProvider(Guid id, [FromBody]ProviderRequest provider)
+        {
+            _logger.LogInformation("Entrando al método que registra los prestadores");
+            try
+            {
+                var query = new UpdateProviderCommand(provider,id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
         }
 

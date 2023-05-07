@@ -45,7 +45,14 @@ public class DeleteProviderCommandHandler : IRequestHandler<DeleteProviderComman
             _logger.LogInformation("DeleteProviderCommandHandler.HandleAsync {Request}", request);
             var providerId = request.Request;
             var entity = _dbContext.Providers.Find(providerId);
-            _dbContext.Providers.Remove(entity);
+            if (entity!=null)
+            {
+                _dbContext.Providers.Remove(entity);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Object with key {providerId} not found");
+            }
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
             _logger.LogInformation("DeleteProviderCommandHandler.HandleAsync {Response}", providerId);
