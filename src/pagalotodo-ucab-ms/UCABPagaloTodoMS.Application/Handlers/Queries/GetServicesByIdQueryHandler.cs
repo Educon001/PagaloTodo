@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Mappers;
@@ -7,7 +8,7 @@ using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries;
 
-public class GetServicesByIdCommandHandler
+public class GetServicesByIdQueryHandler : IRequestHandler<GetServicesByIdQuery, ServiceResponse>
 {
     private readonly IUCABPagaloTodoDbContext _dbContext;
     private readonly ILogger<GetServicesQueryHandler> _logger;
@@ -19,7 +20,7 @@ public class GetServicesByIdCommandHandler
         _logger = logger;
     }
     
-    public Task<List<ServiceResponse>> Handle(GetServicesQuery request, CancellationToken cancellationToken)
+    public Task<ServiceResponse> Handle(GetServicesByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -28,10 +29,7 @@ public class GetServicesByIdCommandHandler
                 _logger.LogWarning("GetServicesQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                return HandleAsync();
-            }
+            return HandleAsync(request);
         }
         catch (Exception)
         {
@@ -40,13 +38,13 @@ public class GetServicesByIdCommandHandler
         }
     }
 
-    private async Task<List<ServiceResponse>> HandleAsync()
+    private async Task<ServiceResponse> HandleAsync(GetServicesByIdQuery request)
     {
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Select(c => ServiceMapper.MapEntityToResponse(c));
-            return await result.ToListAsync();
+            var result = _dbContext.Services.Where(c=>c.Id == request.Id).Select(c => ServiceMapper.MapEntityToResponse(c));
+            return (await result.FirstOrDefaultAsync())!;
         }
         catch (Exception ex)
         {

@@ -45,7 +45,40 @@ public class ServicesController : BaseController<ServicesController>
             _logger.LogInformation("Entrando al método que consulta los servicios");
             try
             {
-                var query = new ConsultarServiciosQuery();
+                var query = new GetServicesQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
+                return BadRequest(ex);
+            }
+        }
+        
+        /// <summary>
+        ///     Endpoint para la consulta de servicios por id
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Get servicios
+        ///     ## Url
+        ///     GET /services/{id}
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el servicio con el id que se paso.</returns>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(Guid id)
+        {
+            _logger.LogInformation("Entrando al método que consulta los servicios dado el id");
+            try
+            {
+                var query = new GetServicesByIdQuery(id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
