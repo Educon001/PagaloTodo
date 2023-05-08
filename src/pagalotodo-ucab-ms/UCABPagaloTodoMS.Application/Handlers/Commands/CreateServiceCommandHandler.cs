@@ -1,8 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
-using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
-using UCABPagaloTodoMS.Application.Handlers.Queries;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
 
@@ -21,22 +19,12 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
     
     public async Task<Guid> Handle(CreateServiceCommand request, CancellationToken cancellationToken)
     {
-        try
+        if (request.Request == null) 
         {
-            if (request.Request == null)
-            {
                 _logger.LogWarning("CreateServiceCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
-            }
-            else
-            {
-                return await HandleAsync(request);
-            }
         }
-        catch (Exception)
-        {
-            throw;
-        }
+        return await HandleAsync(request);
     }
     
     private async Task<Guid> HandleAsync(CreateServiceCommand request)
@@ -44,14 +32,18 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
         var transaccion = _dbContext.BeginTransaction();
         try
         {
-            _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Request}", request);
-            var entity = ServiceMapper.MapRequestToEntity(request.Request);
-            _dbContext.Services.Add(entity);
-            var id = entity.Id;
-            await _dbContext.SaveEfContextChanges("APP");
-            transaccion.Commit();
-            _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Response}", id);
-            return id;
+            if (_dbContext.Providers.Find(request.Request.Provider) is not null)
+            {
+                _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Request}", request);
+                var entity = ServiceMapper.MapRequestToEntity(request.Request, _dbContext);
+                _dbContext.Services.Add(entity);
+                var id = entity.Id;
+                await _dbContext.SaveEfContextChanges("APP");
+                transaccion.Commit();
+                _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Response}", id);
+                return id;
+            }
+            throw new Exception($"Proveedor con id: {request.Request.Provider} no se encuentra en la base de datos");
         }
         catch (Exception ex)
         {

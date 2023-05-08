@@ -35,7 +35,7 @@ public class DeleteServiceCommandHandler : IRequestHandler<DeleteServiceCommand,
             }
             else
             {
-                throw new NotImplementedException();
+                throw new Exception($"Servicio {entityId} no se encontro en la base de datos");
             }
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();

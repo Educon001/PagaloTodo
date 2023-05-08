@@ -1,5 +1,6 @@
 ﻿using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Application.Mappers;
@@ -21,7 +22,7 @@ public class PaymentMapper
         return response;
     }
 
-    public static PaymentEntity MapRequestToEntity(PaymentRequest request)
+    public static PaymentEntity MapRequestToEntity(PaymentRequest request, IUCABPagaloTodoDbContext dbContext)
     {
         var entity = new PaymentEntity()
         {
@@ -29,7 +30,7 @@ public class PaymentMapper
             Identifier = request.Identifier,
             OriginAccount = request.OriginAccount,
             PaymentStatus = request.PaymentStatus,
-            Service = request.Service!=null? ServiceMapper.MapRequestToEntity(request.Service) : null,
+            Service = request.Service!=null? ServiceMapper.MapRequestToEntity(request.Service ,dbContext) : null,
             Consumer = request.Consumer!=null? ConsumerMapper.MapRequestToEntity(request.Consumer) : null
         };
         return entity;

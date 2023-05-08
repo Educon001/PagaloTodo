@@ -1,5 +1,6 @@
 ﻿using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;
 
@@ -24,7 +25,7 @@ public class ServiceMapper
         return response;
     }
 
-    public static ServiceEntity MapRequestToEntity(ServiceRequest request)
+    public static ServiceEntity MapRequestToEntity(ServiceRequest request, IUCABPagaloTodoDbContext dbContext)
     {
         var entity = new ServiceEntity()
         {
@@ -32,7 +33,7 @@ public class ServiceMapper
             Name = request.Name,
             ServiceType = request.ServiceType,
             ServiceStatus = request.ServiceStatus,
-            Provider = request.Provider!=null? ProviderMapper.MapRequestToEntity(request.Provider) : null
+            Provider = dbContext.Providers.Find(request.Provider)
         };
         return entity;
     }

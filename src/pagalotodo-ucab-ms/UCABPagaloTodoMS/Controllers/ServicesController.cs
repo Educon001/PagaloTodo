@@ -1,10 +1,14 @@
+using FluentValidation;
+using GreenPipes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Base;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace UCABPagaloTodoMS.Controllers;
 
@@ -47,7 +51,7 @@ public class ServicesController : BaseController<ServicesController>
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex);
+                _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -71,16 +75,30 @@ public class ServicesController : BaseController<ServicesController>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Guid>> CreateService(ServiceRequest request)
         {
-            _logger.LogInformation("Entrando al método que registra los valores de prueba");
+            _logger.LogInformation("Entrando al método que registra los servicios");
             try
             {
+                AddServiceValidator validator = new AddServiceValidator();
+                ValidationResult result = validator.Validate(request);
+                if (!result.IsValid)
+                {
+                    validator.ValidateAndThrow(request);
+                }
                 var query = new CreateServiceCommand(request);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (ValidationException ex)
+            {
+                foreach (var error in ex.Errors)
+                {
+                    _logger.LogError($"{error.ErrorMessage}\n");
+                }
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex.Message);
                 throw;
             }
         }
@@ -106,14 +124,28 @@ public class ServicesController : BaseController<ServicesController>
         {
             _logger.LogInformation("Entrando al método que actualiza un servicio");
             try
-            {
+            {   
+                AddServiceValidator validator = new AddServiceValidator();
+                ValidationResult result = validator.Validate(request);
+                if (!result.IsValid)
+                {
+                    validator.ValidateAndThrow(request);
+                }
                 var query = new UpdateServiceCommand(request, id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (ValidationException ex)
+            {
+                foreach (var error in ex.Errors)
+                {
+                    _logger.LogError($"{error.ErrorMessage}\n");
+                }
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
                 throw;
             }
         }
@@ -146,7 +178,7 @@ public class ServicesController : BaseController<ServicesController>
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
                 throw;
             }
         }
