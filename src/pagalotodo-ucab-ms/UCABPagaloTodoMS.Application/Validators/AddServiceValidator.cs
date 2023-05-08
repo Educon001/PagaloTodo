@@ -10,13 +10,8 @@ namespace UCABPagaloTodoMS.Application.Validators;
 
 public class AddServiceValidator : AbstractValidator<ServiceRequest>
 {
-    private readonly IUCABPagaloTodoDbContext _dbContext;
-    
-    public AddServiceValidator(/*IUCABPagaloTodoDbContext dbContext*/)
+    public AddServiceValidator()
     {
-        // _dbContext = dbContext;
-        
-        // Rules for validation
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Nombre es requerido");
         RuleFor(x => x.Description)
@@ -31,12 +26,5 @@ public class AddServiceValidator : AbstractValidator<ServiceRequest>
             .NotNull().WithMessage("Debe especificar un tipo de servicio");
         RuleFor(x => x.ServiceType)
             .IsInEnum().WithMessage("Debe especificar un tipo de servicio valido");
-        // RuleFor(x => x.Request.Provider)
-        //     .Must(validateProviderExists).WithMessage("Proveedor no existe en la base de datos.");
-    }
-
-    private bool validateProviderExists(Guid providerGuid)
-    {
-        return _dbContext.Providers.Find(providerGuid) is not null;
     }
 }
