@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Mappers;
@@ -8,25 +7,25 @@ using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries;
 
-public class ConsultarServiciosQueryHandler : IRequestHandler<ConsultarServiciosQuery, List<ServiceResponse>>
+public class GetServicesByIdCommandHandler
 {
     private readonly IUCABPagaloTodoDbContext _dbContext;
-    private readonly ILogger<ConsultarServiciosQueryHandler> _logger;
+    private readonly ILogger<GetServicesQueryHandler> _logger;
 
-    public ConsultarServiciosQueryHandler(IUCABPagaloTodoDbContext dbContext,
-        ILogger<ConsultarServiciosQueryHandler> logger)
+    public GetServicesByIdQueryHandler(IUCABPagaloTodoDbContext dbContext,
+        ILogger<GetServicesQueryHandler> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
     }
     
-    public Task<List<ServiceResponse>> Handle(ConsultarServiciosQuery request, CancellationToken cancellationToken)
+    public Task<List<ServiceResponse>> Handle(GetServicesQuery request, CancellationToken cancellationToken)
     {
         try
         {
             if (request is null)
             {
-                _logger.LogWarning("ConsultarServiciosQueryHandler.Handle: Request nulo.");
+                _logger.LogWarning("GetServicesQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
             else
@@ -45,7 +44,7 @@ public class ConsultarServiciosQueryHandler : IRequestHandler<ConsultarServicios
     {
         try
         {
-            _logger.LogInformation("ConsultarServiciosQueryHandler.HandleAsync");
+            _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
             var result = _dbContext.Services.Select(c => ServiceMapper.MapEntityToResponse(c));
             return await result.ToListAsync();
         }

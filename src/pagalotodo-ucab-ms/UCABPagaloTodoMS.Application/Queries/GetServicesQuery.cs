@@ -3,7 +3,7 @@ using UCABPagaloTodoMS.Application.Responses;
 
 namespace UCABPagaloTodoMS.Application.Queries;
 
-public class ConsultarServiciosQuery : IRequest<List<ServiceResponse>>
+public class GetServicesQuery : IRequest<List<ServiceResponse>>
 {
-    
+
 }
