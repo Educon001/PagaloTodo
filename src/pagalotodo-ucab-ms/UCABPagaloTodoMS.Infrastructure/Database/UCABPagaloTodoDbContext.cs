@@ -39,6 +39,9 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.Entity<ProviderEntity>().HasIndex(e => e.Username).IsUnique();
+        modelBuilder.Entity<ConsumerEntity>().HasIndex(e => e.Username).IsUnique();
+        modelBuilder.Entity<AdminEntity>().HasIndex(e => e.Username).IsUnique();
     }
 
     virtual public void SetPropertyIsModifiedToFalse<TEntity, TProperty>(TEntity entity,
