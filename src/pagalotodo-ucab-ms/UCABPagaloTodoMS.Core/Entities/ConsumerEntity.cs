@@ -2,6 +2,6 @@
 
 public class ConsumerEntity : UserEntity
 {
-    public uint ConsumerId { get; set; }
+    public string? ConsumerId { get; set; }
     public List<PaymentEntity>? Payments { get; set; }
 }

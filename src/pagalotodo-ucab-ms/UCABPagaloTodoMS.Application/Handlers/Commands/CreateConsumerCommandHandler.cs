@@ -1,7 +1,9 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Mappers;
+using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands;
@@ -29,6 +31,8 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
             }
             else
             {
+                var validator = new ConsumerRequestValidator(_dbContext);
+                await validator.ValidateAndThrowAsync(request.Request, cancellationToken);
                 return await HandleAsync(request);
             }
         }

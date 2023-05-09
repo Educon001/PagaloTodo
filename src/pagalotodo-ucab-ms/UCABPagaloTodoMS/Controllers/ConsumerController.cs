@@ -71,7 +71,7 @@ public class ConsumersController : BaseController<ConsumersController>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Guid>> PostConsumer(ConsumerRequest valor)
         {
-            _logger.LogInformation("Entrando al método que registra los proveedores");
+            _logger.LogInformation("Entrando al método que registra los consumidores");
             try
             {
                 var query = new CreateConsumerCommand(valor);
@@ -81,8 +81,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un proveedor. Exception: " + ex);
-                return BadRequest(ex);
-            }
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            }
         }
 
 }

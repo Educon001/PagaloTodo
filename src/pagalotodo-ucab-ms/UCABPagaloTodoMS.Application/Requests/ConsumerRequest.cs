@@ -2,5 +2,5 @@
 
 public class ConsumerRequest : UserRequest
 {
-    public uint ConsumerId { get; set; }
+    public string? ConsumerId { get; set; }
 }
