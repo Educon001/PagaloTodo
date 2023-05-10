@@ -58,7 +58,7 @@ public class ConsumersController : BaseController<ConsumersController>
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Post proveedor.
+        ///     ### Post consumidor.
         ///     ## Url
         ///     POST /Consumers
         /// </remarks>
@@ -81,14 +81,14 @@ public class ConsumersController : BaseController<ConsumersController>
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar registrar un proveedor. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
                 return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            }
         }
 
         [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProviderResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
+        public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
         {
             _logger.LogInformation("Entrando al método que registra los prestadores");
             try
