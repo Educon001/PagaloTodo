@@ -104,6 +104,21 @@ public class ConsumersController : BaseController<ConsumersController>
             }
         }
         
+        
+        /// <summary>
+        ///     Endpoint que actualiza un consumidor.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Actualizar consumidor.
+        ///     ## Url
+        ///     PUT /consumers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el objeto actualizado</returns>
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -119,6 +134,39 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        /// <summary>
+        ///     Endpoint que elimina un consumer.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Eliminar consumer.
+        ///     ## Url
+        ///     DELETE /consumers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el id del objeto eliminado</returns>
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Guid>> DeleteConsumer(Guid id)
+        {
+            _logger.LogInformation("Entrando al método que elimina un prestador");
+            try
+            {
+                var query = new DeleteConsumerCommand(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
                 return BadRequest(ex.Message);
             }
         }
