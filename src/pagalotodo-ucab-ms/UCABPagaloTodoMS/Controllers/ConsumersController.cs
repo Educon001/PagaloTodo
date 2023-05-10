@@ -103,4 +103,23 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPut("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ConsumerResponse>> UpdateConsumer(Guid id, [FromBody]ConsumerRequest consumer)
+        {
+            _logger.LogInformation("Entrando al método que modifica los consumidores");
+            try
+            {
+                var query = new UpdateConsumerCommand(consumer,id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+        }
 }
