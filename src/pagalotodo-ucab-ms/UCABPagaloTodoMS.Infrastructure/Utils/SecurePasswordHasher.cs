@@ -23,8 +23,8 @@ public static class SecurePasswordHasher
     public static string Hash(string password, int iterations)
     {
         // Create salt
-        byte[] salt;
-        new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltSize]);
+        var salt = new byte[SaltSize];
+        RandomNumberGenerator.Create().GetBytes(salt);
 
         // Create hash
         var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);
@@ -39,7 +39,7 @@ public static class SecurePasswordHasher
         var base64Hash = Convert.ToBase64String(hashBytes);
 
         // Format hash with extra information
-        return string.Format("$MYHASH$V1${0}${1}", iterations, base64Hash);
+        return string.Format("$PagalTodo${0}${1}", iterations, base64Hash);
     }
 
     /// <summary>

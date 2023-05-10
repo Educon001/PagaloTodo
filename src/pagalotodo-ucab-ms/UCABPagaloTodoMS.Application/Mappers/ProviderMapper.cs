@@ -1,6 +1,7 @@
 ﻿using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Entities;
+using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Application.Mappers;
 
@@ -28,7 +29,7 @@ public class ProviderMapper
         var entity = new ProviderEntity()
         {
             Username = request.Username,
-            PasswordHash = request.PasswordHash,
+            PasswordHash = request.PasswordHash!=null? SecurePasswordHasher.Hash(request.PasswordHash) : null,
             Email = request.Email,
             Name = request.Name,
             LastName = request.LastName,
