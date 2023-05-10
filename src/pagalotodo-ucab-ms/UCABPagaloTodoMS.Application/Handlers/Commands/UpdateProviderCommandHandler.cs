@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Infrastructure.Utils;
 
@@ -31,6 +33,8 @@ public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderComman
             }
             else
             {
+                var validator = new ProviderRequestValidator();
+                validator.ValidateAndThrow(request.Request);
                 return await HandleAsync(request);
             }
         }
