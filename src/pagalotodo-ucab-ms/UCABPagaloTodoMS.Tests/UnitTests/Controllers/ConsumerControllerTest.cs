@@ -92,4 +92,65 @@ public class ConsumersControllerTest
         Assert.Contains("Test Exception", ex);
     }
     
+    /// <summary>
+    ///     Prueba de metodo Update para consumidores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void UpdateConsumers_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        var consumer = new ConsumerRequest() {Name = "Test Consumer"};
+        var expectedResponse = ConsumerMapper.MapEntityToResponse(ConsumerMapper.MapRequestToEntity(consumer));
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateConsumerCommand>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.UpdateConsumer(id,consumer);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<ConsumerResponse>(okResult.Value);
+        Assert.Equal(expectedResponse,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Update para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void UpdateConsumers_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var consumer = new ConsumerRequest() {Name = "Test Consumer"};
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateConsumerCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.UpdateConsumer(id,consumer);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Delete para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void DeleteConsumers_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteConsumerCommand>(), CancellationToken.None)).ReturnsAsync(id);
+        var response = await _controller.DeleteConsumer(id);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<Guid>(okResult.Value);
+        Assert.Equal(id,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Delete para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void DeleteConsumers_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteConsumerCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.DeleteConsumer(id);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
 }
