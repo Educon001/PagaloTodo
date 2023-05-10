@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -84,4 +85,22 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            }
         }
 
+        [HttpPatch("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProviderResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
+        {
+            _logger.LogInformation("Entrando al método que registra los prestadores");
+            try
+            {
+                var query = new UpdatePasswordCommand(consumer,id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+        }
 }

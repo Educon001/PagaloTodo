@@ -31,7 +31,7 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
             }
             else
             {
-                var validator = new ConsumerRequestValidator(_dbContext);
+                var validator = new ConsumerRequestValidator();
                 await validator.ValidateAndThrowAsync(request.Request, cancellationToken);
                 return await HandleAsync(request);
             }
