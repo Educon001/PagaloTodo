@@ -32,7 +32,7 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
             else
             {
                 var validator = new ConsumerRequestValidator();
-                await validator.ValidateAndThrowAsync(request.Request, cancellationToken);
+                validator.ValidateAndThrow(request.Request);
                 return await HandleAsync(request);
             }
         }

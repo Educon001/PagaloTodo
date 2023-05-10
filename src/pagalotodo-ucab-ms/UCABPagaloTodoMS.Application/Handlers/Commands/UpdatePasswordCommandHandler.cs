@@ -31,7 +31,9 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                 throw new ArgumentNullException(nameof(request));
             }
             else
-            {;
+            {
+                var validator = new UpdatePasswordRequestValidator();
+                validator.ValidateAndThrow(request.Request);
                 return await HandleAsync(request);
             }
         }
