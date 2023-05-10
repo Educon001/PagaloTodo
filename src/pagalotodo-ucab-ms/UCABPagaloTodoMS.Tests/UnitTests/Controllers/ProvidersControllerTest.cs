@@ -91,4 +91,65 @@ public class ProvidersControllerTest
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);
     }
+    
+    /// <summary>
+    ///     Prueba de metodo Delete para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void DeleteProviders_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProviderCommand>(), CancellationToken.None)).ReturnsAsync(id);
+        var response = await _controller.DeleteProvider(id);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<Guid>(okResult.Value);
+        Assert.Equal(id,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Delete para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void DeleteProviders_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProviderCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.DeleteProvider(id);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Update para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void UpdateProviders_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        var provider = new ProviderRequest() {Name = "Test Provider"};
+        var expectedResponse = ProviderMapper.MapEntityToResponse(ProviderMapper.MapRequestToEntity(provider));
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProviderCommand>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.UpdateProvider(id,provider);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<ProviderResponse>(okResult.Value);
+        Assert.Equal(expectedResponse,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo Update para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void UpdateProviders_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var provider = new ProviderRequest() {Name = "Test Provider"};
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProviderCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.UpdateProvider(id,provider);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
 }
