@@ -4,7 +4,7 @@ using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands;
+namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 
 public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand, Guid>
 {

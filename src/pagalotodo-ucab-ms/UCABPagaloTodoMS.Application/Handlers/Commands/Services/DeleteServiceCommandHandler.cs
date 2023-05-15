@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands;
+namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 
 public class DeleteServiceCommandHandler : IRequestHandler<DeleteServiceCommand, Guid>
 {

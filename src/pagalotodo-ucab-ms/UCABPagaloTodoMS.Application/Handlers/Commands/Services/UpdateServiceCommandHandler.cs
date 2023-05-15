@@ -5,7 +5,7 @@ using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands;
+namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 
 public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand, ServiceResponse>
 {
