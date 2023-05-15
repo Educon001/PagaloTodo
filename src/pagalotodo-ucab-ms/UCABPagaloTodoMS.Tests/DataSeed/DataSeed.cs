@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
- using MockQueryable.Moq;
+using MockQueryable.Moq;
 using Moq;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -11,6 +11,8 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
     {
         public static Mock<DbSet<ServiceEntity>> mockSetServiceEntity = new();
         public static Mock<DbSet<ProviderEntity>> mockSetProviderEntity = new();
+        public static Mock<DbSet<ConsumerEntity>> mockSetConsumerEntity = new ();
+
         public static void SetupDbContextData(this Mock<IUCABPagaloTodoDbContext> mockContext)
         {
             var providers = new List<ProviderEntity>()
@@ -92,6 +94,40 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     ConciliationFormat = new List<FieldEntity>()
                 }
             };
+            
+            var consumers = new List<ConsumerEntity>()
+            {
+                new ConsumerEntity()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
+                    Username = "prueba",
+                    PasswordHash = "Password",
+                    Email = "prueba@prueba.com",
+                    Name = "Jhonny",
+                    LastName = "Test",
+                    Status = true,
+                    ConsumerId = "V123456789"
+                },
+                new ConsumerEntity()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
+                    Username = "test",
+                    PasswordHash = "Password",
+                    Email = "test@test.com",
+                    Name = "Juan",
+                    LastName = "Parcial",
+                    Status = true,
+                    ConsumerId = "V123456789"                }
+            };
+            
+            mockSetConsumerEntity.As<IQueryable<ConsumerEntity>>().Setup(m => m.Provider).Returns(consumers.AsQueryable().Provider);
+            mockSetConsumerEntity.As<IQueryable<ConsumerEntity>>().Setup(m => m.Expression).Returns(consumers.AsQueryable().Expression);
+            mockSetConsumerEntity.As<IQueryable<ConsumerEntity>>().Setup(m => m.ElementType).Returns(consumers.AsQueryable().ElementType);
+            mockSetConsumerEntity.As<IQueryable<ConsumerEntity>>().Setup(m => m.GetEnumerator()).Returns(consumers.GetEnumerator());
+
+            mockContext.Setup(c => c.Consumers).Returns(mockSetConsumerEntity.Object);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.Provider).Returns(providers.AsQueryable().Provider);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.Expression).Returns(providers.AsQueryable().Expression);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.ElementType).Returns(providers.AsQueryable().ElementType);
