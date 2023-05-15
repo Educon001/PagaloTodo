@@ -27,10 +27,7 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
                     _logger.LogWarning("ConsultarValoresQueryHandler.Handle: Request nulo.");
                     throw new ArgumentNullException(nameof(request));
                 }
-                else
-                {
-                    return await HandleAsync(request);
-                }
+                return await HandleAsync(request); 
             }
             catch(Exception)
             {

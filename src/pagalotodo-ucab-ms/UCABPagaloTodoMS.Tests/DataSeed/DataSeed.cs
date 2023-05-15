@@ -1,18 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+ using MockQueryable.Moq;
 using Moq;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
+using UCABPagaloTodoMS.Core.Enums;
 
 namespace UCABPagaloTodoMS.Tests.DataSeed
 {
     public static class DataSeed
     {
-        public static Mock<DbSet<ProviderEntity>> mockSetProviderEntity = new Mock<DbSet<ProviderEntity>>();
+        public static Mock<DbSet<ServiceEntity>> mockSetServiceEntity = new();
+        public static Mock<DbSet<ProviderEntity>> mockSetProviderEntity = new();
         public static void SetupDbContextData(this Mock<IUCABPagaloTodoDbContext> mockContext)
         {
             var providers = new List<ProviderEntity>()
             {
-                new ProviderEntity()
+                new()
                 {
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
@@ -25,7 +28,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Rif = "V123456789",
                     AccountNumber = "012345678909876543212"
                 },
-                new ProviderEntity()
+                new()
                 {
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
@@ -40,12 +43,67 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 }
             };
             
+            var services = new List<ServiceEntity>()
+            {
+                new()
+                {
+                    Id = new Guid("12345678-1234-1234-1234-1234567890AC"),
+                    Name = "ferreLeon",
+                    Description = "Ferreteria a domicilio",
+                    ServiceStatus = ServiceStatusEnum.Inactivo,
+                    ServiceType = ServiceTypeEnum.Directo,
+                    Provider = new ProviderEntity()
+                    {
+                        Id = new Guid("12345678-1234-1234-1234-1234567890AB"),
+                        Username = "prueba",
+                        PasswordHash = "Password",
+                        Email = "prueba@prueba.com",
+                        Name = "Jesus Fermin",
+                        LastName = "Fermin",
+                        Status = true,
+                        Rif = "V12123311",
+                        AccountNumber = "012345678909876543212"
+                    },
+                    Payments = new List<PaymentEntity>(),
+                    ConfirmationList = new List<DebtorsEntity>(),
+                    ConciliationFormat = new List<FieldEntity>()
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "directv Colombia",
+                    Description = "television satelital en toda latinoamerica",
+                    ServiceStatus = ServiceStatusEnum.Activo,
+                    ServiceType = ServiceTypeEnum.Directo,
+                    Provider = new ProviderEntity()
+                    {
+                        Id = Guid.NewGuid(),
+                        Username = "provider1",
+                        PasswordHash = "provider1212",
+                        Email = "probandoshit@outlook.com",
+                        Name = "Fernando",
+                        LastName = "Delgado",
+                        Status = true,
+                        Rif = "V12123313",
+                        AccountNumber = "012345678909876041912"
+                    },
+                    Payments = new List<PaymentEntity>(),
+                    ConfirmationList = new List<DebtorsEntity>(),
+                    ConciliationFormat = new List<FieldEntity>()
+                }
+            };
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.Provider).Returns(providers.AsQueryable().Provider);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.Expression).Returns(providers.AsQueryable().Expression);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.ElementType).Returns(providers.AsQueryable().ElementType);
             mockSetProviderEntity.As<IQueryable<ProviderEntity>>().Setup(m => m.GetEnumerator()).Returns(providers.GetEnumerator());
-
+            mockSetServiceEntity.As<IQueryable<ServiceEntity>>().Setup(m => m.Expression)
+                .Returns(services.AsQueryable().Expression);
+            mockSetServiceEntity.As<IQueryable<ServiceEntity>>().Setup(m => m.ElementType)
+                .Returns(services.AsQueryable().ElementType);
+            mockSetServiceEntity.As<IQueryable<ServiceEntity>>().Setup(m => m.GetEnumerator())
+                .Returns(services.GetEnumerator());
             mockContext.Setup(c => c.Providers).Returns(mockSetProviderEntity.Object);
+            mockContext.Setup(c => c.Services).Returns(services.AsQueryable().BuildMockDbSet().Object);
         }
     }
 }

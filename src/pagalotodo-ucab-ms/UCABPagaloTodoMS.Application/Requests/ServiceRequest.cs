@@ -8,5 +8,5 @@ public class ServiceRequest
     public string? Description { get; set; }
     public ServiceStatusEnum ServiceStatus { get; set; }
     public ServiceTypeEnum ServiceType { get; set; }
-    public ProviderRequest? Provider { get; set; }
+    public Guid Provider { get; set; }
 }

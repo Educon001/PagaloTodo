@@ -19,8 +19,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -42,8 +41,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -66,8 +64,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -129,7 +126,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     Identifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Amount = table.Column<float>(type: "real", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true),
-                    ServiceEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -139,8 +136,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Debtors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Debtors_Services_ServiceEntityId",
-                        column: x => x.ServiceEntityId,
+                        name: "FK_Debtors_Services_ServiceId",
+                        column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id");
                 });
@@ -153,7 +150,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Length = table.Column<long>(type: "bigint", nullable: true),
                     Format = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServiceEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttrReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -163,8 +162,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Fields", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Fields_Services_ServiceEntityId",
-                        column: x => x.ServiceEntityId,
+                        name: "FK_Fields_Services_ServiceId",
+                        column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id");
                 });
@@ -201,14 +200,14 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Debtors_ServiceEntityId",
+                name: "IX_Debtors_ServiceId",
                 table: "Debtors",
-                column: "ServiceEntityId");
+                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fields_ServiceEntityId",
+                name: "IX_Fields_ServiceId",
                 table: "Fields",
-                column: "ServiceEntityId");
+                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_ConsumerId",
