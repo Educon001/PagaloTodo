@@ -1,4 +1,5 @@
-﻿using UCABPagaloTodoMS.Application.Requests;
+﻿using Microsoft.EntityFrameworkCore;
+using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -10,6 +11,11 @@ public class ServiceMapper
 {
     public static ServiceResponse MapEntityToResponse(ServiceEntity entity)
     {
+        // List<FieldResponse>? conciliationList = new List<FieldResponse>()!;
+        // foreach (var fEntity in entity.ConciliationFormat!)
+        // {
+        //     conciliationList.Add(FieldMapper.MapEntityToResponse(fEntity));
+        // }
         var response = new ServiceResponse()
         {
             Id = entity.Id,
@@ -27,8 +33,7 @@ public class ServiceMapper
 
     public static ServiceEntity MapRequestToEntity(ServiceRequest request, IUCABPagaloTodoDbContext dbContext)
     {
-        var entity = new ServiceEntity()
-        {
+        ServiceEntity entity = new(){
             Description = request.Description,
             Name = request.Name,
             ServiceType = request.ServiceType,

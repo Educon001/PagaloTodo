@@ -41,14 +41,14 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
                 entity.ServiceStatus = request.Request.ServiceStatus;
                 entity.ServiceType = request.Request.ServiceType;
                 _dbContext.Services.Update(entity);
+                await _dbContext.SaveEfContextChanges("APP");
+                transaccion.Commit();
+                _logger.LogInformation("UpdateServiceCommandHandler.HandleAsync {Response}", entity.Id);
             }
             else
             {
                 throw new NotImplementedException();
             }
-            await _dbContext.SaveEfContextChanges("APP");
-            transaccion.Commit();
-            _logger.LogInformation("UpdateServiceCommandHandler.HandleAsync {Response}", entity.Id);
             return ServiceMapper.MapEntityToResponse(entity);
         }
         catch (Exception ex)

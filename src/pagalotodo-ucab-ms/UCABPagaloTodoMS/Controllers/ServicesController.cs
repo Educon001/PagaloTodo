@@ -2,12 +2,16 @@ using FluentValidation;
 using GreenPipes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Amqp.Serialization;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Debtors;
+using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Base;
+using UCABPagaloTodoMS.Core.Enums;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace UCABPagaloTodoMS.Controllers;
@@ -47,6 +51,27 @@ public class ServicesController : BaseController<ServicesController>
             {
                 var query = new GetServicesQuery();
                 var response = await _mediator.Send(query);
+                if (response is not null)
+                {
+                    foreach (var serviceResponse in response)
+                    {
+                        //lista fields
+                        var fieldsQuery = new GetFieldsByServiceIdQuery(serviceResponse.Id);
+                        var responseField = await _mediator.Send(fieldsQuery);
+                        serviceResponse.ConciliationFormat = responseField;
+                        //lista pagos
+                        var paymentsQuery = new GetPaymentsByServiceIdQuery(serviceResponse.Id);
+                        var responsePayments = await _mediator.Send(paymentsQuery);
+                        serviceResponse.Payments = responsePayments;
+                        //lista debtors
+                        if (serviceResponse.ServiceType.Equals(ServiceTypeEnum.Directo))
+                        {
+                            var debtorsQuery = new GetDebtorsByServiceIdQuery(serviceResponse.Id);
+                            var responseDebtors = await _mediator.Send(debtorsQuery);
+                            serviceResponse.ConfirmationList = responseDebtors;
+                        }
+                    }
+                }
                 return Ok(response);
             }
             catch (Exception ex)
@@ -78,13 +103,19 @@ public class ServicesController : BaseController<ServicesController>
             _logger.LogInformation("Entrando al método que consulta los servicios dado el id");
             try
             {
-                var query = new GetServicesByIdQuery(id);
+                var query = new GetServiceByIdQuery(id);
                 var response = await _mediator.Send(query);
+                if (response is not null)
+                {
+                    var fieldsQuery = new GetFieldsByServiceIdQuery(response.Id);
+                    var responseField = await _mediator.Send(fieldsQuery);
+                    response.ConciliationFormat = responseField;
+                }
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
+                _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -96,7 +127,7 @@ public class ServicesController : BaseController<ServicesController>
         ///     ## Description
         ///     ### Post registra servicio.
         ///     ## Url
-        ///     POST /servicio
+        ///     POST /services
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
@@ -132,10 +163,11 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
+               
         /// <summary>
         ///     Endpoint que actualiza un servicio.
         /// </summary>
@@ -143,13 +175,13 @@ public class ServicesController : BaseController<ServicesController>
         ///     ## Description
         ///     ### Patch actualiza un servicio.
         ///     ## Url
-        ///     PATCH /servicio
+        ///     PATCH /services/{id}
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna el id del registro modificado.</returns>
+        /// <returns>Retorna el regisrto modificado.</returns>
         [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -179,18 +211,18 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         /// <summary>
-        ///     Endpoint que actualiza un servicio.
+        ///     Endpoint que elimina un servicio.
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Patch actualiza un servicio.
+        ///     ### Delete elimina un servicio.
         ///     ## Url
-        ///     PATCH /servicio
+        ///     DELETE /services/{id}
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
@@ -202,7 +234,7 @@ public class ServicesController : BaseController<ServicesController>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Guid>> DeleteService(Guid id)
         {
-            _logger.LogInformation("Entrando al método que actualiza un servicio");
+            _logger.LogInformation("Entrando al método que elimina un servicio");
             try
             {
                 var query = new DeleteServiceCommand(id);
@@ -211,8 +243,107 @@ public class ServicesController : BaseController<ServicesController>
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
+                _logger.LogError("Ocurrio un error al intentar eliminar un servicio. Exception: " + ex.Message);
+                return BadRequest(ex);
+            }
+        }
+        
+        /// <summary>
+        ///     Endpoint que actualiza los campos de un servicio.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Patch actualiza los campos de un servicio.
+        ///     ## Url
+        ///     PATCH /services/{id}/fields
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la lista de campos modificados.</returns>
+        [HttpPatch("fields/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<FieldResponse>>> UpdateField([FromBody] FieldRequest request, Guid id)
+        {
+            _logger.LogInformation("Entrando al método que actualiza los campos de un servicio");
+            var responseList = new List<Object>();
+            try
+            {   
+                FieldValidator validator = new FieldValidator();
+                validator.ValidateAndThrow(request); 
+                var query = new UpdateFieldCommand(request, id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (ValidationException ex)
+            {
+                foreach (var error in ex.Errors)
+                {
+                    _logger.LogError($"{error.ErrorMessage}\n");
+                }
                 throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " + ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
+
+        /// <summary>
+        ///     Endpoint que registra un formato de archivo de conciliacion
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Post registra campos de archivo de conciliacion.
+        ///     ## Url
+        ///     POST /format
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la lista de los ids de los campo .</returns>
+        [HttpPost("format")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<Guid>>> CreateFormat(List<FieldRequest> fieldsRequests)
+        {
+            _logger.LogInformation("Entrando al método que registra el formato de conciliacion dado un servicio");
+            try
+            {
+                FieldValidator validator = new FieldValidator();
+                foreach (var fieldRequest in fieldsRequests)
+                {
+                    validator.ValidateAndThrow(fieldRequest);
+                }
+
+                List<Guid> responsesList = new();
+                foreach (var fieldRequest in fieldsRequests)
+                {
+                    var query = new CreateFieldCommand(fieldRequest);
+                    responsesList.Add((await _mediator.Send(query)));
+                }
+
+                return Ok(responsesList);
+            }
+            catch (ValidationException ex)
+            {
+                foreach (var error in ex.Errors)
+                {
+                    _logger.LogError($"{error.ErrorMessage}\n");
+                }
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un campo. Exception: " + ex.Message);
+                return BadRequest(ex);
             }
         }
     }
+    

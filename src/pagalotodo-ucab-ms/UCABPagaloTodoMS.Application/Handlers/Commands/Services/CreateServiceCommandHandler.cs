@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
+using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 
@@ -37,9 +38,21 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
                 _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Request}", request);
                 var entity = ServiceMapper.MapRequestToEntity(request.Request, _dbContext);
                 _dbContext.Services.Add(entity);
-                var id = entity.Id;
                 await _dbContext.SaveEfContextChanges("APP");
                 transaccion.Commit();
+                var fieldEntity = new FieldEntity()
+                {
+                    Name = "Id Pago",
+                    Length = 36,
+                    AttrReference = "Payment.Id",
+                    Format = "",
+                    Service = entity,
+                    Type = "string"
+                };
+                _dbContext.Fields.Add(fieldEntity);
+                await _dbContext.SaveEfContextChanges("APP");
+                transaccion.Commit();
+                var id = entity.Id; ;
                 _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Response}", id);
                 return id;
             }

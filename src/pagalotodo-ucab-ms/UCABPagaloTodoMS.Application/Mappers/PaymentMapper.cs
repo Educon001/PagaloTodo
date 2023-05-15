@@ -1,4 +1,5 @@
-﻿using UCABPagaloTodoMS.Application.Requests;
+﻿
+using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -16,7 +17,7 @@ public class PaymentMapper
             Identifier = entity.Identifier,
             OriginAccount = entity.OriginAccount,
             PaymentStatus = entity.PaymentStatus,
-            Service = entity.Service!=null? ServiceMapper.MapEntityToResponse(entity.Service) : null,
+            Service = null,
             Consumer = entity.Consumer!=null? ConsumerMapper.MapEntityToResponse(entity.Consumer) : null
         };
         return response;

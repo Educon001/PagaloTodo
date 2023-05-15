@@ -51,7 +51,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error ServicesQueryHandler.HandleAsync. {Mensaje}", ex.Message);
+            _logger.LogError(ex, "Error GetServicesQueryHandler.HandleAsync. {Mensaje}", ex.Message);
             throw;
         }
     }

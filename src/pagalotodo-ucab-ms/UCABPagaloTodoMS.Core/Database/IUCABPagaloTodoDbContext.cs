@@ -5,14 +5,14 @@ namespace UCABPagaloTodoMS.Core.Database
 {
     public interface IUCABPagaloTodoDbContext
     {
-        DbSet<ValoresEntity> Valores { get; }
-        DbSet<AdminEntity> Admins { get; }
-        DbSet<ConsumerEntity> Consumers { get; }
-        DbSet<DebtorsEntity> Debtors { get; }
-        DbSet<FieldEntity> Fields { get; }
-        DbSet<PaymentEntity> Payments { get; }
-        DbSet<ProviderEntity> Providers { get; }
-        DbSet<ServiceEntity> Services { get; }
+        DbSet<ValoresEntity> Valores { get; set; }
+        DbSet<AdminEntity> Admins { get; set;  }
+        DbSet<ConsumerEntity> Consumers { get; set; }
+        DbSet<DebtorsEntity> Debtors { get; set;  }
+        DbSet<FieldEntity> Fields { get; set;  }
+        DbSet<PaymentEntity> Payments { get; set; }
+        DbSet<ProviderEntity> Providers { get; set; }
+        DbSet<ServiceEntity> Services { get; set;  }
 
         DbContext DbContext
         {

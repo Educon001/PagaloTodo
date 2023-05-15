@@ -5,5 +5,5 @@ namespace UCABPagaloTodoMS.Application.Queries;
 
 public class GetServicesQuery : IRequest<List<ServiceResponse>>
 {
-
+    
 }

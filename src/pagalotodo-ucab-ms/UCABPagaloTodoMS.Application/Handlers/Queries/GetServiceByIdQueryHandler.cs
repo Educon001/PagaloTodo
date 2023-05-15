@@ -8,13 +8,13 @@ using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries;
 
-public class GetServicesByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, ServiceResponse>
+public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, ServiceResponse>
 {
     private readonly IUCABPagaloTodoDbContext _dbContext;
-    private readonly ILogger<GetServicesQueryHandler> _logger;
+    private readonly ILogger<GetServiceByIdQueryHandler> _logger;
 
-    public GetServicesByIdQueryHandler(IUCABPagaloTodoDbContext dbContext,
-        ILogger<GetServicesQueryHandler> logger)
+    public GetServiceByIdQueryHandler(IUCABPagaloTodoDbContext dbContext,
+        ILogger<GetServiceByIdQueryHandler> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
