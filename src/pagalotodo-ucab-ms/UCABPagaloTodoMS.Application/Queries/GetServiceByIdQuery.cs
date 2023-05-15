@@ -3,10 +3,10 @@ using UCABPagaloTodoMS.Application.Responses;
 
 namespace UCABPagaloTodoMS.Application.Queries;
 
-public class GetServicesByIdQuery : IRequest<ServiceResponse>
+public class GetServiceByIdQuery : IRequest<ServiceResponse>
 {
     public Guid? Id { get; set; }
-    public GetServicesByIdQuery(Guid id)
+    public GetServiceByIdQuery(Guid id)
     {
         Id = id;
     }

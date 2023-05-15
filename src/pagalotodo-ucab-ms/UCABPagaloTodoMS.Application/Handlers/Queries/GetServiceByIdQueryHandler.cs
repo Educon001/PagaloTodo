@@ -8,7 +8,7 @@ using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries;
 
-public class GetServicesByIdQueryHandler : IRequestHandler<GetServicesByIdQuery, ServiceResponse>
+public class GetServicesByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, ServiceResponse>
 {
     private readonly IUCABPagaloTodoDbContext _dbContext;
     private readonly ILogger<GetServicesQueryHandler> _logger;
@@ -20,7 +20,7 @@ public class GetServicesByIdQueryHandler : IRequestHandler<GetServicesByIdQuery,
         _logger = logger;
     }
     
-    public Task<ServiceResponse> Handle(GetServicesByIdQuery request, CancellationToken cancellationToken)
+    public Task<ServiceResponse> Handle(GetServiceByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -38,7 +38,7 @@ public class GetServicesByIdQueryHandler : IRequestHandler<GetServicesByIdQuery,
         }
     }
 
-    private async Task<ServiceResponse> HandleAsync(GetServicesByIdQuery request)
+    private async Task<ServiceResponse> HandleAsync(GetServiceByIdQuery request)
     {
         try
         {
