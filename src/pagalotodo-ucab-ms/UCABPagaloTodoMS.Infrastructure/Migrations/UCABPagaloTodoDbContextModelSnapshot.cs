@@ -37,6 +37,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -84,6 +87,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -133,6 +139,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Identifier")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
@@ -169,6 +178,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.Property<string>("Format")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<long?>("Length")
                         .HasColumnType("bigint");
@@ -216,6 +228,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Identifier")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OriginAccount")
                         .HasColumnType("nvarchar(max)");
 
@@ -257,6 +272,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -306,6 +324,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -349,6 +370,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.Property<string>("Identificacion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");

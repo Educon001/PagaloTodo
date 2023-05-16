@@ -72,6 +72,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
             {
                 ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
                 ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
+                ((BaseEntity) entityEntry.Entity).IsDeleted = false;
             }
 
             if (entityEntry.State == EntityState.Modified)
@@ -80,6 +81,12 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
                 Entry((BaseEntity)entityEntry.Entity).Property(x => x.CreatedAt).IsModified = false;
                 Entry((BaseEntity)entityEntry.Entity).Property(x => x.CreatedBy).IsModified = false;
             }
+
+            if (entityEntry.State == EntityState.Deleted)
+            {
+                entityEntry.State = EntityState.Modified;
+                ((BaseEntity) entityEntry.Entity).IsDeleted = true;
+            }
         }
 
         return await base.SaveChangesAsync(cancellationToken);
@@ -87,7 +94,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 
     public async Task<int> SaveChangesAsync(string user, CancellationToken cancellationToken = default)
     {
-        var state = new List<EntityState> { EntityState.Added, EntityState.Modified };
+        var state = new List<EntityState> { EntityState.Added, EntityState.Modified, EntityState.Deleted };
 
         var entries = ChangeTracker.Entries().Where(e =>
             e.Entity is BaseEntity && state.Any(s => e.State == s)
@@ -105,6 +112,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
                 entity.CreatedBy = user;
                 Entry(entity).Property(x => x.UpdatedAt).IsModified = false;
                 Entry(entity).Property(x => x.UpdatedBy).IsModified = false;
+                entity.IsDeleted = false;
             }
 
             if (entityEntry.State == EntityState.Modified)
@@ -113,6 +121,16 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
                 entity.UpdatedBy = user;
                 Entry(entity).Property(x => x.CreatedAt).IsModified = false;
                 Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+            }
+            
+            if (entityEntry.State == EntityState.Deleted)
+            {
+                entityEntry.State = EntityState.Modified;
+                entity.IsDeleted = true;
+                if (entity.GetType().IsSubclassOf(typeof(UserEntity)))
+                {
+                    ((UserEntity) entity).Username = null;   
+                }
             }
         }
 

@@ -46,7 +46,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Select(c => ServiceMapper.MapEntityToResponse(c));
+            var result = _dbContext.Services.Where(c=>c.IsDeleted==false).Select(c => ServiceMapper.MapEntityToResponse(c));
             return await result.ToListAsync();
         }
         catch (Exception ex)
