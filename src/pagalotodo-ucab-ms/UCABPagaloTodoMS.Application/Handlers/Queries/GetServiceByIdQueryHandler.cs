@@ -43,7 +43,7 @@ public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, S
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Where(c=>c.Id == request.Id && c.IsDeleted==false).Select(c => ServiceMapper.MapEntityToResponse(c));
+            var result = _dbContext.Services.Where(c=>c.Id == request.Id).Select(c => ServiceMapper.MapEntityToResponse(c));
             return (await result.FirstOrDefaultAsync())!;
         }
         catch (Exception ex)
