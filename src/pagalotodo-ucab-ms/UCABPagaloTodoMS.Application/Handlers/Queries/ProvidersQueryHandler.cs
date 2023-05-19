@@ -48,7 +48,7 @@ public class ProvidersQueryHandler : IRequestHandler<ProvidersQuery, List<Provid
         {
             _logger.LogInformation("ProvidersQueryHandler.HandleAsync");
 
-            var result = _dbContext.Providers.Where(c=>c.IsDeleted==false).Select(c => ProviderMapper.MapEntityToResponse(c));
+            var result = _dbContext.Providers.Select(c => ProviderMapper.MapEntityToResponse(c));
 
             return await result.ToListAsync();
         }

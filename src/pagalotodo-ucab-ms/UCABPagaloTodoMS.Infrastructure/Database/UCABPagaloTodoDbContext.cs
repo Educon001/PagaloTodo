@@ -42,6 +42,14 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         modelBuilder.Entity<ProviderEntity>().HasIndex(e => e.Username).IsUnique();
         modelBuilder.Entity<ConsumerEntity>().HasIndex(e => e.Username).IsUnique();
         modelBuilder.Entity<AdminEntity>().HasIndex(e => e.Username).IsUnique();
+        //IsDeleted Query Filter
+        modelBuilder.Entity<AdminEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<ConsumerEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<DebtorsEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<FieldEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<PaymentEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<ProviderEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<ServiceEntity>().HasQueryFilter(e => !e.IsDeleted);
     }
 
     virtual public void SetPropertyIsModifiedToFalse<TEntity, TProperty>(TEntity entity,

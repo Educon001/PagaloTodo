@@ -48,7 +48,7 @@ namespace UCABPagaloTodoMS.Application.Handlers.Queries
             {
                 _logger.LogInformation("ConsultarValoresQueryHandler.HandleAsync");
 
-                var result = _dbContext.Valores.Where(c=>c.IsDeleted==false).Select(c => ValoresMapper.MapEntityAResponse(c));
+                var result = _dbContext.Valores.Select(c => ValoresMapper.MapEntityAResponse(c));
 
                 return await result.ToListAsync();
             }
