@@ -1,8 +1,6 @@
 using FluentValidation;
-using GreenPipes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Amqp.Serialization;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Debtors;
@@ -143,22 +141,10 @@ public class ServicesController : BaseController<ServicesController>
             try
             {
                 AddServiceValidator validator = new AddServiceValidator();
-                ValidationResult result = validator.Validate(request);
-                if (!result.IsValid)
-                {
-                    validator.ValidateAndThrow(request);
-                }
+                validator.ValidateAndThrow(request);
                 var query = new CreateServiceCommand(request);
                 var response = await _mediator.Send(query);
                 return Ok(response);
-            }
-            catch (ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    _logger.LogError($"{error.ErrorMessage}\n");
-                }
-                throw;
             }
             catch (Exception ex)
             {
@@ -268,7 +254,6 @@ public class ServicesController : BaseController<ServicesController>
         public async Task<ActionResult<List<FieldResponse>>> UpdateField([FromBody] FieldRequest request, Guid id)
         {
             _logger.LogInformation("Entrando al método que actualiza los campos de un servicio");
-            var responseList = new List<Object>();
             try
             {   
                 FieldValidator validator = new FieldValidator();

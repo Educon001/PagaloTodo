@@ -39,11 +39,11 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
                 var entity = ServiceMapper.MapRequestToEntity(request.Request, _dbContext);
                 _dbContext.Services.Add(entity);
                 await _dbContext.SaveEfContextChanges("APP");
-                transaccion.Commit();
                 var fieldEntity = new FieldEntity()
                 {
                     Name = "Id Pago",
                     Length = 36,
+                    IsDeleted = false,
                     AttrReference = "Payment.Id",
                     Format = "",
                     Service = entity,
@@ -62,7 +62,7 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
         {
             _logger.LogError(ex, "Error CreateServiceCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw;
+            throw new Exception();
         }
     }
 }
