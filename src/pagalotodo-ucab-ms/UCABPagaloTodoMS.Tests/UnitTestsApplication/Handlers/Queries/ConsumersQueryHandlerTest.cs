@@ -9,17 +9,17 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
-public class ProvidersQueryHandlerTest
+public class ConsumersQueryHandlerTest
 {
-    private readonly ProvidersQueryHandler _handler;
-    private readonly Mock<ILogger<ProvidersQueryHandler>> _loggerMock;
+    private readonly ConsumersQueryHandler _handler;
+    private readonly Mock<ILogger<ConsumersQueryHandler>> _loggerMock;
     private readonly Mock<IUCABPagaloTodoDbContext> _mockContext;
 
-    public ProvidersQueryHandlerTest()
+    public ConsumersQueryHandlerTest()
     {
-        _loggerMock = new Mock<ILogger<ProvidersQueryHandler>>();
+        _loggerMock = new Mock<ILogger<ConsumersQueryHandler>>();
         _mockContext = new Mock<IUCABPagaloTodoDbContext>();
-        _handler = new ProvidersQueryHandler(_mockContext.Object, _loggerMock.Object);
+        _handler = new ConsumersQueryHandler(_mockContext.Object, _loggerMock.Object);
         DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
     
@@ -27,25 +27,24 @@ public class ProvidersQueryHandlerTest
     ///     Prueba de handler con respuesta Ok
     /// </summary>
     [Fact]
-    public async void ProvidersQueryHandle_Returns_List()
+    public async void ConsumersQueryHandle_Returns_List()
     {
-        var expectedResponse = _mockContext.Object.Providers.Select(p => ProviderMapper.MapEntityToResponse(p)).ToList();
-        var query = new ProvidersQuery();
+        var expectedResponse = _mockContext.Object.Consumers.Select(c => ConsumerMapper.MapEntityToResponse(c)).ToList();
+        var query = new ConsumersQuery();
         var response = await _handler.Handle(query,default);
-        Assert.IsType<List<ProviderResponse>>(response);
+        Assert.IsType<List<ConsumerResponse>>(response);
         Assert.Equal(expectedResponse.ToString(), response.ToString());
     }
-    
     
     /// <summary>
     ///     Prueba de handler con excepción en HandleAsync
     /// </summary>
     [Fact]
-    public async void ProvidersQueryHandle_HandleAsyncException()
+    public async void ConsumersQueryHandle_HandleAsyncException()
     {
         var expectedException = new Exception("Test Exception");
-        _mockContext.Setup(c => c.Providers).Throws(expectedException);
-        var query = new ProvidersQuery();
+        _mockContext.Setup(c => c.Consumers).Throws(expectedException);
+        var query = new ConsumersQuery();
         var result = await Assert.ThrowsAnyAsync<Exception>(()=>_handler.Handle(query, default));
         Assert.Equal(expectedException.Message,result.Message);
     }
@@ -54,7 +53,7 @@ public class ProvidersQueryHandlerTest
     ///     Prueba de handler con request nulo
     /// </summary>
     [Fact]
-    public async void ProvidersQueryHandle_ArgumentNullException()
+    public async void ConsumersQueryHandle_ArgumentNullException()
     {
         await Assert.ThrowsAsync<ArgumentNullException>(()=>_handler.Handle(null, default));
     }

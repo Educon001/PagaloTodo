@@ -30,10 +30,7 @@ public class ProvidersQueryHandler : IRequestHandler<ProvidersQuery, List<Provid
                 _logger.LogWarning("ProvidersQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                return HandleAsync();
-            }
+            return HandleAsync();
         }
         catch (Exception)
         {
