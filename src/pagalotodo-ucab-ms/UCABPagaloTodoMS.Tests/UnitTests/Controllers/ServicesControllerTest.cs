@@ -21,14 +21,13 @@ public class ServicesControllerTest
 {
     private readonly ServicesController _controller;
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly Mock<ILogger<ServicesController>> _loggerMock;
     private readonly Mock<IUCABPagaloTodoDbContext> _mockContext;
 
     public ServicesControllerTest()
     {
-        _loggerMock = new Mock<ILogger<ServicesController>>();
+        var loggerMock = new Mock<ILogger<ServicesController>>();
         _mediatorMock = new Mock<IMediator>();
-        _controller = new ServicesController(_loggerMock.Object, _mediatorMock.Object);
+        _controller = new ServicesController(loggerMock.Object, _mediatorMock.Object);
         _controller.ControllerContext = new ControllerContext();
         _controller.ControllerContext.HttpContext = new DefaultHttpContext();
         _controller.ControllerContext.ActionDescriptor = new ControllerActionDescriptor();
@@ -59,7 +58,6 @@ public class ServicesControllerTest
     [Fact]
     public async Task GetServices_Returns_Error()
     {
-        var expectedException = new Exception("New Exception");
         _mediatorMock.Setup(x => x.Send(It.IsAny<GetServicesQuery>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
         var result = await _controller.GetServices();
@@ -80,12 +78,9 @@ public class ServicesControllerTest
 
         var result = await _controller.GetServiceById(id);
         var response = Assert.IsType<OkObjectResult>(result.Result);
-
         //El tipo es de lista de ServiceResponse
         Assert.IsType<ServiceResponse>(response.Value);
-        //La respuesta es la esperada
         Assert.Equal(expectedResponse, response.Value);
-        //Status code = 200
         Assert.Equal(200, response.StatusCode);
         _mediatorMock.Verify();
     }
@@ -136,6 +131,7 @@ public class ServicesControllerTest
         var result = await _controller.CreateService(service);
         var response = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
         _mediatorMock.Verify();
     }
 
@@ -155,7 +151,6 @@ public class ServicesControllerTest
     [Fact]
     public async Task UpdateService_Returns_Ok()
     {
-        //TODO: Prueba tiene FALLA por null exception en el mapper
         Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
         ServiceRequest service = new(){   Name = "ferreLeon",
                 Description = "Ferreteria a domicilio", Provider =new Guid("12345678-1234-1234-1234-1234567890AB"), ServiceType = ServiceTypeEnum.Directo, ServiceStatus = ServiceStatusEnum.Inactivo};
@@ -166,6 +161,7 @@ public class ServicesControllerTest
         var result = await _controller.UpdateService(service, id);
         var response = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
         _mediatorMock.Verify();
     }
     
@@ -178,6 +174,95 @@ public class ServicesControllerTest
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateServiceCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
         var result = await _controller.UpdateService(service, id);
+        var response = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+
+    
+    [Fact]
+    public async Task CreateFormat_Returns_Ok()
+    {
+        List<FieldRequest> fieldRequests = new List<FieldRequest>
+        {
+            new()
+            {
+                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            },
+            new()
+            {
+                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            }
+        };
+
+        List<Guid> expectedResponse = new() {new Guid(new byte[16]), new Guid(new byte[16])};
+        _mediatorMock.Setup(m => m.Send(It.IsAny<List<CreateFieldCommand>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedResponse);
+        var result = await _controller.CreateFormat(fieldRequests);
+        var response = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+
+    [Fact]
+    public async Task CreateFormat_Returns_Error()
+    {
+        List<FieldRequest> fieldRequests = new List<FieldRequest>
+        {
+            new()
+            {
+                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            },
+            new()
+            {
+                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            }
+        };
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateFieldCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception());
+        var result = await _controller.CreateFormat(fieldRequests);
+        var response = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+
+    [Fact]
+    public async Task Update_Field_Returns_Ok()
+    {
+        Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
+        FieldRequest fieldRequest = new()
+        {
+            Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+            Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+        };
+        FieldResponse expectedResponse =
+            FieldMapper.MapEntityToResponse(FieldMapper.MapRequestToEntity(fieldRequest, _mockContext.Object)); 
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedResponse);
+        var result = await _controller.UpdateField(fieldRequest, id);
+        var response = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+    
+    [Fact]
+    public async Task Update_Field_Returns_Error()
+    {
+        Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
+        FieldRequest fieldRequest = new()
+        {
+            Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+            Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+        };
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception());
+        var result = await _controller.UpdateField(fieldRequest, id);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
         _mediatorMock.Verify();

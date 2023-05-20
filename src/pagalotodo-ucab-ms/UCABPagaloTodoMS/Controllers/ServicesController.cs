@@ -177,22 +177,10 @@ public class ServicesController : BaseController<ServicesController>
             try
             {   
                 AddServiceValidator validator = new AddServiceValidator();
-                ValidationResult result = validator.Validate(request);
-                if (!result.IsValid)
-                {
-                    validator.ValidateAndThrow(request);
-                }
+                validator.ValidateAndThrow(request);
                 var query = new UpdateServiceCommand(request, id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
-            }
-            catch (ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    _logger.LogError($"{error.ErrorMessage}\n");
-                }
-                throw;
             }
             catch (Exception ex)
             {
@@ -262,14 +250,6 @@ public class ServicesController : BaseController<ServicesController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    _logger.LogError($"{error.ErrorMessage}\n");
-                }
-                throw;
-            }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " + ex.Message);
@@ -305,29 +285,18 @@ public class ServicesController : BaseController<ServicesController>
                 {
                     validator.ValidateAndThrow(fieldRequest);
                 }
-
                 List<Guid> responsesList = new();
                 foreach (var fieldRequest in fieldsRequests)
                 {
                     var query = new CreateFieldCommand(fieldRequest);
                     responsesList.Add((await _mediator.Send(query)));
                 }
-
                 return Ok(responsesList);
-            }
-            catch (ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    _logger.LogError($"{error.ErrorMessage}\n");
-                }
-
-                throw;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un campo. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }
