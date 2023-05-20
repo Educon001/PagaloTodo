@@ -59,7 +59,7 @@ public static class SecurePasswordHasher
     /// <returns>Is supported?</returns>
     public static bool IsHashSupported(string hashString)
     {
-        return hashString.Contains("$MYHASH$V1$");
+        return hashString.Contains("$PagalTodo$");
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public static class SecurePasswordHasher
         }
 
         // Extract iteration and Base64 string
-        var splittedHashString = hashedPassword.Replace("$MYHASH$V1$", "").Split('$');
+        var splittedHashString = hashedPassword.Replace("$PagalTodo$", "").Split('$');
         var iterations = int.Parse(splittedHashString[0]);
         var base64Hash = splittedHashString[1];
 
