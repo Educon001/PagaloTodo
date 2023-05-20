@@ -21,7 +21,7 @@ public class DeleteProviderCommandHandler : IRequestHandler<DeleteProviderComman
     {
         try
         {
-            if (request.Request == null)
+            if (request.Request == Guid.Empty)
             {
                 _logger.LogWarning("DeleteProviderCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));

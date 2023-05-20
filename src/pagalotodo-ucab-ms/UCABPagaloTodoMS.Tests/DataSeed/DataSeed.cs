@@ -22,26 +22,26 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "prueba",
-                    PasswordHash = "Password",
+                    PasswordHash = "Password.",
                     Email = "prueba@prueba.com",
                     Name = "Jhonny",
                     LastName = "Test",
                     Status = true,
                     Rif = "V123456789",
-                    AccountNumber = "012345678909876543212"
+                    AccountNumber = "12345678909876543212"
                 },
                 new()
                 {
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "test",
-                    PasswordHash = "Password",
+                    PasswordHash = "Password!",
                     Email = "test@test.com",
                     Name = "Juan",
                     LastName = "Parcial",
                     Status = true,
                     Rif = "V123456729",
-                    AccountNumber = "012345578909876543212"
+                    AccountNumber = "09876543211234567890"
                 }
             };
             
@@ -138,7 +138,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 .Returns(services.AsQueryable().ElementType);
             mockSetServiceEntity.As<IQueryable<ServiceEntity>>().Setup(m => m.GetEnumerator())
                 .Returns(services.GetEnumerator());
-            mockContext.Setup(c => c.Providers).Returns(mockSetProviderEntity.Object);
+            mockContext.Setup(c => c.Providers).Returns(providers.AsQueryable().BuildMockDbSet().Object);
             mockContext.Setup(c => c.Services).Returns(services.AsQueryable().BuildMockDbSet().Object);
         }
     }
