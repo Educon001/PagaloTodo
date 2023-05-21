@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Infrastructure.Database;
 using UCABPagaloTodoMS.Infrastructure.Settings;
@@ -6,6 +7,8 @@ using UCABPagaloTodoMS.Providers.Implementation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
 using UCABPagaloTodoMS.Application.Handlers.Queries.Services;
 
@@ -50,7 +53,23 @@ public class Startup
         services.AddTransient<IUCABPagaloTodoDbContext, UCABPagaloTodoDbContext>();
         services.AddProviders(Configuration, Folder, _appSettings, environment);
         services.AddMediatR(
-            typeof(GetServicesQueryHandler).GetTypeInfo().Assembly);
+                typeof(GetServicesQueryHandler).GetTypeInfo().Assembly);
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "https://example.com",
+                    ValidAudience = "https://example.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0"))
+                };
+            });
+        
     }
 
     public void Configure(IApplicationBuilder app)
@@ -60,6 +79,7 @@ public class Startup
 
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseAuthentication();
 
         if (_appSettings.RequireSwagger)
         {
@@ -93,5 +113,8 @@ public class Startup
                 endpoints.MapHealthChecks("/health/live", new HealthCheckOptions { Predicate = _ => false });
             });
         }
+        
+        
+        
     }
 }
