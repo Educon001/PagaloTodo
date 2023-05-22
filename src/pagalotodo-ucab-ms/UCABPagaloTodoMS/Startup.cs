@@ -60,15 +60,24 @@ public class Startup
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://example.com",
-                    ValidAudience = "https://example.com",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                 };
             });
+        
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminPolicy", policy =>
+                policy.RequireClaim("UserType","admin"));
+        
+            options.AddPolicy("ConsumerPolicy", policy =>
+                policy.RequireClaim("UserType", "consumer"));
+        
+            options.AddPolicy("ProviderPolicy", policy =>
+                policy.RequireClaim("UserType", "provider"));
+        });
         
     }
 
@@ -80,6 +89,8 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
+        app.UseAuthorization();
+
 
         if (_appSettings.RequireSwagger)
         {

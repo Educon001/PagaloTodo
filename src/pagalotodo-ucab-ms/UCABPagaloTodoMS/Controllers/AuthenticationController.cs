@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,12 @@ namespace UCABPagaloTodoMS.Controllers;
 public class AuthenticationController : BaseController<AuthenticationController>
 {
     private readonly IMediator _mediator;
+    private IConfiguration config;
 
-    public AuthenticationController(ILogger<AuthenticationController> logger, IMediator mediator) : base(logger)
+    public AuthenticationController(ILogger<AuthenticationController> logger, IMediator mediator, IConfiguration config) : base(logger)
     {
         _mediator = mediator;
+        this.config = config;
     }
 
     [HttpPost]
@@ -35,7 +38,7 @@ public class AuthenticationController : BaseController<AuthenticationController>
                 return BadRequest();
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+            /*var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -48,9 +51,11 @@ public class AuthenticationController : BaseController<AuthenticationController>
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);*/
 
-            return Ok(new LoginResponse { UserType = result.UserType, Id = result.Id, Token = tokenString });
+            string jwtToken = GenerateToken(result);
+            
+            return Ok(new LoginResponse { UserType = result.UserType, Id = result.Id, Token = jwtToken });
         }
         catch (Exception ex)
         {
@@ -58,4 +63,24 @@ public class AuthenticationController : BaseController<AuthenticationController>
             return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
         }
     }
+    private string GenerateToken(LoginResponse result)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0");
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()),
+                new Claim("UserType", result.UserType)
+            }),
+            Expires = DateTime.UtcNow.AddMinutes(60),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = tokenHandler.WriteToken(token);
+
+        return tokenString;
+    }
+    
 }
