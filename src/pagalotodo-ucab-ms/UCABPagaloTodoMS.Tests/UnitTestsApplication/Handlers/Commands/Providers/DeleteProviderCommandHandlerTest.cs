@@ -41,7 +41,7 @@ public class DeleteProviderCommandHandlerTest
         var id = Guid.NewGuid();
         var command = new DeleteProviderCommand(id);
         var result = await Assert.ThrowsAsync<KeyNotFoundException>(()=>_handler.Handle(command,default));
-        Assert.Matches(".*"+id+".*",result.Message);
+        Assert.Contains(id.ToString(),result.Message);
     }
     
     [Fact]

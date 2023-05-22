@@ -62,7 +62,7 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
         {
             _logger.LogError(ex, "Error CreateServiceCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw new Exception();
+            throw;
         }
     }
 }
