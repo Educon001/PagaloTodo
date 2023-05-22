@@ -40,7 +40,7 @@ public class ConsumersControllerTest
     [Fact]
     public async void GetConsumers_Returns_Ok()
     {
-        var expectedResponse = DataSeed.DataSeed.mockSetConsumerEntity.Object.Select(p => ConsumerMapper.MapEntityToResponse(p)).ToList();
+        var expectedResponse = _mockContext.Object.Consumers.Select(p => ConsumerMapper.MapEntityToResponse(p)).ToList();
         _mediatorMock.Setup(m => m.Send(It.IsAny<ConsumersQuery>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
         var response = await _controller.GetConsumers();
         var okResult = Assert.IsType<OkObjectResult>(response.Result);

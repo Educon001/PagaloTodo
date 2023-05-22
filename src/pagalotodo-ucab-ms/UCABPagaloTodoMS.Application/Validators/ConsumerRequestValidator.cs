@@ -15,7 +15,7 @@ public class ConsumerRequestValidator : AbstractValidator<ConsumerRequest>
 
         RuleFor(c => c.ConsumerId)
             .NotEmpty().WithMessage("La cédula es requerida")
-            .Matches(@"^[VEGP].{7,8}$").WithMessage("La cédula debe tener formato V1234567 o V12345678.");
+            .Matches(@"^[VEGP].{1,8}$").WithMessage("La cédula debe tener formato V12345678");
 
     }
 }
