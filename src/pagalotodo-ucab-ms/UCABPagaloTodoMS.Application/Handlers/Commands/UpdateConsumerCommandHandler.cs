@@ -31,12 +31,9 @@ public class UpdateConsumerCommandHandler : IRequestHandler<UpdateConsumerComman
                 _logger.LogWarning("UpdateConsumerCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                var validator = new ConsumerRequestValidator();
-                validator.ValidateAndThrow(request.Request);
-                return await HandleAsync(request);
-            }
+            var validator = new ConsumerRequestValidator();
+            validator.ValidateAndThrow(request.Request);
+            return await HandleAsync(request);
         }
         catch (Exception)
         {

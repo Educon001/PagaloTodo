@@ -30,12 +30,9 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                 _logger.LogWarning("UpdatePasswordCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                var validator = new UpdatePasswordRequestValidator();
-                validator.ValidateAndThrow(request.Request);
-                return await HandleAsync(request);
-            }
+            var validator = new UpdatePasswordRequestValidator();
+            validator.ValidateAndThrow(request.Request);
+            return await HandleAsync(request);
         }
         catch (Exception)
         {

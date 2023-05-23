@@ -29,10 +29,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
                 _logger.LogWarning("GetServicesQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                return HandleAsync();
-            }
+            return HandleAsync();
         }
         catch (Exception)
         {

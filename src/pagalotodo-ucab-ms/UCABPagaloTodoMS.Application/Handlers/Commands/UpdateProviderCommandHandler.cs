@@ -31,12 +31,9 @@ public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderComman
                 _logger.LogWarning("UpdateProviderCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                var validator = new ProviderRequestValidator();
-                validator.ValidateAndThrow(request.Request);
-                return await HandleAsync(request);
-            }
+            var validator = new ProviderRequestValidator();
+            validator.ValidateAndThrow(request.Request);
+            return await HandleAsync(request);
         }
         catch (Exception)
         {

@@ -29,12 +29,9 @@ public class CreateProviderCommandHandler : IRequestHandler<CreateProviderComman
                 _logger.LogWarning("CreateProviderCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                var validator = new ProviderRequestValidator();
-                validator.ValidateAndThrow(request.Request);
-                return await HandleAsync(request);
-            }
+            var validator = new ProviderRequestValidator();
+            validator.ValidateAndThrow(request.Request);
+            return await HandleAsync(request);
         }
         catch (Exception)
         {

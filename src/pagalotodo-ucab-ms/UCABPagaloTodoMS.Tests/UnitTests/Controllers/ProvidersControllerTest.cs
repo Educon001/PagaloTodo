@@ -40,7 +40,7 @@ public class ProvidersControllerTest
     [Fact]
     public async void GetProviders_Returns_Ok()
     {
-        var expectedResponse = DataSeed.DataSeed.mockSetProviderEntity.Object.Select(p => ProviderMapper.MapEntityToResponse(p)).ToList();
+        var expectedResponse = _mockContext.Object.Providers.Select(p => ProviderMapper.MapEntityToResponse(p)).ToList();
         _mediatorMock.Setup(m => m.Send(It.IsAny<ProvidersQuery>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
         var response = await _controller.GetProviders();
         var okResult = Assert.IsType<OkObjectResult>(response.Result);

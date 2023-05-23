@@ -8,10 +8,10 @@ namespace UCABPagaloTodoMS.Tests.MockData
 {
     public static class BuildDataContextFaker
     {
-        public static Faker<ServiceRequest> BuildServicesRequest()
+        /*public static Faker<ServiceRequest> BuildServicesRequest()
         {
             return new Faker<ServiceRequest>();
-        }
+        }*/
 
         public static List<ServiceResponse> BuildServicesList()
         {

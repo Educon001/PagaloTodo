@@ -11,7 +11,7 @@ public class UserRequestValidator : AbstractValidator<UserRequest>
             .NotEmpty().WithMessage("El nombre de usuario es requerido");
         
         RuleFor(c => c.PasswordHash)
-            .NotEmpty().WithMessage("La contraseña es requerida")
+            .NotEmpty().Unless(c=>c.PasswordHash is null).WithMessage("La contraseña es requerida")
             .MinimumLength(8).WithMessage("La contraseña debe tener al menos 8 caracteres.")
             .Matches("[a-z]").WithMessage("La contraseña debe contener al menos una letra minúscula.")
             .Matches("[A-Z]").WithMessage("La contraseña debe contener al menos una letra mayúscula.")

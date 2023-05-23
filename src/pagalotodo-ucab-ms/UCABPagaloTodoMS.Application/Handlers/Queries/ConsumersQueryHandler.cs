@@ -30,10 +30,7 @@ public class ConsumersQueryHandler : IRequestHandler<ConsumersQuery, List<Consum
                 _logger.LogWarning("ConsumersQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
-            else
-            {
-                return HandleAsync();
-            }
+            return HandleAsync();
         }
         catch (Exception)
         {
