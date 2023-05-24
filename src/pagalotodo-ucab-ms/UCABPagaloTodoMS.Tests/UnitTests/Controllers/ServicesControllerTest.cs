@@ -11,6 +11,7 @@ using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
 using UCABPagaloTodoMS.Core.Database;
+using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;
 using UCABPagaloTodoMS.Tests.MockData;
 using Xunit;
@@ -154,8 +155,9 @@ public class ServicesControllerTest
         Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
         ServiceRequest service = new(){   Name = "ferreLeon",
                 Description = "Ferreteria a domicilio", Provider =new Guid("12345678-1234-1234-1234-1234567890AB"), ServiceType = ServiceTypeEnum.Directo, ServiceStatus = ServiceStatusEnum.Inactivo};
+        ProviderEntity providerE = new ProviderEntity() { Id = new Guid("12345678-1234-1234-1234-1234567890AB") };
         ServiceResponse expectedResponse =
-            ServiceMapper.MapEntityToResponse(ServiceMapper.MapRequestToEntity(service, _mockContext.Object));
+            ServiceMapper.MapEntityToResponse(ServiceMapper.MapRequestToEntity(service, providerE));
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateServiceCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
         var result = await _controller.UpdateService(service, id);
@@ -240,8 +242,9 @@ public class ServicesControllerTest
             Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
             Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
         };
+        ServiceEntity serviceE = new ServiceEntity() { Id = new Guid("12345678-1234-1234-1234-1234567890AC") };
         FieldResponse expectedResponse =
-            FieldMapper.MapEntityToResponse(FieldMapper.MapRequestToEntity(fieldRequest, _mockContext.Object)); 
+            FieldMapper.MapEntityToResponse(FieldMapper.MapRequestToEntity(fieldRequest, serviceE)); 
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
         var result = await _controller.UpdateField(fieldRequest, id);

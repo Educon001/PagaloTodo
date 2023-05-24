@@ -47,8 +47,9 @@ public class Startup
         _appSettings = appSettingsSection.Get<AppSettings>();
         services.Configure<AppSettings>(appSettingsSection);
         services.AddTransient<IUCABPagaloTodoDbContext, UCABPagaloTodoDbContext>();
-
         services.AddProviders(Configuration, Folder, _appSettings, environment);
+        services.AddMediatR(
+            typeof(GetServicesQueryHandler).GetTypeInfo().Assembly);
     }
 
     public void Configure(IApplicationBuilder app)

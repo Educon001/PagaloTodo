@@ -23,7 +23,7 @@ public class PaymentMapper
         return response;
     }
 
-    public static PaymentEntity MapRequestToEntity(PaymentRequest request, IUCABPagaloTodoDbContext dbContext)
+    public static PaymentEntity MapRequestToEntity(PaymentRequest request, ServiceEntity serviceE, ConsumerEntity consumerE)
     {
         var entity = new PaymentEntity()
         {
@@ -31,8 +31,8 @@ public class PaymentMapper
             Identifier = request.Identifier,
             OriginAccount = request.OriginAccount,
             PaymentStatus = request.PaymentStatus,
-            Service = request.Service!=null? ServiceMapper.MapRequestToEntity(request.Service ,dbContext) : null,
-            Consumer = request.Consumer!=null? ConsumerMapper.MapRequestToEntity(request.Consumer) : null
+            Service = serviceE,
+            Consumer = consumerE
         };
         return entity;
     }

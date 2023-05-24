@@ -36,7 +36,8 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
             if (_dbContext.Providers.Find(request.Request.Provider) is not null)
             {
                 _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Request}", request);
-                var entity = ServiceMapper.MapRequestToEntity(request.Request, _dbContext);
+                var providerE = _dbContext.Providers.Find(request.Request.Provider);
+                var entity = ServiceMapper.MapRequestToEntity(request.Request, providerE!);
                 _dbContext.Services.Add(entity);
                 await _dbContext.SaveEfContextChanges("APP");
                 var fieldEntity = new FieldEntity()

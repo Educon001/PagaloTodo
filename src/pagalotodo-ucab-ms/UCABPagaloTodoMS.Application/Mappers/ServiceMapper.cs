@@ -31,14 +31,14 @@ public class ServiceMapper
         return response;
     }
 
-    public static ServiceEntity MapRequestToEntity(ServiceRequest request, IUCABPagaloTodoDbContext dbContext)
+    public static ServiceEntity MapRequestToEntity(ServiceRequest request, ProviderEntity providerE)
     {
         ServiceEntity entity = new(){
             Description = request.Description,
             Name = request.Name,
             ServiceType = request.ServiceType,
             ServiceStatus = request.ServiceStatus,
-            Provider = dbContext.Providers.Find(request.Provider)
+            Provider = providerE
         };
         return entity;
     }

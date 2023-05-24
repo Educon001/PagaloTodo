@@ -22,14 +22,14 @@ public class FieldMapper
         return response;
     }
 
-    public static FieldEntity MapRequestToEntity(FieldRequest request, IUCABPagaloTodoDbContext dbContext)
+    public static FieldEntity MapRequestToEntity(FieldRequest request, ServiceEntity serviceE)
     {
         var entity = new FieldEntity()
         {
             Name = request.Name,
             Format = request.Format,
             Length = request.Length,
-            Service = dbContext.Services.Find(request.Service),
+            Service = serviceE, 
             Type = request.Type,
             AttrReference = request.AttrReference
         };

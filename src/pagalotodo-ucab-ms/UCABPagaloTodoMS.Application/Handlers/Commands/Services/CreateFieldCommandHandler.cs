@@ -37,7 +37,8 @@ public class CreateFieldCommandHandler : IRequestHandler<CreateFieldCommand, Gui
             if (_dbContext.Services.Find(request.Request.Service) is not null)
             {
                 _logger.LogInformation("CreateFieldCommandHandler.HandleAsync {Request}", request);
-                var entity = FieldMapper.MapRequestToEntity(request.Request, _dbContext);
+                ServiceEntity? serviceE = _dbContext.Services.Find(request.Request.Service);
+                var entity = FieldMapper.MapRequestToEntity(request.Request, serviceE!);
                 
                 //fields entity add
                 _dbContext.Fields.Add(entity);
