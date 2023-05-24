@@ -22,8 +22,8 @@ namespace UCABPagaloTodoMS.Tests.MockData
                     Id = Guid.NewGuid(),
                     Name = "Jorge",
                     Description = "Servicio de Jorges",
-                    ServiceStatus = ServiceStatusEnum.Activo,
-                    ServiceType = ServiceTypeEnum.Directo,
+                    ServiceStatus = ServiceStatusEnum.Activo.ToString(),
+                    ServiceType = ServiceTypeEnum.Directo.ToString(),
                     Provider = new ProviderResponse()
                     {
                         AccountNumber = "12390491093109101",
@@ -42,8 +42,8 @@ namespace UCABPagaloTodoMS.Tests.MockData
                     Id = Guid.NewGuid(),
                     Name = "Carol",
                     Description = "Servicio de Carols ",
-                    ServiceStatus = ServiceStatusEnum.Inactivo,
-                    ServiceType = ServiceTypeEnum.Directo,
+                    ServiceStatus = ServiceStatusEnum.Inactivo.ToString(),
+                    ServiceType = ServiceTypeEnum.Directo.ToString(),
                     Provider = new ProviderResponse()
                     {
                         AccountNumber = "12390491093109104",

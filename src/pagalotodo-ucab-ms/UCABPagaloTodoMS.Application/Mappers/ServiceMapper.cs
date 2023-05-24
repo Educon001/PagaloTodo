@@ -21,9 +21,9 @@ public class ServiceMapper
             Id = entity.Id,
             Description = entity.Description,
             Name = entity.Name,
-            ServiceType = entity.ServiceType,
+            ServiceType = entity.ServiceType.ToString(),
             ConfirmationList = entity.ServiceType==ServiceTypeEnum.Directo? new List<DebtorsResponse>() : null,
-            ServiceStatus = entity.ServiceStatus,
+            ServiceStatus = entity.ServiceStatus.ToString(),
             Provider = entity.Provider!=null? ProviderMapper.MapEntityToResponse(entity.Provider) : null,
             Payments = new List<PaymentResponse>(),
             ConciliationFormat = new List<FieldResponse>()
