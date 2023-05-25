@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;

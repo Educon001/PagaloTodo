@@ -58,8 +58,8 @@ public class ConsumersControllerTest
         _mediatorMock.Setup(m => m.Send(It.IsAny<ConsumersQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetConsumers();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
-        var ex = Assert.IsType<Exception>(badRequestResult.Value);
-        Assert.Contains("Test Exception", ex.Message);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
     }
     
     /// <summary>

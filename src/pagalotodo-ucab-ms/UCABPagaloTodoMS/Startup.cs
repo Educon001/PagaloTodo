@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
 using MediatR;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
+using UCABPagaloTodoMS.Application.Handlers.Queries.Services;
 
 namespace UCABPagaloTodoMS;
 

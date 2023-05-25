@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
+using UCABPagaloTodoMS.Application.Handlers.Queries.Providers;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 using Xunit;

@@ -2,11 +2,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Mappers;
-using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Services;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Queries;
+namespace UCABPagaloTodoMS.Application.Handlers.Queries.Services;
 
 public class GetFieldsByServiceIdQueryHandler : IRequestHandler<GetFieldsByServiceIdQuery, List<FieldResponse>>
 {

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
+using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Application.Requests;

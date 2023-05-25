@@ -6,7 +6,7 @@ using UCABPagaloTodoMS.Application.Queries.Debtors;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Queries;
+namespace UCABPagaloTodoMS.Application.Handlers.Queries.Debtors;
 
 public class GetDebtorsByServiceIdQueryHandler : IRequestHandler<GetDebtorsByServiceIdQuery, List<DebtorsResponse>>
 {

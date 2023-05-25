@@ -7,6 +7,7 @@ using Moq;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
@@ -58,8 +59,8 @@ public class ProvidersControllerTest
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetProvidersQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetProviders();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
-        var ex = Assert.IsType<Exception>(badRequestResult.Value);
-        Assert.Contains("Test Exception", ex.Message);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
     }
     
     /// <summary>
@@ -89,8 +90,8 @@ public class ProvidersControllerTest
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetProvidersWithServicesQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetProvidersWithServices();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
-        var ex = Assert.IsType<Exception>(badRequestResult.Value);
-        Assert.Contains("Test Exception", ex.Message);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
     }
     
     /// <summary>
