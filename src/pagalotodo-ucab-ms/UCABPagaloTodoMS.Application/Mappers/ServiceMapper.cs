@@ -36,8 +36,8 @@ public class ServiceMapper
         ServiceEntity entity = new(){
             Description = request.Description,
             Name = request.Name,
-            ServiceType = request.ServiceType,
-            ServiceStatus = request.ServiceStatus,
+            ServiceType = request.ServiceType ?? 0,
+            ServiceStatus = request.ServiceStatus ?? 0,
             Provider = providerE
         };
         return entity;

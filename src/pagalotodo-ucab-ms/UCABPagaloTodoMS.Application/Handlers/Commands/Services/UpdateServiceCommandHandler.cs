@@ -38,8 +38,8 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
             {
                 entity.Name = request.Request.Name;
                 entity.Description = request.Request.Description;
-                entity.ServiceStatus = request.Request.ServiceStatus;
-                entity.ServiceType = request.Request.ServiceType;
+                entity.ServiceStatus = request.Request.ServiceStatus ?? 0;
+                entity.ServiceType = request.Request.ServiceType ?? 0;
                 _dbContext.Services.Update(entity);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaccion.Commit();
