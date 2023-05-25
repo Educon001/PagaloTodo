@@ -19,7 +19,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         _dbContext = dbContext;
         _logger = logger;
     }
-    
+
     public Task<List<ServiceResponse>> Handle(GetServicesQuery request, CancellationToken cancellationToken)
     {
         try
@@ -33,7 +33,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         }
         catch (Exception)
         {
-            _logger.LogWarning("ProvidersQueryHandler.Handle: ArgumentNullException");
+            _logger.LogWarning("GetProvidersQueryHandler.Handle: ArgumentNullException");
             throw;
         }
     }
@@ -43,7 +43,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Select(c => ServiceMapper.MapEntityToResponse(c));
+            var result = _dbContext.Services.Include(s=>s.Provider).Select(c => ServiceMapper.MapEntityToResponse(c, false));
             return await result.ToListAsync();
         }
         catch (Exception ex)

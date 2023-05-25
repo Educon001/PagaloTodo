@@ -1,14 +1,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using UCABPagaloTodoMS.Application.Handlers.Queries.Payments;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Debtors;
-using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Queries.Debtors;
+namespace UCABPagaloTodoMS.Application.Handlers.Queries;
 
 public class GetDebtorsByServiceIdQueryHandler : IRequestHandler<GetDebtorsByServiceIdQuery, List<DebtorsResponse>>
 {

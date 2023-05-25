@@ -3,14 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
-using UCABPagaloTodoMS.Application.Queries.Debtors;
-using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Base;
-using UCABPagaloTodoMS.Core.Enums;
-using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace UCABPagaloTodoMS.Controllers;
 
@@ -49,33 +45,12 @@ public class ServicesController : BaseController<ServicesController>
             {
                 var query = new GetServicesQuery();
                 var response = await _mediator.Send(query);
-                if (response is not null)
-                {
-                    foreach (var serviceResponse in response)
-                    {
-                        //lista fields
-                        var fieldsQuery = new GetFieldsByServiceIdQuery(serviceResponse.Id);
-                        var responseField = await _mediator.Send(fieldsQuery);
-                        serviceResponse.ConciliationFormat = responseField;
-                        //lista pagos
-                        var paymentsQuery = new GetPaymentsByServiceIdQuery(serviceResponse.Id);
-                        var responsePayments = await _mediator.Send(paymentsQuery);
-                        serviceResponse.Payments = responsePayments;
-                        //lista debtors
-                        if (serviceResponse.ServiceType.Equals(ServiceTypeEnum.Directo))
-                        {
-                            var debtorsQuery = new GetDebtorsByServiceIdQuery(serviceResponse.Id);
-                            var responseDebtors = await _mediator.Send(debtorsQuery);
-                            serviceResponse.ConfirmationList = responseDebtors;
-                        }
-                    }
-                }
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
         
@@ -103,18 +78,45 @@ public class ServicesController : BaseController<ServicesController>
             {
                 var query = new GetServiceByIdQuery(id);
                 var response = await _mediator.Send(query);
-                if (response is not null)
-                {
-                    var fieldsQuery = new GetFieldsByServiceIdQuery(response.Id);
-                    var responseField = await _mediator.Send(fieldsQuery);
-                    response.ConciliationFormat = responseField;
-                }
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+            }
+        }
+        
+        /// <summary>
+        ///     Endpoint para la consulta de servicios por prestador
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Get servicios por prestador
+        ///     ## Url
+        ///     GET /services/provider/{id}
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna los servicios del prestador.</returns>
+        [HttpGet("Provider/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ServiceResponse>>> GetServiceByProviderId(Guid id)
+        {
+            _logger.LogInformation("Entrando al método que consulta los servicios dado el id de un prestador");
+            try
+            {
+                var query = new GetServicesByProviderIdQuery(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
         
@@ -149,7 +151,7 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
         
@@ -185,7 +187,7 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
         
@@ -218,7 +220,7 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar eliminar un servicio. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
         
@@ -253,7 +255,7 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " + ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message+ "\n" +ex.InnerException?.Message);
             }
         }
 
@@ -296,7 +298,7 @@ public class ServicesController : BaseController<ServicesController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un campo. Exception: " + ex.Message);
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
     }

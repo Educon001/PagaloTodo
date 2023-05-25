@@ -49,7 +49,7 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
             {
                 throw new NotImplementedException();
             }
-            return ServiceMapper.MapEntityToResponse(entity);
+            return ServiceMapper.MapEntityToResponse(entity,false);
         }
         catch (Exception ex)
         {

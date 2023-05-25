@@ -30,7 +30,7 @@ public class GetServiceByIdQueryHandlerTest
     public async void GetServiceByIdQueryHandle_Returns_ServiceResponse()
     {
         var entity = _mockContext.Object.Services.First();
-        var expectedResponse = ServiceMapper.MapEntityToResponse(entity);
+        var expectedResponse = ServiceMapper.MapEntityToResponse(entity,false);
         var query = new GetServiceByIdQuery(entity.Id);
         var response = await _handler.Handle(query,default);
         Assert.IsType<ServiceResponse>(response);

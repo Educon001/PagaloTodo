@@ -11,15 +11,15 @@ namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
 public class ProvidersQueryHandlerTest
 {
-    private readonly ProvidersQueryHandler _handler;
-    private readonly Mock<ILogger<ProvidersQueryHandler>> _loggerMock;
+    private readonly GetProvidersQueryHandler _handler;
+    private readonly Mock<ILogger<GetProvidersQueryHandler>> _loggerMock;
     private readonly Mock<IUCABPagaloTodoDbContext> _mockContext;
 
     public ProvidersQueryHandlerTest()
     {
-        _loggerMock = new Mock<ILogger<ProvidersQueryHandler>>();
+        _loggerMock = new Mock<ILogger<GetProvidersQueryHandler>>();
         _mockContext = new Mock<IUCABPagaloTodoDbContext>();
-        _handler = new ProvidersQueryHandler(_mockContext.Object, _loggerMock.Object);
+        _handler = new GetProvidersQueryHandler(_mockContext.Object, _loggerMock.Object);
         DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
     
@@ -30,7 +30,7 @@ public class ProvidersQueryHandlerTest
     public async void ProvidersQueryHandle_Returns_List()
     {
         var expectedResponse = _mockContext.Object.Providers.Select(p => ProviderMapper.MapEntityToResponse(p)).ToList();
-        var query = new ProvidersQuery();
+        var query = new GetProvidersQuery();
         var response = await _handler.Handle(query,default);
         Assert.IsType<List<ProviderResponse>>(response);
         Assert.Equal(expectedResponse.ToString(), response.ToString());
@@ -45,7 +45,7 @@ public class ProvidersQueryHandlerTest
     {
         var expectedException = new Exception("Test Exception");
         _mockContext.Setup(c => c.Providers).Throws(expectedException);
-        var query = new ProvidersQuery();
+        var query = new GetProvidersQuery();
         var result = await Assert.ThrowsAnyAsync<Exception>(()=>_handler.Handle(query, default));
         Assert.Equal(expectedException.Message,result.Message);
     }

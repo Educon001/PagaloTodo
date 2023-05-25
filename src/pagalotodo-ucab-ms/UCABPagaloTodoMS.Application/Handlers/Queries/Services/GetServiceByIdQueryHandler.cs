@@ -33,7 +33,7 @@ public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, S
         }
         catch (Exception)
         {
-            _logger.LogWarning("ProvidersQueryHandler.Handle: ArgumentNullException");
+            _logger.LogWarning("GetProvidersQueryHandler.Handle: ArgumentNullException");
             throw;
         }
     }
@@ -43,8 +43,12 @@ public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, S
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Where(c=>c.Id == request.Id).Select(c => ServiceMapper.MapEntityToResponse(c));
-            return (await result.FirstOrDefaultAsync())!;
+            var result = await _dbContext.Services.Include(s=>s.Provider)
+                .Include(s => s.ConciliationFormat)
+                .Include(s => s.ConfirmationList)
+                .Include(s => s.Payments)
+                .SingleAsync(c => c.Id == request.Id);
+            return ServiceMapper.MapEntityToResponse(result,false);
         }
         catch (Exception ex)
         {
