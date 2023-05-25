@@ -31,7 +31,7 @@ public class UpdateServiceCommandHandlerTest
     public async void UpdateServiceCommandHandler_Ok()
     {
         var entity = _mockContext.Object.Services.First();
-        var expectedResponse = ServiceMapper.MapEntityToResponse(entity);
+        var expectedResponse = ServiceMapper.MapEntityToResponse(entity,false);
         expectedResponse.Name = "New Name";
         var request = new ServiceRequest()
         {

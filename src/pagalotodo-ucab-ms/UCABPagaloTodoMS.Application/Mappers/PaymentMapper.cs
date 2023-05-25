@@ -8,8 +8,16 @@ namespace UCABPagaloTodoMS.Application.Mappers;
 
 public class PaymentMapper
 {
-    public static PaymentResponse MapEntityToResponse(PaymentEntity entity)
+    public static PaymentResponse MapEntityToResponse(PaymentEntity entity, bool isServiceReference, bool isConsumerReference)
     {
+        if (!isConsumerReference)
+        {
+            entity.Consumer!.Payments = null;
+        }
+        if (!isServiceReference)
+        {
+            entity.Service!.Payments = null;
+        }
         var response = new PaymentResponse()
         {
             Id = entity.Id,
@@ -17,8 +25,8 @@ public class PaymentMapper
             Identifier = entity.Identifier,
             OriginAccount = entity.OriginAccount,
             PaymentStatus = entity.PaymentStatus,
-            Service = null,
-            Consumer = entity.Consumer!=null? ConsumerMapper.MapEntityToResponse(entity.Consumer) : null
+            Service = isServiceReference? null : ServiceMapper.MapEntityToResponse(entity.Service!,false),
+            Consumer = isConsumerReference? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!)
         };
         return response;
     }

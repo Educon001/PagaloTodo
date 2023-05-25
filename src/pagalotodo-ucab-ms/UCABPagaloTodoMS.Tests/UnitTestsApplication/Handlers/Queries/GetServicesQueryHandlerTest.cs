@@ -29,7 +29,7 @@ public class GetServicesQueryHandlerTest
     [Fact]
     public async void GetServicesQueryHandle_Returns_List()
     {
-        var expectedResponse = _mockContext.Object.Services.Select(s => ServiceMapper.MapEntityToResponse(s)).ToList();
+        var expectedResponse = _mockContext.Object.Services.Select(s => ServiceMapper.MapEntityToResponse(s,false)).ToList();
         var query = new GetServicesQuery();
         var response = await _handler.Handle(query,default);
         Assert.IsType<List<ServiceResponse>>(response);

@@ -33,7 +33,7 @@ public class GetFieldsByServiceIdQueryHandler : IRequestHandler<GetFieldsByServi
         }
         catch (Exception)
         {
-            _logger.LogWarning("ProvidersQueryHandler.Handle: ArgumentNullException");
+            _logger.LogWarning("GetProvidersQueryHandler.Handle: ArgumentNullException");
             throw;
         }
     }

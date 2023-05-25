@@ -18,7 +18,7 @@ public static class ConsumerMapper
             FullName = entity.Name + ' ' + entity.LastName,
             Status = entity.Status,
             ConsumerId = entity.ConsumerId,
-            Payments = new List<PaymentResponse>()
+            Payments = entity.Payments?.Select(p => PaymentMapper.MapEntityToResponse(p, false, true)).ToList()
         };
         return response;
     }
@@ -28,7 +28,7 @@ public static class ConsumerMapper
         var entity = new ConsumerEntity()
         {
             Username = request.Username,
-            PasswordHash = request.PasswordHash!=null? SecurePasswordHasher.Hash(request.PasswordHash) : null,
+            PasswordHash = request.PasswordHash != null ? SecurePasswordHasher.Hash(request.PasswordHash) : null,
             Email = request.Email,
             Name = request.Name,
             LastName = request.LastName,

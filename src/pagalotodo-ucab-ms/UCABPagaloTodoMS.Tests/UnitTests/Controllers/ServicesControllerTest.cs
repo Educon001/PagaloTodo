@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
@@ -65,6 +66,30 @@ public class ServicesControllerTest
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
         _mediatorMock.Verify();
+    }
+    
+    [Fact]
+    public async Task GetServicesByProviderId_Returns_OK()
+    {
+        var entity = _mockContext.Object.Services.First();
+        var expectedResponse = new List<ServiceResponse>();
+        expectedResponse.Add(ServiceMapper.MapEntityToResponse(entity, false));
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetServicesByProviderIdQuery>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.GetServiceByProviderId(entity.Provider!.Id);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<List<ServiceResponse>>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+    }
+
+    [Fact]
+    public async Task GetServicesByProviderId_Returns_Error()
+    {
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetServicesByProviderIdQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.GetServiceByProviderId(Guid.NewGuid());
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<Exception>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex.Message);
     }
 
     [Fact]
@@ -157,7 +182,7 @@ public class ServicesControllerTest
                 Description = "Ferreteria a domicilio", Provider =new Guid("12345678-1234-1234-1234-1234567890AB"), ServiceType = ServiceTypeEnum.Directo, ServiceStatus = ServiceStatusEnum.Inactivo};
         ProviderEntity providerE = new ProviderEntity() { Id = new Guid("12345678-1234-1234-1234-1234567890AB") };
         ServiceResponse expectedResponse =
-            ServiceMapper.MapEntityToResponse(ServiceMapper.MapRequestToEntity(service, providerE));
+            ServiceMapper.MapEntityToResponse(ServiceMapper.MapRequestToEntity(service,providerE),false);
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateServiceCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
         var result = await _controller.UpdateService(service, id);

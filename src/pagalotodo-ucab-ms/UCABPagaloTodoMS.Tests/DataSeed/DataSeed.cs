@@ -1,5 +1,6 @@
 using MockQueryable.Moq;
 using Moq;
+using NuGet.Packaging;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;
@@ -112,7 +113,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 }
             };
             services[1].ConfirmationList!.AddRange(debtors);
-            
+
             //Consumers data
             var consumers = new List<ConsumerEntity>()
             {

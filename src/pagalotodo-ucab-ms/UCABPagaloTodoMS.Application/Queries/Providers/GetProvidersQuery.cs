@@ -1,9 +1,9 @@
-﻿using MediatR;
+using MediatR;
 using UCABPagaloTodoMS.Application.Responses;
 
 namespace UCABPagaloTodoMS.Application.Queries;
 
-public class ProvidersQuery : IRequest<List<ProviderResponse>>
+public class GetProvidersQuery : IRequest<List<ProviderResponse>>
 {
     
 }

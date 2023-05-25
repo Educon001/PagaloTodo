@@ -19,7 +19,7 @@ public class ProviderMapper
             Status = entity.Status,
             Rif = entity.Rif,
             AccountNumber = entity.AccountNumber,
-            Services = new List<ServiceResponse>()
+            Services = entity.Services?.Select(s=>ServiceMapper.MapEntityToResponse(s,true)).ToList()
         };
         return response;
     }

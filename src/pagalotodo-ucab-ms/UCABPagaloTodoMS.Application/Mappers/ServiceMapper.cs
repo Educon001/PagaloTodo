@@ -9,24 +9,23 @@ namespace UCABPagaloTodoMS.Application.Mappers;
 
 public class ServiceMapper
 {
-    public static ServiceResponse MapEntityToResponse(ServiceEntity entity)
+    public static ServiceResponse MapEntityToResponse(ServiceEntity entity, bool isProviderReference)
     {
-        // List<FieldResponse>? conciliationList = new List<FieldResponse>()!;
-        // foreach (var fEntity in entity.ConciliationFormat!)
-        // {
-        //     conciliationList.Add(FieldMapper.MapEntityToResponse(fEntity));
-        // }
+        if (!isProviderReference)
+        {
+            entity.Provider!.Services = null;
+        }
         var response = new ServiceResponse()
         {
             Id = entity.Id,
             Description = entity.Description,
             Name = entity.Name,
             ServiceType = entity.ServiceType.ToString(),
-            ConfirmationList = entity.ServiceType==ServiceTypeEnum.Directo? new List<DebtorsResponse>() : null,
+            ConfirmationList = entity.ConfirmationList?.Select(c => DebtorsMapper.MapEntityToResponse(c)).ToList(),
             ServiceStatus = entity.ServiceStatus.ToString(),
-            Provider = entity.Provider!=null? ProviderMapper.MapEntityToResponse(entity.Provider) : null,
-            Payments = new List<PaymentResponse>(),
-            ConciliationFormat = new List<FieldResponse>()
+            Provider = isProviderReference ? null : ProviderMapper.MapEntityToResponse(entity.Provider!),
+            Payments = entity.Payments?.Select(p=>PaymentMapper.MapEntityToResponse(p,true,false)).ToList(),
+            ConciliationFormat = entity.ConciliationFormat?.Select(f=>FieldMapper.MapEntityToResponse(f)).ToList()
         };
         return response;
     }
