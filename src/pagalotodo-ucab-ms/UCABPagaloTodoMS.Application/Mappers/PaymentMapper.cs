@@ -1,5 +1,4 @@
-﻿
-using UCABPagaloTodoMS.Application.Requests;
+﻿using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -21,6 +20,7 @@ public class PaymentMapper
         var response = new PaymentResponse()
         {
             Id = entity.Id,
+            PaymentDate = entity.CreatedAt.ToLocalTime(),
             Amount = entity.Amount,
             Identifier = entity.Identifier,
             OriginAccount = entity.OriginAccount,
@@ -30,7 +30,7 @@ public class PaymentMapper
         };
         return response;
     }
-
+    
     public static PaymentEntity MapRequestToEntity(PaymentRequest request, ServiceEntity serviceE, ConsumerEntity consumerE)
     {
         var entity = new PaymentEntity()

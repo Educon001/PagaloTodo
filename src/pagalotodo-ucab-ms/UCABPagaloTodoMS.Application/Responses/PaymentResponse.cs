@@ -5,6 +5,7 @@ namespace UCABPagaloTodoMS.Application.Responses;
 public class PaymentResponse
 {
     public Guid Id { get; set; }
+    public DateTime? PaymentDate { get; set; }
     public float? Amount { get; set; }
     public string? OriginAccount { get; set; }
     public PaymentStatusEnum? PaymentStatus { get; set; }

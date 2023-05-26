@@ -44,9 +44,10 @@ public class GetServicesByProviderIdQueryHandler : IRequestHandler<GetServicesBy
         {
             _logger.LogInformation("GetServicesByProviderIdQueryHandler.HandleAsync");
             var result = _dbContext.Services.Where(c=>c.Provider!.Id == request.Id)
+                .Include(s=>s.Payments)!
+                    .ThenInclude(p=>p.Consumer)
                 .Include(s=>s.ConciliationFormat)
                 .Include(s=>s.ConfirmationList)
-                .Include(s=>s.Payments)
                 .Select(c => ServiceMapper.MapEntityToResponse(c,true));
             return await result.ToListAsync();
         }
