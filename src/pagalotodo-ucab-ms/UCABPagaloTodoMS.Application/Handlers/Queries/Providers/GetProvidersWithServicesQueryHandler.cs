@@ -46,7 +46,6 @@ public class GetProvidersWithServicesQueryHandler : IRequestHandler<GetProviders
         {
             _logger.LogInformation("GetProvidersWithServicesQueryHandler.HandleAsync");
             var result = _dbContext.Providers.Include(p=>p.Services)!
-                    .ThenInclude(s=>s.ConciliationFormat)
                 .Select(p => ProviderMapper.MapEntityToResponse(p));
             return await result.ToListAsync();
         }

@@ -51,6 +51,39 @@ public class ProvidersController : BaseController<ProvidersController>
                 return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
             }
         }
+        
+        /// <summary>
+        ///     Endpoint para la consulta de prestadores
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Get prestadores
+        ///     ## Url
+        ///     GET /providers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la lista de prestadores.</returns>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProviderResponse>> GetProviderById(Guid id)
+        {
+            _logger.LogInformation("Entrando al método que consulta los prestadores");
+            try
+            {
+                var query = new GetProviderByIdQuery(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+            }
+        }
 
         /// <summary>
         ///     Endpoint para la consulta de prestadores con sus servicios

@@ -162,9 +162,9 @@ public class ServicesController : BaseController<ServicesController>
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Patch actualiza un servicio.
+        ///     ### Put actualiza un servicio.
         ///     ## Url
-        ///     PATCH /services/{id}
+        ///     PUT /services/{id}
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
@@ -230,16 +230,16 @@ public class ServicesController : BaseController<ServicesController>
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Patch actualiza los campos de un servicio.
+        ///     ### Put actualiza los campos de un servicio.
         ///     ## Url
-        ///     PATCH /services/{id}/fields
+        ///     PUT /services/{id}/fields
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de campos modificados.</returns>
-        [HttpPatch("fields/{id:guid}")]
+        [HttpPut("fields/{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<FieldResponse>>> UpdateField([FromBody] FieldRequest request, Guid id)

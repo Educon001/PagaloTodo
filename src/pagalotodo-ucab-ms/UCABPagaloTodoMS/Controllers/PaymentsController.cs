@@ -202,7 +202,7 @@ public class PaymentsController : BaseController<PaymentsController>
     /// </summary>
     /// <remarks>
     ///     ## Description
-    ///     ### Patch pago
+    ///     ### Put pago
     ///     ## Url
     ///     PATCH /payments/{id}
     /// </remarks>
@@ -211,7 +211,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna un mensaje de exito</returns>
-    [HttpPatch("{id:guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<string>> UpdatePaymentStatus(Guid id, [FromBody] PaymentStatusEnum? newPaymentStatus)

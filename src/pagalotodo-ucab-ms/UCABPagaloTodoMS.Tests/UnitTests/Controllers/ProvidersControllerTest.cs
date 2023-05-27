@@ -64,6 +64,35 @@ public class ProvidersControllerTest
     }
     
     /// <summary>
+    ///     Prueba de metodo get para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void GetProviderById_Returns_Ok()
+    {
+        var entity = _mockContext.Object.Providers.First();
+        var expectedResponse = ProviderMapper.MapEntityToResponse(entity);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProviderByIdQuery>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.GetProviderById(entity.Id);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<ProviderResponse>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo get para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void GetProviderById_Returns_BadRequest()
+    {
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProviderByIdQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.GetProviderById(Guid.Empty);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
+    /// <summary>
     ///     Prueba de metodo get para prestadores con servicios con respuesta Ok
     /// </summary>
     [Fact]

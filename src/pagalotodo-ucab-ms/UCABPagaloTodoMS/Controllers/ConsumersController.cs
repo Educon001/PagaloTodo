@@ -85,7 +85,7 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            }
         }
 
-        [HttpPatch("{id:guid}")]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
