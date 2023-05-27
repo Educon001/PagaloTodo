@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
@@ -34,6 +35,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de consumidores.</returns>
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +87,7 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message);            }
         }
 
+        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -119,6 +122,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el objeto actualizado</returns>
+        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -152,6 +156,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del objeto eliminado</returns>
+        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

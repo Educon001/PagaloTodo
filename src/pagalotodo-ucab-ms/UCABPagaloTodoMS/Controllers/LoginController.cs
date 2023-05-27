@@ -14,12 +14,12 @@ using UCABPagaloTodoMS.Infrastructure.Utils;
 namespace UCABPagaloTodoMS.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class AuthenticationController : BaseController<AuthenticationController>
+public class LoginController : BaseController<LoginController>
 {
     private readonly IMediator _mediator;
     private IConfiguration config;
 
-    public AuthenticationController(ILogger<AuthenticationController> logger, IMediator mediator, IConfiguration config) : base(logger)
+    public LoginController(ILogger<LoginController> logger, IMediator mediator, IConfiguration config) : base(logger)
     {
         _mediator = mediator;
         this.config = config;
@@ -28,34 +28,19 @@ public class AuthenticationController : BaseController<AuthenticationController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<LoginResponse>> Authenticate([FromBody] LoginRequest request)
+    public async Task<ActionResult<LoginResponse>> Authenticate(LoginRequest request)
     {
         try
         {
-            var result = await _mediator.Send(new AuthenticateCommand { Username = request.Username, PasswordHash = request.PasswordHash });
+            var result = await _mediator.Send(new LoginCommand(request));
             if (result == null)
             {
                 return BadRequest();
             }
 
-            /*var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("aA1$Bb2&Cc3^Dd4#Ee5!Ff6*Gg7(Hh8)Ii9Jj0");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, result.Id.ToString()),
-                    new Claim(ClaimTypes.Role, result.UserType)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);*/
-
             string jwtToken = GenerateToken(result);
             
-            return Ok(new LoginResponse { UserType = result.UserType, Id = result.Id, Token = jwtToken });
+            return Ok(new LoginResponse { UserType =result.UserType ,Id = result.Id, Token = jwtToken });
         }
         catch (Exception ex)
         {
