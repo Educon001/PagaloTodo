@@ -34,7 +34,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
-        [Authorize(Policy = "AdminOrConsumerPolicy" )]
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -221,5 +221,4 @@ public class ProvidersController : BaseController<ProvidersController>
                 return BadRequest(ex.Message);
             }
         }
-
-}
+    }
