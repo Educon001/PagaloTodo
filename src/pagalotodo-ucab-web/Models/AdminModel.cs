@@ -1,6 +1,6 @@
 namespace UCABPagaloTodoWeb.Models;
 
-public class AdminModel
+public class AdminModel : UserModel
 {
     
 }

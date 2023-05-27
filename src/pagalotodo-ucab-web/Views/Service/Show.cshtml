@@ -1,0 +1,31 @@
+@model ServiceModel
+
+@functions
+{
+    void RenderValue(string mystr)
+    {
+        <div>@(char.ToUpper(mystr[0]) + mystr.Substring(1))</div>
+    }
+}
+
+<div class="container p-4">
+    <div><b>Id</b></div>
+    <div>@Model.Id</div>
+    <div><b>Name</b></div>
+    <div>@Model.Name</div>
+    <div><b>Description</b></div>
+    <div>@Model.Description</div>
+    <div><b>Estatus Servicio</b></div>
+    <div>@Model.ServiceStatus</div>
+    <div><b>Tipo Servicio</b></div>
+    <div>@Model.ServiceType</div>
+    <br>
+    <div>
+        <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+        <a asp-route="update" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+    </div>
+    <br>
+    <div>
+        <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</div>

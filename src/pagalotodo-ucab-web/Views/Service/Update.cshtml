@@ -2,13 +2,12 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ServiceRequest
 
-<form method="post">
+<form method="post" asp-route="put" asp-route-id="@ViewBag.Id">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2>Create Service</h2>
+            <h2>Edit Service</h2>
             <hr>
         </div>
-        <div asp-validation-summary="All"></div>
         <div class="mb-3">
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control">
@@ -37,7 +36,7 @@
             <label asp-for="Provider">Provider</label>
             <select name="Provider" id="Provider" asp-items="selectList"></select>
         </div>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Update</button>
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
     </div>
 </form>
