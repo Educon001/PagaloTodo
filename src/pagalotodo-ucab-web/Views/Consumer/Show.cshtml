@@ -1,0 +1,51 @@
+@model ConsumerModel
+
+<div class="container p-4">
+    <div><b>Id</b></div>
+    <div>@Model.Id</div>
+    <div><b>Username</b></div>
+    <div>@Model.Username</div>
+    <div><b>Full Name</b></div>
+    <div>@Model.FullName</div>
+    <div><b>Consumer Id</b></div>
+    <div>@Model.ConsumerId</div>
+    <div><b>Tipo Servicio</b></div>
+    <div>@Model.</div>
+    <div><b>Estatus</b></div>
+    <div>@Model.Status.ToString()</div>
+    <div><b>Payments</b></div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    Identificador
+                </th>
+                <th>
+                    Servicio
+                </th>
+                <th>
+                    Estatus
+                </th>
+            </tr>
+            </thead>
+            @foreach (var obj in @Model.Payments)
+            {
+                <tr>
+                    <td>@obj.Identifier</td>
+                    <td>@obj.Service.Name</td>
+                    <td>@obj.PaymentStatus</td>
+                </tr> 
+            }
+        </table>
+    </div>
+    <br>
+    <div>
+        <a asp-controller="Consumer" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+        <a asp-route="update" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+    </div>
+    <br>
+    <div>
+        <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</div>

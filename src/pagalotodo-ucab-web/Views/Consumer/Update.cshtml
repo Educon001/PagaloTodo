@@ -1,0 +1,52 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ConsumerRequest
+
+<form method="post" asp-route="put" asp-route-id="@ViewBag.Id">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Edit Consumer</h2>
+            <hr>
+        </div>
+               <div asp-validation-summary="All"></div>
+               <div class="mb-3">
+                   <label asp-for="Username">Username</label>
+                   <input asp-for="Username" class="form-control">
+               </div>
+               <div class="mb-3">
+                   <label asp-for="Email">Email</label>
+                   <input asp-for="Email" class="form-control">
+               </div>
+               <div class="mb-3">
+                   <label asp-for="Name">Nombre(s)</label>
+                   <input asp-for="Name" class="form-control">
+               </div>
+               <div class="mb-3">
+                   <label asp-for="ConsumerId">Cedula</label>
+                   <input asp-for="ConsumerId" class="form-control">
+               </div>
+               <div class="mb-3">
+                   <label asp-for="LastName">Apellidos</label>
+                   <input asp-for="LastName" class="form-control">
+               </div>
+               @{
+                   IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
+                       new()
+                       {
+                           Text = "Activo",
+                           Value = "1"
+                       },
+                       new()
+                       {
+                           Text = "Inactivo",
+                           Value = "0"
+                       }
+                   };
+               }
+               <div class="mb-3">
+                   <label asp-for="Status">Estatus</label>
+                   <select name="ServiceStatus" id="ServiceStatus" asp-items="selectList"></select>
+               </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</form>

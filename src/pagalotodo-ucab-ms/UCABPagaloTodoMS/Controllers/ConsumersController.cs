@@ -98,7 +98,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     ## Description
         ///     ### Post consumidor.
         ///     ## Url
-        ///     POST /Consumers
+        ///     POST /consumers
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
@@ -120,7 +120,8 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
-                return BadRequest(ex.Message);            }
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            
+            }
         }
         
         [Authorize(Policy = "AdminOrConsumerPolicy" )]
