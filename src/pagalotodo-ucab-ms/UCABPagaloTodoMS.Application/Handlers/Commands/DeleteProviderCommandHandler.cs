@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands;
@@ -28,9 +29,9 @@ public class DeleteProviderCommandHandler : IRequestHandler<DeleteProviderComman
             }
             return await HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            throw new CustomException(e);
         }
     }
 

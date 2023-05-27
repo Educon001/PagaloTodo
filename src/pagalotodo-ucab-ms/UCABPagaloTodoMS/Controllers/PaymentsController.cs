@@ -50,7 +50,7 @@ public class PaymentsController : BaseController<PaymentsController>
         catch (Exception ex)
         {
             _logger.LogError($"Ocurrio un error al consultar los pagos. Exception: " + ex.Message);
-            return BadRequest(ex.Message + "\n" + ex.InnerException?.Message);
+            return BadRequest(ex.Message);
         }
     }
 

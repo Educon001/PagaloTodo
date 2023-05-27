@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
@@ -55,6 +56,7 @@ public class ConsumersQueryHandlerTest
     [Fact]
     public async void ConsumersQueryHandle_ArgumentNullException()
     {
-        await Assert.ThrowsAsync<ArgumentNullException>(()=>_handler.Handle(null, default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(null, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 }

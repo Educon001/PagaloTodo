@@ -48,7 +48,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -81,7 +81,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -114,7 +114,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores con sus servicios. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -147,7 +147,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -180,7 +180,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -213,7 +213,7 @@ public class ProvidersController : BaseController<ProvidersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
 

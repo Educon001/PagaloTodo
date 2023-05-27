@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
@@ -33,9 +34,9 @@ public class CreateProviderCommandHandler : IRequestHandler<CreateProviderComman
             validator.ValidateAndThrow(request.Request);
             return await HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            throw new CustomException(e);
         }
     }
 

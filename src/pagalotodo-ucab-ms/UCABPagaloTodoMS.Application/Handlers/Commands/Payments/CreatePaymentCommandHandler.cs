@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
@@ -21,14 +22,22 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 
     public async Task<Guid> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
-        if (request.Request == null)
+        try
         {
-            _logger.LogWarning("CreatePaymentCommandHandler.Handle: Request nulo.");
-            throw new ArgumentNullException(nameof(request));
+            if (request.Request == null)
+            {
+                _logger.LogWarning("CreatePaymentCommandHandler.Handle: Request nulo.");
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var validator = new PaymentRequestValidator();
+            validator.ValidateAndThrow(request.Request);
+            return await HandleAsync(request);
         }
-        var validator = new PaymentRequestValidator();
-        validator.ValidateAndThrow(request.Request);
-        return await HandleAsync(request);
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
     }
 
     private async Task<Guid> HandleAsync(CreatePaymentCommand request)
@@ -48,6 +57,7 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                     : "");
                 throw new KeyNotFoundException(message);
             }
+
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
             _dbContext.Payments.Add(entity);

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
@@ -29,9 +30,9 @@ public class UpdatePaymentStatusCommandHandler : IRequestHandler<UpdatePaymentSt
 
             return await HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            throw new CustomException(e);
         }
     }
 

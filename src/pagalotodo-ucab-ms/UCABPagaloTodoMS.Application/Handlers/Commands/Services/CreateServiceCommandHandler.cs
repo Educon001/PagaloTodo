@@ -1,13 +1,14 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 
-public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand, Guid>
+public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand, Guid>
 {
     private readonly IUCABPagaloTodoDbContext _dbContext;
     private readonly ILogger<CreateServiceCommandHandler> _logger;
@@ -17,17 +18,25 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
         _dbContext = dbContext;
         _logger = logger;
     }
-    
+
     public async Task<Guid> Handle(CreateServiceCommand request, CancellationToken cancellationToken)
     {
-        if (request.Request == null) 
+        try
         {
+            if (request.Request == null)
+            {
                 _logger.LogWarning("CreateServiceCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
+            }
+
+            return await HandleAsync(request);
         }
-        return await HandleAsync(request);
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
     }
-    
+
     private async Task<Guid> HandleAsync(CreateServiceCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();
@@ -53,10 +62,12 @@ public class CreateServiceCommandHandler  : IRequestHandler<CreateServiceCommand
                 _dbContext.Fields.Add(fieldEntity);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaccion.Commit();
-                var id = entity.Id; ;
+                var id = entity.Id;
+                ;
                 _logger.LogInformation("CreateServiceCommandHandler.HandleAsync {Response}", id);
                 return id;
             }
+
             throw new Exception($"Proveedor con id: {request.Request.Provider} no se encuentra en la base de datos");
         }
         catch (Exception ex)

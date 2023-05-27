@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands;
@@ -19,7 +20,14 @@ public class DeleteConsumerCommandHandler : IRequestHandler<DeleteConsumerComman
 
     public async Task<Guid> Handle(DeleteConsumerCommand request, CancellationToken cancellationToken)
     {
-        return await HandleAsync(request);
+        try
+        {
+            return await HandleAsync(request);
+        }
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
     }
 
     private async Task<Guid> HandleAsync(DeleteConsumerCommand request)
@@ -30,7 +38,7 @@ public class DeleteConsumerCommandHandler : IRequestHandler<DeleteConsumerComman
             _logger.LogInformation("DeleteConsumerCommandHandler.HandleAsync {Request}", request);
             var consumerId = request.Request;
             var entity = _dbContext.Consumers.Find(consumerId);
-            if (entity!=null)
+            if (entity != null)
             {
                 _dbContext.Consumers.Remove(entity);
             }
@@ -38,6 +46,7 @@ public class DeleteConsumerCommandHandler : IRequestHandler<DeleteConsumerComman
             {
                 throw new KeyNotFoundException($"Object with key {consumerId} not found");
             }
+
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
             _logger.LogInformation("DeleteConsumerCommandHandler.HandleAsync {Response}", consumerId);

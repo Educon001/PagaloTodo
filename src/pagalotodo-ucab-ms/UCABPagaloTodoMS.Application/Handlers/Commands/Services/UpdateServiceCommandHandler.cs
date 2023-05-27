@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
@@ -20,8 +21,15 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
     }
     
     public async Task<ServiceResponse> Handle(UpdateServiceCommand request, CancellationToken cancellationToken)
-    { 
-        return await HandleAsync(request);
+    {
+        try
+        {
+            return await HandleAsync(request);
+        }
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
     }
     
     private async Task<ServiceResponse> HandleAsync(UpdateServiceCommand request)

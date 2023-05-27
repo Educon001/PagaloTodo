@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Requests;
@@ -82,14 +83,16 @@ public class UpdateConsumerCommandHandlerTest
             Username = "HandlerTest"
         };
         var command = new UpdateConsumerCommand(request,new Guid());
-        await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ValidationException>(result.InnerException);
     }
     
     [Fact]
     public async void UpdateConsumerCommandHandle_ArgumentNullException()
     {
         var command = new UpdateConsumerCommand(null,new Guid());
-        await Assert.ThrowsAsync<ArgumentNullException>(() =>_handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() =>_handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
     
     [Fact]
@@ -107,7 +110,8 @@ public class UpdateConsumerCommandHandlerTest
             PasswordHash = entity.PasswordHash
         };
         var command = new UpdateConsumerCommand(request,entity.Id);
-        var result = await Assert.ThrowsAsync<KeyNotFoundException>(()=>_handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
+        Assert.IsType<KeyNotFoundException>(result.InnerException);
         Assert.Contains(entity.Id.ToString(),result.Message);
     }
 }

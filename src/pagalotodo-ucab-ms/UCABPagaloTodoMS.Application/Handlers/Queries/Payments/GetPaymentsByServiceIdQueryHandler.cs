@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Responses;
@@ -31,10 +32,9 @@ public class GetPaymentsByServiceIdQueryHandler : IRequestHandler<GetPaymentsByS
             }
             return HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            _logger.LogWarning("ProvidersQueryHandler.Handle: ArgumentNullException");
-            throw;
+            throw new CustomException(e);
         }
     }
 

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Queries.Payments;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Payments;
@@ -59,6 +60,7 @@ public class GetPaymentsByConsumerIdQueryHandlerTest
     public async void GetPaymentsByConsumerIdQueryHandle_ArgumentNullException()
     {
         var request = new GetPaymentsByConsumerIdQuery(Guid.Empty, null, null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(request, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(request, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 }

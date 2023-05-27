@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Payments;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Core.Database;
@@ -59,7 +60,8 @@ public class CreatePaymentCommandHandlerTest
     public async void CreatePaymentCommandHandle_ArgumentNullException()
     {
         var command = new CreatePaymentCommand(null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 
     [Fact]

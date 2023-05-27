@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Payments;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Core.Database;
@@ -45,7 +46,8 @@ public class UpdatePaymentStatusCommandHandlerTest
     public async void UpdatePaymentStatusCommandHandle_ArgumentNullException()
     {
         var command = new UpdatePaymentStatusCommand(Guid.Empty, null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 
     [Fact]
@@ -54,7 +56,8 @@ public class UpdatePaymentStatusCommandHandlerTest
         var entity = _mockContext.Object.Payments.First();
         var request = PaymentStatusEnum.Pendiente;
         var command = new UpdatePaymentStatusCommand(entity.Id, request);
-        var result = await Assert.ThrowsAnyAsync<KeyNotFoundException>(()=>_handler.Handle(command,default));
+        var result = await Assert.ThrowsAnyAsync<CustomException>(()=>_handler.Handle(command,default));
+        Assert.IsType<KeyNotFoundException>(result.InnerException);
         Assert.Contains(entity.Id.ToString(), result.Message);
     }
 }

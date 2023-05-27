@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Responses;
@@ -52,8 +53,7 @@ public class GetProviderByIdQueryHandler : IRequestHandler<GetProviderByIdQuery,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error GetProviderByIdQueryHandler.HandleAsync. {Mensaje}", ex.Message);
-            throw;
+            throw new CustomException(ex);
         }
     }
 }

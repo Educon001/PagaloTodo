@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -52,14 +53,16 @@ public class UpdatePasswordCommandHandlerTest
             PasswordHash = "invalid password"
         };
         var command = new UpdatePasswordCommand(request, Guid.NewGuid());
-        await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ValidationException>(result.InnerException);
     }
     
     [Fact]
     public async void UpdatePasswordCommandHandle_ArgumentNullException()
     {
         var command = new UpdatePasswordCommand(null, new Guid());
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
     
     [Fact]
@@ -71,7 +74,8 @@ public class UpdatePasswordCommandHandlerTest
         };
         var entity = _mockContext.Object.Consumers.First();
         var command = new UpdatePasswordCommand(request, entity.Id);
-        var response = await Assert.ThrowsAsync<KeyNotFoundException>(()=>_handler.Handle(command, default));
+        var response = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
+        Assert.IsType<KeyNotFoundException>(response.InnerException);
         Assert.Contains(entity.Id.ToString(), response.Message);
     }
 }

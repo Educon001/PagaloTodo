@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Core.Database;
@@ -59,14 +60,16 @@ public class CreateProviderCommandHandlerTest
             Username = "HandlerTest"
         };
         var command = new CreateProviderCommand(request);
-        await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ValidationException>(result.InnerException);
     }
     
     [Fact]
     public async void CreateProviderCommandHandle_ArgumentNullException()
     {
         var command = new CreateProviderCommand(null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() =>_handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() =>_handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
     
     [Fact]

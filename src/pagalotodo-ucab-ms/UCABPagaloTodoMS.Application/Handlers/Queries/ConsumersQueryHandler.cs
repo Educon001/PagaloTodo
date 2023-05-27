@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Responses;
 using Microsoft.EntityFrameworkCore;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Queries;
@@ -32,10 +33,9 @@ public class ConsumersQueryHandler : IRequestHandler<ConsumersQuery, List<Consum
             }
             return HandleAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            _logger.LogWarning("ConsumersQueryHandler.Handle: ArgumentNullException");
-            throw;
+            throw new CustomException(e);
         }
     }
 

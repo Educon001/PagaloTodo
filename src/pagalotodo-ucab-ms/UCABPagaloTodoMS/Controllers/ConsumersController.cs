@@ -49,7 +49,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los consumidores. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -82,10 +82,10 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            }
+                return BadRequest(ex.Message);            }
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
@@ -100,7 +100,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -134,7 +134,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -167,7 +167,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message);
             }
         }
 }

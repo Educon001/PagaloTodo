@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;
@@ -35,9 +36,9 @@ public class UpdateConsumerCommandHandler : IRequestHandler<UpdateConsumerComman
             validator.ValidateAndThrow(request.Request);
             return await HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            throw new CustomException(e);
         }
     }
 

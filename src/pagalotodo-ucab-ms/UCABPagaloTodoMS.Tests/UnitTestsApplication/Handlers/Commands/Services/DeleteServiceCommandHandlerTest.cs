@@ -40,7 +40,7 @@ public class DeleteServiceCommandHandlerTest
     {
         var id = Guid.NewGuid();
         var command = new DeleteServiceCommand(id);
-        var result = await Assert.ThrowsAsync<Exception>(()=>_handler.Handle(command,default));
+        var result = await Assert.ThrowsAnyAsync<Exception>(()=>_handler.Handle(command,default));
         Assert.Contains(id.ToString(),result.Message);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Core.Database;
@@ -54,7 +55,8 @@ public class CreateFieldCommandHandlerTest
     public async void CreateFieldCommandHandle_ArgumentNullException()
     {
         var command = new CreateFieldCommand(null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 
     [Fact]

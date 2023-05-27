@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Responses;
@@ -33,10 +34,9 @@ public class GetProvidersQueryHandler : IRequestHandler<GetProvidersQuery, List<
 
             return HandleAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            _logger.LogWarning("GetProvidersQueryHandler.Handle: ArgumentNullException");
-            throw;
+            throw new CustomException(e);
         }
     }
 

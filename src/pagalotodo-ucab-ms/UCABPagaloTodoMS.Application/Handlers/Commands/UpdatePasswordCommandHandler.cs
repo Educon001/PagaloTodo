@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
@@ -35,9 +36,9 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             validator.ValidateAndThrow(request.Request);
             return await HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
+            throw new CustomException(e);
         }
     }
 

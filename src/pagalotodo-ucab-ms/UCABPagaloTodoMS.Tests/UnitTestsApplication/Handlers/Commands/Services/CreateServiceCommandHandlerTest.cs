@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Core.Database;
@@ -53,7 +54,8 @@ public class CreateServiceCommandHandlerTest
     public async void CreateServiceCommandHandle_ArgumentNullException()
     {
         var command = new CreateServiceCommand(null);
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 
     [Fact]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Core.Database;
 using Xunit;
@@ -40,7 +41,8 @@ public class DeleteProviderCommandHandlerTest
     {
         var id = Guid.NewGuid();
         var command = new DeleteProviderCommand(id);
-        var result = await Assert.ThrowsAsync<KeyNotFoundException>(()=>_handler.Handle(command,default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command,default));
+        Assert.IsType<KeyNotFoundException>(result.InnerException);
         Assert.Contains(id.ToString(),result.Message);
     }
     
@@ -48,6 +50,7 @@ public class DeleteProviderCommandHandlerTest
     public async void DeleteProviderCommandHandler_ArgumentNullException()
     {
         var command = new DeleteProviderCommand(Guid.Empty);
-        await Assert.ThrowsAsync<ArgumentNullException>(()=>_handler.Handle(command,default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command,default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 }

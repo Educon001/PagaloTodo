@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Core.Database;
 using Xunit;
@@ -40,7 +41,8 @@ public class DeleteConsumerCommandHandlerTest
     {
         var id = Guid.NewGuid();
         var command = new DeleteConsumerCommand(id);
-        var result = await Assert.ThrowsAsync<KeyNotFoundException>(()=>_handler.Handle(command,default));
-        Assert.Matches(".*"+id+".*",result.Message);
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command,default));
+        Assert.IsType<KeyNotFoundException>(result.InnerException);
+        Assert.Contains(id.ToString(),result.Message);
     }
 }

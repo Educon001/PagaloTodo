@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
@@ -17,12 +18,19 @@ public class UpdateFieldCommandHandler : IRequestHandler<UpdateFieldCommand, Fie
         _dbContext = dbContext;
         _logger = logger;
     }
-    
+
     public async Task<FieldResponse> Handle(UpdateFieldCommand request, CancellationToken cancellationToken)
-    { 
-        return await HandleAsync(request);
+    {
+        try
+        {
+            return await HandleAsync(request);
+        }
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
     }
-    
+
     private async Task<FieldResponse> HandleAsync(UpdateFieldCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();
@@ -48,6 +56,7 @@ public class UpdateFieldCommandHandler : IRequestHandler<UpdateFieldCommand, Fie
             {
                 throw new NotImplementedException();
             }
+
             return FieldMapper.MapEntityToResponse(entity);
         }
         catch (Exception ex)

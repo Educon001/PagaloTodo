@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Services;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Requests;
@@ -59,6 +60,7 @@ public class UpdateServiceCommandHandlerTest
             ServiceType = entity.ServiceType
         };
         var command = new UpdateServiceCommand(request,entity.Id);
-        await Assert.ThrowsAsync<NotImplementedException>(()=>_handler.Handle(command, default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
+        Assert.IsType<NotImplementedException>(result.InnerException);
     }
 }

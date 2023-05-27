@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
 using UCABPagaloTodoMS.Application.Handlers.Queries.Services;
 using UCABPagaloTodoMS.Application.Mappers;
@@ -60,6 +61,7 @@ public class GetFieldsByServiceIdQueryHandlerTest
     [Fact]
     public async void GetFieldsByServiceIdQueryHandle_ArgumentNullException()
     {
-        await Assert.ThrowsAsync<ArgumentNullException>(()=>_handler.Handle(null, default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(null, default));
+        Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 }
