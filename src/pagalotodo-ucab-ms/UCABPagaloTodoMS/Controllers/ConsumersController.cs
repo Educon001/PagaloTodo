@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Base;
@@ -55,6 +56,39 @@ public class ConsumersController : BaseController<ConsumersController>
             }
         }
 
+        /// <summary>
+        ///     Endpoint para la consulta de consumidores
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Get consumidores
+        ///     ## Url
+        ///     GET /consumers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la lista de prestadores.</returns>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ConsumerResponse>> GetConsumerById(Guid id)
+        {
+            _logger.LogInformation("Entrando al método que consulta los prestadores");
+            try
+            {
+                var query = new GetConsumerByIdQuery(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
+                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+            }
+        }
+        
         /// <summary>
         ///     Endpoint que registra un consumidor.
         /// </summary>
@@ -174,4 +208,5 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message);
             }
         }
+        
 }
