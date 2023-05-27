@@ -45,7 +45,7 @@ public class ConsumersQueryHandler : IRequestHandler<ConsumersQuery, List<Consum
         {
             _logger.LogInformation("ConsumersQueryHandler.HandleAsync");
 
-            var result = _dbContext.Consumers.Select(c => ConsumerMapper.MapEntityToResponse(c));
+            var result = _dbContext.Consumers.Where(c=>c.IsDeleted==false).Select(c => ConsumerMapper.MapEntityToResponse(c));
 
             return await result.ToListAsync();
         }

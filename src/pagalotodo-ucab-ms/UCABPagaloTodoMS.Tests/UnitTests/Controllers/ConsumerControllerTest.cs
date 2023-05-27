@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
@@ -125,6 +127,39 @@ public class ConsumersControllerTest
     }
     
     /// <summary>
+    ///     Prueba de metodo UpdatePassword para consumidores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void UpdatePasswordHashConsumers_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        var password = new UpdatePasswordRequest() {PasswordHash = "Ab123456.r"};
+        var expectedResponse = new UpdatePasswordResponse(id,"Password updated successfully.");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.UpdatePassword(id,password);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<UpdatePasswordResponse>(okResult.Value);
+        Assert.Equal(expectedResponse,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo UpdatePassword para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void UpdatePasswordHashConsumers_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var password = new UpdatePasswordRequest() {PasswordHash = "string"};
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
+            .ThrowsAsync(new Exception("Test Exception"));
+        var response = await _controller.UpdatePassword(id,password);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
+    /// <summary>
     ///     Prueba de metodo Delete para prestadores con respuesta Ok
     /// </summary>
     [Fact]
@@ -153,4 +188,33 @@ public class ConsumersControllerTest
         Assert.Contains("Test Exception", ex);
     }
     
+    /// <summary>
+    ///     Prueba de metodo get para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void GetConsumerById_Returns_Ok()
+    {
+        var entity = _mockContext.Object.Consumers.First();
+        var expectedResponse = ConsumerMapper.MapEntityToResponse(entity);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetConsumerByIdQuery>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.GetConsumerById(entity.Id);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<ConsumerResponse>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+    }
+
+    /// <summary>
+    ///     Prueba de metodo get para consumers con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void GetConsumerById_Returns_BadRequest()
+    {
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetConsumerByIdQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
+        var response = await _controller.GetConsumerById(Guid.Empty);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+
 }

@@ -43,7 +43,7 @@ public class GetFieldsByServiceIdQueryHandler : IRequestHandler<GetFieldsByServi
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Fields.Where(c=>c.Service!.Id == request.Id).Select(c => FieldMapper.MapEntityToResponse(c));
+            var result = _dbContext.Fields.Where(c=>c.Service!.Id == request.Id && c.IsDeleted==false).Select(c => FieldMapper.MapEntityToResponse(c));
             return await result.ToListAsync();
         }
         catch (Exception ex)

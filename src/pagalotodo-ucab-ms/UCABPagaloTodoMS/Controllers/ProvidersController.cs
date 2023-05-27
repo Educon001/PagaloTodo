@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Queries.Providers;
@@ -33,6 +34,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -132,6 +134,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del nuevo registro.</returns>
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -165,6 +168,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del objeto eliminado</returns>
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -198,6 +202,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el objeto actualizado</returns>
+        [Authorize(Policy = "AdminOrProviderPolicy" )]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -216,5 +221,4 @@ public class ProvidersController : BaseController<ProvidersController>
                 return BadRequest(ex.Message);
             }
         }
-
-}
+    }
