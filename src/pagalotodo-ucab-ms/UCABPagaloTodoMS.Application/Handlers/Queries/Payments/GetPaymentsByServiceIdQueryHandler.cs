@@ -24,7 +24,7 @@ public class GetPaymentsByServiceIdQueryHandler : IRequestHandler<GetPaymentsByS
     {
         try
         {
-            if (request is null)
+            if (request.Id == Guid.Empty)
             {
                 _logger.LogWarning("GetServicesQueryHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));

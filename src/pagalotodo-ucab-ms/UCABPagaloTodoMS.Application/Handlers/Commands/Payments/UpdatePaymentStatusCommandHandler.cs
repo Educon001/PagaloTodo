@@ -21,11 +21,12 @@ public class UpdatePaymentStatusCommandHandler : IRequestHandler<UpdatePaymentSt
     {
         try
         {
-            if (request.NewPaymentStatus == null)
+            if (request.Id == Guid.Empty || request.NewPaymentStatus == null)
             {
                 _logger.LogWarning("UpdatePaymentStatusCommandHandler.Handle: Request nulo.");
                 throw new ArgumentNullException(nameof(request));
             }
+
             return await HandleAsync(request);
         }
         catch (Exception)
@@ -50,9 +51,10 @@ public class UpdatePaymentStatusCommandHandler : IRequestHandler<UpdatePaymentSt
             {
                 throw new KeyNotFoundException($"Object with key {request.Id} not found");
             }
+
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
-            var response = request.Id+" PaymentStatus updated successfully";
+            var response = request.Id + " PaymentStatus updated successfully";
             _logger.LogInformation("UpdatePaymentStatusCommandHandler.HandleAsync {Response}", response);
             return response;
         }

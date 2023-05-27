@@ -96,7 +96,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     AttrReference = "Payment.Amount",
                     Type = "float",
                     Service = services[0]
-                }    
+                }
             };
             services[0].ConciliationFormat!.AddRange(fields);
 
@@ -144,7 +144,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Payments = new List<PaymentEntity>()
                 }
             };
-            
+
             //Payments data
             var payments = new List<PaymentEntity>()
             {
@@ -164,26 +164,26 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 },
                 new()
                 {
-                Id = Guid.NewGuid(),
-                Amount = 50,
-                CardNumber = "5111111111111118",
-                ExpirationMonth = 9,
-                ExpirationYear = 2024,
-                CardholderName = "JUAN PARCIAL",
-                CardSecurityCode = "456",
-                TransactionId = Guid.NewGuid().ToString(),
-                PaymentStatus = PaymentStatusEnum.Aprovado,
-                Service = services[0],
-                Consumer = consumers[1]
+                    Id = Guid.NewGuid(),
+                    Amount = 50,
+                    CardNumber = "5111111111111118",
+                    ExpirationMonth = 9,
+                    ExpirationYear = 2024,
+                    CardholderName = "JUAN PARCIAL",
+                    CardSecurityCode = "456",
+                    TransactionId = Guid.NewGuid().ToString(),
+                    PaymentStatus = PaymentStatusEnum.Aprovado,
+                    Service = services[0],
+                    Consumer = consumers[1]
                 }
             };
             services[0].Payments!.AddRange(payments);
             consumers[0].Payments!.Add(payments[0]);
             consumers[1].Payments!.Add(payments[1]);
-            
+
             //Providers setup
             mockContext.Setup(c => c.Providers).Returns(providers.AsQueryable().BuildMockDbSet().Object);
-            
+
             //Services setup
             mockContext.Setup(c => c.Services).Returns(services.AsQueryable().BuildMockDbSet().Object);
 
@@ -195,7 +195,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
 
             //Consumers setup
             mockContext.Setup(c => c.Consumers).Returns(consumers.AsQueryable().BuildMockDbSet().Object);
-            
+
             //Payments setup
             mockContext.Setup(c => c.Payments).Returns(payments.AsQueryable().BuildMockDbSet().Object);
         }
