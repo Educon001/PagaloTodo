@@ -107,7 +107,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 {
                     Id = Guid.NewGuid(),
                     Amount = 10,
-                    Identifier = "V27670971",
+                    Identifier = "1234",
                     Status = false,
                     Service = services[1]
                 }
@@ -152,8 +152,12 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 {
                     Id = Guid.NewGuid(),
                     Amount = 25,
-                    Identifier = "1234",
-                    OriginAccount = "12345678900987654321",
+                    CardNumber = "4111111111111111",
+                    ExpirationMonth = 8,
+                    ExpirationYear = 2023,
+                    CardholderName = "JHONNY TEST",
+                    CardSecurityCode = "123",
+                    TransactionId = Guid.NewGuid().ToString(),
                     PaymentStatus = PaymentStatusEnum.Aprovado,
                     Service = services[0],
                     Consumer = consumers[0]
@@ -162,8 +166,12 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 {
                 Id = Guid.NewGuid(),
                 Amount = 50,
-                Identifier = "5678",
-                OriginAccount = "12346678900947654321",
+                CardNumber = "5111111111111118",
+                ExpirationMonth = 9,
+                ExpirationYear = 2024,
+                CardholderName = "JUAN PARCIAL",
+                CardSecurityCode = "456",
+                TransactionId = Guid.NewGuid().ToString(),
                 PaymentStatus = PaymentStatusEnum.Aprovado,
                 Service = services[0],
                 Consumer = consumers[1]

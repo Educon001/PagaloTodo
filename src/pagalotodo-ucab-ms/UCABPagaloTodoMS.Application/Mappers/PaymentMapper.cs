@@ -7,40 +7,52 @@ namespace UCABPagaloTodoMS.Application.Mappers;
 
 public class PaymentMapper
 {
-    public static PaymentResponse MapEntityToResponse(PaymentEntity entity, bool isServiceReference, bool isConsumerReference)
+    public static PaymentResponse MapEntityToResponse(PaymentEntity entity, bool isServiceReference,
+        bool isConsumerReference)
     {
         if (!isConsumerReference)
         {
             entity.Consumer!.Payments = null;
         }
+
         if (!isServiceReference)
         {
             entity.Service!.Payments = null;
         }
+
         var response = new PaymentResponse()
         {
             Id = entity.Id,
             PaymentDate = entity.CreatedAt.ToLocalTime(),
             Amount = entity.Amount,
             Identifier = entity.Identifier,
-            OriginAccount = entity.OriginAccount,
+            CardholderName = entity.CardholderName,
+            CardNumber = new string('*', entity.CardNumber!.Length - 4) +
+                         entity.CardNumber.Substring(entity.CardNumber.Length - 4),
+            TransactionId = entity.TransactionId,
             PaymentStatus = entity.PaymentStatus,
-            Service = isServiceReference? null : ServiceMapper.MapEntityToResponse(entity.Service!,false),
-            Consumer = isConsumerReference? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!)
+            Service = isServiceReference ? null : ServiceMapper.MapEntityToResponse(entity.Service!, false),
+            Consumer = isConsumerReference ? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!)
         };
         return response;
     }
-    
-    public static PaymentEntity MapRequestToEntity(PaymentRequest request, ServiceEntity serviceE, ConsumerEntity consumerE)
+
+    public static PaymentEntity MapRequestToEntity(PaymentRequest request, ServiceEntity serviceE,
+        ConsumerEntity consumerE)
     {
         var entity = new PaymentEntity()
         {
             Amount = request.Amount,
             Identifier = request.Identifier,
-            OriginAccount = request.OriginAccount,
+            CardholderName = request.CardholderName,
+            CardNumber = request.CardNumber?.Replace("-","").Replace(" ",""),
+            ExpirationMonth = request.ExpirationMonth,
+            ExpirationYear = request.ExpirationYear<100? request.ExpirationYear+2000 : request.ExpirationYear,
+            CardSecurityCode = request.CardSecurityCode,
             PaymentStatus = request.PaymentStatus,
             Service = serviceE,
-            Consumer = consumerE
+            Consumer = consumerE,
+            TransactionId = Guid.NewGuid().ToString()
         };
         return entity;
     }

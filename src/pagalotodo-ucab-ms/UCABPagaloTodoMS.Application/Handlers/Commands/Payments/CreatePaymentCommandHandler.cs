@@ -1,7 +1,9 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
 using UCABPagaloTodoMS.Application.Mappers;
+using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
@@ -24,7 +26,8 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             _logger.LogWarning("CreatePaymentCommandHandler.Handle: Request nulo.");
             throw new ArgumentNullException(nameof(request));
         }
-
+        var validator = new PaymentRequestValidator();
+        validator.ValidateAndThrow(request.Request);
         return await HandleAsync(request);
     }
 
@@ -46,6 +49,7 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                 throw new KeyNotFoundException(message);
             }
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
+            entity.TransactionId = Guid.NewGuid().ToString();
             _dbContext.Payments.Add(entity);
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();

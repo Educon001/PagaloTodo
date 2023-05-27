@@ -210,7 +210,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     Accepted:
     ///     - Operation successful.
     /// </response>
-    /// <returns>Retorna el id del nuevo registro</returns>
+    /// <returns>Retorna un mensaje de exito</returns>
     [HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
