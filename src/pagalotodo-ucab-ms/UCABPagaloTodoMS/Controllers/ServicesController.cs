@@ -171,7 +171,7 @@ public class ServicesController : BaseController<ServicesController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el regisrto modificado.</returns>
-        [HttpPatch("{id:guid}")]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ServiceResponse>> UpdateService([FromBody] ServiceRequest request, Guid id)
