@@ -23,44 +23,54 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
     {
         try
         {
-            // Buscamos el usuario en la tabla de administradores
-            if (request.Request.UserType != null && request.Request.UserType.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            if (request.Request.Username != null && request.Request.PasswordHash != null &&
+                request.Request.UserType != null)
             {
-                var admin = await _dbContext.Admins.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
-                if (admin != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, admin.PasswordHash))
+                // Buscamos el usuario en la tabla de administradores
+                if (request.Request.UserType != null && request.Request.UserType.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
                 {
-                    _logger.LogInformation($"El administrador {request.Request.Username} inició sesión con éxito.");
-                    return new LoginResponse {UserType = "admin", Id = admin.Id };
+                    var admin = await _dbContext.Admins.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    if (admin != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, admin.PasswordHash!))
+                    {
+                        _logger.LogInformation($"El administrador {request.Request.Username} inició sesión con éxito.");
+                        return new LoginResponse {UserType = "admin", Id = admin.Id };
+                    }
+                    
                 }
-                
-            }
             
-            // Buscamos el usuario en la tabla de consumidores
-            if (request.Request.UserType != null && request.Request.UserType.Equals("CONSUMER", StringComparison.OrdinalIgnoreCase))
-            {
-                var consumer = await _dbContext.Consumers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
-                if (consumer != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, consumer.PasswordHash))
+                // Buscamos el usuario en la tabla de consumidores
+                if (request.Request.UserType != null && request.Request.UserType.Equals("CONSUMER", StringComparison.OrdinalIgnoreCase))
                 {
-                    _logger.LogInformation($"El consumidor {request.Request.Username} inició sesión con éxito.");
-                    return new LoginResponse {UserType = "consumer", Id = consumer.Id };
+                    var consumer = await _dbContext.Consumers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    if (consumer != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, consumer.PasswordHash!))
+                    {
+                        _logger.LogInformation($"El consumidor {request.Request.Username} inició sesión con éxito.");
+                        return new LoginResponse {UserType = "consumer", Id = consumer.Id };
+                    }
+                    
+                }
+
+                // Buscamos el usuario en la tabla de proveedores
+                if (request.Request.UserType != null && request.Request.UserType.Equals("PROVIDER", StringComparison.OrdinalIgnoreCase))
+                {
+                    var provider = await _dbContext.Providers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    if (provider != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, provider.PasswordHash!))
+                    {
+                        _logger.LogInformation($"El proveedor {request.Request.Username} inició sesión con éxito.");
+                        return new LoginResponse {UserType = "provider", Id = provider.Id };
+                    }
+                    
                 }
                 
+                _logger.LogWarning($"El usuario {request.Request.Username} no pudo iniciar sesión porque no se encontró en la tabla de usuarios o la contraseña es incorrecta.");
+                return null;
             }
-
-            // Buscamos el usuario en la tabla de proveedores
-            if (request.Request.UserType != null && request.Request.UserType.Equals("PROVIDER", StringComparison.OrdinalIgnoreCase))
+            else
             {
-                var provider = await _dbContext.Providers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
-                if (provider != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, provider.PasswordHash))
-                {
-                    _logger.LogInformation($"El proveedor {request.Request.Username} inició sesión con éxito.");
-                    return new LoginResponse {UserType = "provider", Id = provider.Id };
-                }
-                
+                throw new ArgumentNullException(nameof(request));
             }
 
-            _logger.LogWarning($"El usuario {request.Request.Username} no pudo iniciar sesión porque no se encontró en la tabla de usuarios o la contraseña es incorrecta.");
-            return null;
+
         }
         catch (InvalidOperationException ex)
         {

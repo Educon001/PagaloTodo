@@ -34,7 +34,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
-        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
+        [Authorize(Policy = "AdminOrConsumerPolicy" )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -202,7 +202,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el objeto actualizado</returns>
-        [Authorize(Policy = "AdminPolicy" ),Authorize(Policy = "ProviderPolicy" ) ]
+        [Authorize(Policy = "AdminOrProviderPolicy" )]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

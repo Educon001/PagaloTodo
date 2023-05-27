@@ -77,6 +77,26 @@ public class Startup
         
             options.AddPolicy("ProviderPolicy", policy =>
                 policy.RequireClaim("UserType", "provider"));
+            
+            options.AddPolicy("AdminOrConsumerPolicy", policy =>
+            {
+                policy.RequireClaim("UserType", "admin", "consumer");
+            });
+
+            options.AddPolicy("AdminOrProviderPolicy", policy =>
+            {
+                policy.RequireClaim("UserType", "admin", "provider");
+            });
+
+            options.AddPolicy("ConsumerOrProviderPolicy", policy =>
+            {
+                policy.RequireClaim("UserType", "consumer", "provider");
+            });
+
+            options.AddPolicy("AllPolicies", policy =>
+            {
+                policy.RequireClaim("UserType", "admin", "consumer", "provider");
+            });
         });
         
     }

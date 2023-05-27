@@ -86,8 +86,7 @@ public class ConsumersController : BaseController<ConsumersController>
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
                 return BadRequest(ex.Message);            }
         }
-
-        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
+        [Authorize(Policy = "AdminOrConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -122,7 +121,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el objeto actualizado</returns>
-        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
+        [Authorize(Policy = "AdminOrConsumerPolicy" )]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -156,7 +155,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del objeto eliminado</returns>
-        [Authorize(Policy = "AdminPolicy" ), Authorize(Policy = "ConsumerPolicy" )]
+        [Authorize(Policy = "AdminPolicy" )]
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
