@@ -2,6 +2,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient("PagaloTodoApi", c =>
+{
+    c.BaseAddress = new Uri("http://localhost:5000");
+}).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+{
+    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+
+});
 
 var app = builder.Build();
 

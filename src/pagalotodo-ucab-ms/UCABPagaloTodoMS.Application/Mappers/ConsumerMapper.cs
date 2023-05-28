@@ -15,7 +15,8 @@ public static class ConsumerMapper
             Username = entity.Username,
             PasswordHash = entity.PasswordHash,
             Email = entity.Email,
-            FullName = entity.Name + ' ' + entity.LastName,
+            Name = entity.Name,
+            LastName = entity.LastName,
             Status = entity.Status,
             ConsumerId = entity.ConsumerId,
             Payments = entity.Payments?.Select(p => PaymentMapper.MapEntityToResponse(p, false, true)).ToList()

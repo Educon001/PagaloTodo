@@ -28,7 +28,7 @@ namespace UCABPagaloTodoMS.Tests.MockData
                     {
                         AccountNumber = "12390491093109101",
                         Email = "jorgealeond@gmail.com",
-                        FullName = "Jorge Leon",
+                        Name = "Jorge",
                         Id = Guid.NewGuid(),
                         PasswordHash = "kfkslf2123lkjl232l",
                         Rif = "V19291292410",
@@ -48,7 +48,7 @@ namespace UCABPagaloTodoMS.Tests.MockData
                     {
                         AccountNumber = "12390491093109104",
                         Email = "jorgealeond@gmail.com",
-                        FullName = "Carol El Souki",
+                        Name = "Carol",
                         Id = Guid.NewGuid(),
                         PasswordHash = "1fdsfa3e21ka0",
                         Rif = "V19914329",

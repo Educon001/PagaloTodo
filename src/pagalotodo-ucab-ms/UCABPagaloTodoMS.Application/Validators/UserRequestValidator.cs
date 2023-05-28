@@ -23,11 +23,7 @@ public class UserRequestValidator : AbstractValidator<UserRequest>
         
         RuleFor(c => c.Name)
             .NotEmpty().WithMessage("El nombre es requerido");
-        
-        RuleFor(c => c.LastName)
-            .NotEmpty().When(c => c.LastName != null)
-            .WithMessage("El apellido no puede estar vacío");
-        
+
         RuleFor(c => c.Status)
             .NotNull().WithMessage("El estado de la cuenta es requerido");
     }

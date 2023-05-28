@@ -57,7 +57,6 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
                     AttrReference = "Payment.Id",
                     Format = "",
                     Service = entity,
-                    Type = "string"
                 };
                 _dbContext.Fields.Add(fieldEntity);
                 await _dbContext.SaveEfContextChanges("APP");

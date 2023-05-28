@@ -1,0 +1,61 @@
+@model ConsumerModel
+
+<div class="container p-4">
+    <div><b>Id</b></div>
+    <div>@Model.Id</div>
+    <div><b>Username</b></div>
+    <div>@Model.Username</div>
+    <div><b>Name</b></div>
+    <div>@Model.Name</div>
+    <div><b>LastName</b></div>
+    <div>@Model.LastName</div>
+    <div><b>Email</b></div>
+    <div>@Model.Email</div>
+    <div><b>Consumer Id</b></div>
+    <div>@Model.ConsumerId</div>
+    <div><b>Estatus</b></div>
+    <div>@(Model.Status.GetValueOrDefault() ? "Activo" : "Inactivo") </div>
+    <div><b>Payments</b></div>
+    <div>
+        @if (Model.Payments != null && Model.Payments.Count > 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Identificador
+                    </th>
+                    <th>
+                        Servicio
+                    </th>
+                    <th>
+                        Estatus
+                    </th>
+                </tr>
+                </thead>
+
+                @foreach (var obj in @Model.Payments)
+                {
+                    <tr>
+                        <td>@obj.Identifier</td>
+                        <td>@obj.Service.Name</td>
+                        <td>@obj.PaymentStatus</td>
+                    </tr>
+                }
+            </table>
+        }
+        @if (Model.Payments == null)
+        {
+            <div>No payments registered</div>
+        }
+    </div>
+    <br>
+    <div>
+        <a asp-controller="Consumer" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+        <a asp-route="updateConsumer" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+    </div>
+    <br>
+    <div>
+        <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</div>

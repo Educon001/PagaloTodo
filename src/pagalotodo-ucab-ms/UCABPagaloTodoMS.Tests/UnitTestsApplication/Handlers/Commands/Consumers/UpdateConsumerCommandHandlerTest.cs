@@ -34,7 +34,7 @@ public class UpdateConsumerCommandHandlerTest
     {
         var entity = _mockContext.Object.Consumers.First();
         var expectedResponse = ConsumerMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "New";
         var request = new ConsumerRequest()
         {
             Username = entity.Username,
@@ -49,7 +49,7 @@ public class UpdateConsumerCommandHandlerTest
         var command = new UpdateConsumerCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ConsumerResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class UpdateConsumerCommandHandlerTest
     {
         var entity = _mockContext.Object.Consumers.First();
         var expectedResponse = ConsumerMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "Name";
         var request = new ConsumerRequest()
         {
             Username = entity.Username,
@@ -72,7 +72,7 @@ public class UpdateConsumerCommandHandlerTest
         var command = new UpdateConsumerCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ConsumerResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
     
     [Fact]

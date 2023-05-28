@@ -16,7 +16,6 @@ public class FieldMapper
             Name = entity.Name,
             Format = entity.Format,
             Length = entity.Length,
-            Type = entity.Type,
             AttrReference = entity.AttrReference
         };
         return response;
@@ -30,7 +29,6 @@ public class FieldMapper
             Format = request.Format,
             Length = request.Length,
             Service = serviceE, 
-            Type = request.Type,
             AttrReference = request.AttrReference
         };
         return entity;

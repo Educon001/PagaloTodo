@@ -11,7 +11,5 @@ public class FieldEntity : BaseEntity
     [Required]
     public ServiceEntity? Service { get; set; }
 
-    public string? Type { get; set; }
-    
     public string? AttrReference { get; set; }
 }

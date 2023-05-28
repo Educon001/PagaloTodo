@@ -34,7 +34,7 @@ public class UpdateProviderCommandHandlerTest
     {
         var entity = _mockContext.Object.Providers.First();
         var expectedResponse = ProviderMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "New";
         var request = new ProviderRequest()
         {
             Username = entity.Username,
@@ -43,14 +43,13 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = "Name",
             PasswordHash = null
         };
         _mockContext.Setup(m => m.Providers.Find(entity.Id)).Returns(entity);
         var command = new UpdateProviderCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ProviderResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
 
     [Fact]
@@ -58,7 +57,7 @@ public class UpdateProviderCommandHandlerTest
     {
         var entity = _mockContext.Object.Providers.First();
         var expectedResponse = ProviderMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "New";
         var request = new ProviderRequest()
         {
             Username = entity.Username,
@@ -67,14 +66,13 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = "Name",
             PasswordHash = entity.PasswordHash
         };
         _mockContext.Setup(m => m.Providers.Find(entity.Id)).Returns(entity);
         var command = new UpdateProviderCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ProviderResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
     
     [Fact]
@@ -109,7 +107,6 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = entity.LastName,
             PasswordHash = entity.PasswordHash
         };
         var command = new UpdateProviderCommand(request,entity.Id);
