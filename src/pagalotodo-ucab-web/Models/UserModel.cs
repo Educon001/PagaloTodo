@@ -9,7 +9,9 @@ public class UserModel
     
     public string? Email { get; set; }
 
-    public string? FullName { get; set; }
+    public string? Name { get; set; }
+
+    public string? LastName { get; set; }
 
     public bool? Status { get; set; }
 }

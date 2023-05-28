@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ServiceRequest
 
-<form method="post" asp-route="put" asp-route-id="@ViewBag.Id">
+<form method="post" asp-route="putService" asp-route-id="@ViewBag.Id">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2>Edit Service</h2>
@@ -11,10 +11,12 @@
         <div class="mb-3">
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Description">Description</label>
             <input asp-for="Description" class="form-control">
+            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="ServiceType">Tipo</label>
@@ -28,7 +30,7 @@
             List<ProviderModel> providers = ViewBag.Message;
             IEnumerable<SelectListItem> selectList = providers.Select(p => new SelectListItem
             {
-                Text = p.FullName,
+                Text = $"{p.Name} {p.LastName}",
                 Value = p.Id.ToString()
             });
         }
@@ -40,3 +42,11 @@
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
     </div>
 </form>
+
+@section Scripts
+{   @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
+
+<partial name="_ValidationScriptsPartial"/>

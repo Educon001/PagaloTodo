@@ -109,7 +109,7 @@ public class ConsumerController : Controller
     }
     
     [HttpGet]
-    [Route("update/{id:Guid}", Name = "update")]
+    [Route("updateConsumer/{id:Guid}", Name = "updateConsumer")]
     public async Task<IActionResult> Update(Guid id)
     {
         try
@@ -130,6 +130,8 @@ public class ConsumerController : Controller
                 Username = consumer.Username,
                 Email = consumer.Email,
                 ConsumerId = consumer.ConsumerId,
+                Name = consumer.Name,
+                LastName = consumer.LastName,
                 Status = consumer.Status
             };
             return View(consumerRequest);
@@ -142,7 +144,7 @@ public class ConsumerController : Controller
     }
     
     [HttpPost]
-    [Route("update/{id:Guid}", Name = "put")]
+    [Route("putConsumer/{id:Guid}", Name = "putConsumer")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Update(ConsumerRequest consumer, Guid id)
     {
@@ -160,5 +162,31 @@ public class ConsumerController : Controller
             return NotFound();
         }
 
+    }
+
+    [HttpGet]
+    //TODO: No traer todo de la bdd sino definir una ruta para obtener true/false
+    public async Task<JsonResult> CheckUsername(string username)
+    {
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        var response = await client.GetAsync("/consumers");
+        response.EnsureSuccessStatusCode();
+        var items = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        IEnumerable<ConsumerModel> consumers = JsonSerializer.Deserialize<IEnumerable<ConsumerModel>>(items, options)!;
+        bool isUnique = true;
+        foreach (ConsumerModel consumer in consumers)
+        {
+            if (consumer.Username == username)
+            {
+                isUnique = false;
+                break;
+            }
+        }
+        return Json(isUnique);
     }
 }

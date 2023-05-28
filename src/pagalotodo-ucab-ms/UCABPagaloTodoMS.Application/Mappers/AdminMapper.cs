@@ -14,7 +14,8 @@ public static class AdminMapper
             Username = entity.Username,
             PasswordHash = entity.PasswordHash,
             Email = entity.Email,
-            FullName = entity.Name + ' ' + entity.LastName,
+            Name = entity.Name, 
+            LastName = entity.LastName,
             Status = entity.Status
         };
         return response;

@@ -34,7 +34,7 @@ public class UpdateProviderCommandHandlerTest
     {
         var entity = _mockContext.Object.Providers.First();
         var expectedResponse = ProviderMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "New";
         var request = new ProviderRequest()
         {
             Username = entity.Username,
@@ -50,7 +50,7 @@ public class UpdateProviderCommandHandlerTest
         var command = new UpdateProviderCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ProviderResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class UpdateProviderCommandHandlerTest
     {
         var entity = _mockContext.Object.Providers.First();
         var expectedResponse = ProviderMapper.MapEntityToResponse(entity);
-        expectedResponse.FullName = "New Name";
+        expectedResponse.Name = "New";
         var request = new ProviderRequest()
         {
             Username = entity.Username,
@@ -74,7 +74,7 @@ public class UpdateProviderCommandHandlerTest
         var command = new UpdateProviderCommand(request,entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<ProviderResponse>(response);
-        Assert.Equal(expectedResponse.FullName, response.FullName);
+        Assert.Equal(expectedResponse.Name, response.Name);
     }
     
     [Fact]

@@ -129,7 +129,7 @@ public class ServiceController : Controller
     }
     
     [HttpGet]
-    [Route("update/{id:Guid}", Name = "update")]
+    [Route("updateService/{id:Guid}", Name = "updateService")]
     public async Task<IActionResult> Update(Guid id)
     {
         try
@@ -168,7 +168,7 @@ public class ServiceController : Controller
     }
     
     [HttpPost]
-    [Route("update/{id:Guid}", Name = "put")]
+    [Route("putService/{id:Guid}", Name = "putService")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Update(ServiceRequest service, Guid id)
     {
