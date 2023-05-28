@@ -8,6 +8,7 @@ using UCABPagaloTodoMS.Application.Queries.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Application.Validators;
+using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 
 namespace UCABPagaloTodoMS.Controllers;
@@ -37,7 +38,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de servicios.</returns>
-    [Authorize(Policy = "AllPolicies" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy )]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +72,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el servicio con el id que se paso.</returns>
-    [Authorize(Policy = "AdminOrProviderPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrProviderPolicy )]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -105,7 +106,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna los servicios del prestador.</returns>
-    [Authorize(Policy = "AllPolicies" )]
+    [Authorize(Policy = AuthorizationPolicies.AllPolicies )]
     [HttpGet("Provider/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -139,7 +140,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el id del nuevo registro.</returns>
-    [Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -176,7 +177,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el regisrto modificado.</returns>
-    [Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -212,7 +213,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el id del registro modificado.</returns>
-    [Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -246,7 +247,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de campos modificados.</returns>
-    [Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
     [HttpPut("fields/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -284,7 +285,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de los ids de los campo .</returns>
-    [Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
     [HttpPost("format")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

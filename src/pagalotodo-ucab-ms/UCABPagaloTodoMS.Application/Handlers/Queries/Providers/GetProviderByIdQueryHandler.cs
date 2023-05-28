@@ -34,10 +34,10 @@ public class GetProviderByIdQueryHandler : IRequestHandler<GetProviderByIdQuery,
 
             return HandleAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             _logger.LogWarning("GetProviderByIdQueryHandler.Handle: ArgumentNullException");
-            throw;
+            throw new CustomException(e);
         }
     }
 

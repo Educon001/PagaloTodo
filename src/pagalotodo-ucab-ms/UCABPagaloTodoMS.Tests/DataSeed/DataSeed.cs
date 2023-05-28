@@ -1,6 +1,5 @@
 using MockQueryable.Moq;
 using Moq;
-using NuGet.Packaging;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;

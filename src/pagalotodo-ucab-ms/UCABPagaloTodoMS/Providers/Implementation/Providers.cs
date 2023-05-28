@@ -97,6 +97,24 @@ namespace UCABPagaloTodoMS.Providers.Implementation
                         Scheme = "Bearer",
                         BearerFormat = "JWT"
                     });
+                
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Authorization"
+                            },
+                            Scheme = "Bearer",
+                            Name = "Authorization",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
 
                 c.AddSecurityDefinition("Application-Key",
                     new OpenApiSecurityScheme

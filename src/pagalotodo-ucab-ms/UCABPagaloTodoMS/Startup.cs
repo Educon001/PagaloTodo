@@ -11,12 +11,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
 using UCABPagaloTodoMS.Application.Handlers.Queries.Services;
+using UCABPagaloTodoMS.Authorization;
 
 namespace UCABPagaloTodoMS;
 
 
 public class Startup
 {
+    
+
     private AppSettings _appSettings;
     private readonly string _allowAllOriginsPolicy = "AllowAllOriginsPolicy";
 
@@ -69,31 +72,31 @@ public class Startup
         
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("AdminPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.AdminPolicy, policy =>
                 policy.RequireClaim("UserType","admin"));
         
-            options.AddPolicy("ConsumerPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.ConsumerPolicy, policy =>
                 policy.RequireClaim("UserType", "consumer"));
         
-            options.AddPolicy("ProviderPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.ProviderPolicy, policy =>
                 policy.RequireClaim("UserType", "provider"));
             
-            options.AddPolicy("AdminOrConsumerPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.AdminOrConsumerPolicy, policy =>
             {
                 policy.RequireClaim("UserType", "admin", "consumer");
             });
 
-            options.AddPolicy("AdminOrProviderPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.AdminOrProviderPolicy, policy =>
             {
                 policy.RequireClaim("UserType", "admin", "provider");
             });
 
-            options.AddPolicy("ConsumerOrProviderPolicy", policy =>
+            options.AddPolicy(AuthorizationPolicies.ConsumerOrProviderPolicy, policy =>
             {
                 policy.RequireClaim("UserType", "consumer", "provider");
             });
 
-            options.AddPolicy("AllPolicies", policy =>
+            options.AddPolicy(AuthorizationPolicies.AllPolicies, policy =>
             {
                 policy.RequireClaim("UserType", "admin", "consumer", "provider");
             });

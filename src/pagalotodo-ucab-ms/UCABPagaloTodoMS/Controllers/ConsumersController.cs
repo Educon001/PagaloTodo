@@ -7,6 +7,7 @@ using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 
 namespace UCABPagaloTodoMS.Controllers;
@@ -36,7 +37,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de consumidores.</returns>
-        [Authorize(Policy = "AdminPolicy" )]
+        [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,6 +71,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
+        [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy)]
         [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -120,6 +122,7 @@ public class ConsumersController : BaseController<ConsumersController>
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
                 return BadRequest(ex.Message);            }
         }
+        
         [Authorize(Policy = "AdminOrConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]

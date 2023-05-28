@@ -1,10 +1,13 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 
 namespace UCABPagaloTodoMS.Controllers;
@@ -34,7 +37,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
-        [Authorize(Policy = "AdminPolicy" )]
+        [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,6 +71,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores.</returns>
+        [Authorize(Policy = AuthorizationPolicies.AdminOrProviderPolicy)]
         [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,6 +105,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de prestadores con sus servicios.</returns>
+        [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy)]
         [HttpGet("services")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -134,7 +139,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del nuevo registro.</returns>
-        [Authorize(Policy = "AdminPolicy" )]
+        [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -168,7 +173,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el id del objeto eliminado</returns>
-        [Authorize(Policy = "AdminPolicy" )]
+        [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -202,7 +207,7 @@ public class ProvidersController : BaseController<ProvidersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna el objeto actualizado</returns>
-        [Authorize(Policy = "AdminOrProviderPolicy" )]
+        [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

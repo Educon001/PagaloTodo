@@ -1,10 +1,12 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands.Payments;
 using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Queries.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 using UCABPagaloTodoMS.Core.Enums;
 
@@ -35,6 +37,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de todos los pagos</returns>
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy)]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,6 +71,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de todos los pagos de un consumidor</returns>
+    [Authorize(Policy = AuthorizationPolicies.ConsumerPolicy)]
     [HttpGet("Consumer/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -102,6 +106,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de todos los pagos recibidos por un prestador</returns>
+    [Authorize(Policy = AuthorizationPolicies.ProviderPolicy)]
     [HttpGet("Provider/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -144,6 +149,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de todos los pagos de un servicio</returns>
+    [Authorize(Policy = AuthorizationPolicies.ProviderPolicy)]
     [HttpGet("Service/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -178,6 +184,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el id del nuevo registro</returns>
+    [Authorize(Policy = AuthorizationPolicies.ConsumerPolicy)]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -211,6 +218,7 @@ public class PaymentsController : BaseController<PaymentsController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna un mensaje de exito</returns>
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy)]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

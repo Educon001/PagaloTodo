@@ -20,7 +20,7 @@ public class GetConsumerByIdQueryHandlerTest
         _loggerMock = new Mock<ILogger<GetConsumerByIdQueryHandler>>();
         _mockContext = new Mock<IUCABPagaloTodoDbContext>();
         _handler = new GetConsumerByIdQueryHandler(_mockContext.Object, _loggerMock.Object);
-        //DataSeed.DataSeed.SetupDbContextData(_mockContext);
+        DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
 
     /// <summary>
