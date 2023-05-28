@@ -7,7 +7,7 @@
     <div>@Model.Username</div>
     <div><b>Name</b></div>
     <div>@Model.Name</div>
-    <div><b>Last Name</b></div>
+    <div><b>LastName</b></div>
     <div>@Model.LastName</div>
     <div><b>Email</b></div>
     <div>@Model.Email</div>
@@ -17,9 +17,9 @@
     <div>@(Model.Status.GetValueOrDefault() ? "Activo" : "Inactivo") </div>
     <div><b>Payments</b></div>
     <div>
-        @if (Model.Payments != null)
+        @if (Model.Payments != null && Model.Payments.Count > 0)
         {
-            <table>
+            <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>

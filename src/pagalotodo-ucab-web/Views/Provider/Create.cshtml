@@ -1,0 +1,70 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProviderRequest
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Create Provider</h2>
+            <hr>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Username">Username</label>
+            <input asp-for="Username" class="form-control">
+            <span asp-validation-for="Username" class="text-danger"></span>
+            @* <span class="text-danger">@Html.ValidationMessageFor(m=>m.Username, "username ya existe")</span> *@
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name">Nombre Proveedor</label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName">Siglas</label>
+            <input asp-for="LastName" class="form-control">
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Rif">Rif</label>
+            <input asp-for="Rif" class="form-control">
+            <span asp-validation-for="Rif" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AccountNumber">Numero de cuenta</label>
+            <input asp-for="AccountNumber" class="form-control">
+            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+        </div>
+        @{
+            IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
+                new()
+                {
+                    Text = "Activo",
+                    Value = "true"
+                },
+                new()
+                {
+                    Text = "Inactivo",
+                    Value = "false"
+                }
+            };
+        }
+        <div class="mb-3">
+            <label asp-for="Status">Estatus</label>
+            <select name="Status" id="Status" asp-items="selectList"></select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</form>
+
+@section Scripts
+{   @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
+
+<partial name="_ValidationScriptsPartial"/>
