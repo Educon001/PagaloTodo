@@ -39,7 +39,6 @@ public class UpdateFieldCommandHandlerTest
             Name = "New Name",
             Format = entity.Format,
             Length = entity.Length,
-            Type = entity.Type,
             AttrReference = entity.AttrReference
         };
         _mockContext.Setup(m => m.Fields.Find(entity.Id)).Returns(entity);
@@ -58,7 +57,6 @@ public class UpdateFieldCommandHandlerTest
             Name = "New Name",
             Format = entity.Format,
             Length = entity.Length,
-            Type = entity.Type,
             AttrReference = entity.AttrReference
         };
         var command = new UpdateFieldCommand(request,entity.Id);

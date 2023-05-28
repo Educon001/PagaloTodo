@@ -9,6 +9,5 @@ public class UserResponse
     
     public string? Name { get; set; }
     
-    public string? LastName { get; set; }
     public bool? Status { get; set; }
 }

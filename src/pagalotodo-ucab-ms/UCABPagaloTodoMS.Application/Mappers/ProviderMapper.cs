@@ -16,7 +16,6 @@ public class ProviderMapper
             PasswordHash = entity.PasswordHash,
             Email = entity.Email,
             Name = entity.Name,
-            LastName = entity.LastName,
             Status = entity.Status,
             Rif = entity.Rif,
             AccountNumber = entity.AccountNumber,
@@ -33,7 +32,6 @@ public class ProviderMapper
             PasswordHash = request.PasswordHash!=null? SecurePasswordHasher.Hash(request.PasswordHash) : null,
             Email = request.Email,
             Name = request.Name,
-            LastName = request.LastName,
             Status = request.Status,
             Rif = request.Rif,
             AccountNumber = request.AccountNumber

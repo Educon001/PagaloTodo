@@ -21,7 +21,6 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     PasswordHash = "Password.",
                     Email = "prueba@prueba.com",
                     Name = "Jhonny",
-                    LastName = "Test",
                     Status = true,
                     Rif = "V123456789",
                     AccountNumber = "12345678909876543212",
@@ -35,7 +34,6 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     PasswordHash = "Password!",
                     Email = "test@test.com",
                     Name = "Juan",
-                    LastName = "Parcial",
                     Status = true,
                     Rif = "V123456729",
                     AccountNumber = "09876543211234567890",
@@ -83,7 +81,6 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Format = "XXXXXXXXXX",
                     Length = 10,
                     AttrReference = "Payment.Id",
-                    Type = "int",
                     Service = services[0]
                 },
                 new()
@@ -93,7 +90,6 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Format = "XXXXX.XX",
                     Length = 8,
                     AttrReference = "Payment.Amount",
-                    Type = "float",
                     Service = services[0]
                 }
             };

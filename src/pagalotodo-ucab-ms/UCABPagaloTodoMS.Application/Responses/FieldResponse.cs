@@ -6,8 +6,5 @@ public class FieldResponse
     public string? Name { get; set; }
     public uint? Length { get; set; }
     public string? Format { get; set; }
-    
-    public string? Type { get; set; }
-    
     public string? AttrReference { get; set; }
 }

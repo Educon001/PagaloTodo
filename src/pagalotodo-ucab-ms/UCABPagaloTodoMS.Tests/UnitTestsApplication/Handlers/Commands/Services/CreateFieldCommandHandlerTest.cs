@@ -39,7 +39,6 @@ public class CreateFieldCommandHandlerTest
             Format = entity.Format,
             Length = entity.Length,
             Service = entity.Service!.Id,
-            Type = entity.Type,
             AttrReference = entity.AttrReference
         };
         _mockContext.Setup(c => c.Services.Find(entity.Service.Id)).Returns(entity.Service);
@@ -69,7 +68,6 @@ public class CreateFieldCommandHandlerTest
             Format = entity.Format,
             Length = entity.Length,
             Service = entity.Service!.Id,
-            Type = entity.Type,
             AttrReference = entity.AttrReference
         };
         var command = new CreateFieldCommand(request);

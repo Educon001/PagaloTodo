@@ -45,7 +45,6 @@ public class UpdateFieldCommandHandler : IRequestHandler<UpdateFieldCommand, Fie
                 entity.Name = request.Request.Name;
                 entity.Format = request.Request.Format;
                 entity.Length = request.Request.Length;
-                entity.Type = request.Request.Type;
                 entity.AttrReference = request.Request.AttrReference;
                 _dbContext.Fields.Update(entity);
                 await _dbContext.SaveEfContextChanges("APP");

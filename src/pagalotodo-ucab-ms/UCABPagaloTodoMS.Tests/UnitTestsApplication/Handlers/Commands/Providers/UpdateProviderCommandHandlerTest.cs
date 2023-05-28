@@ -43,7 +43,6 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = "Name",
             PasswordHash = null
         };
         _mockContext.Setup(m => m.Providers.Find(entity.Id)).Returns(entity);
@@ -67,7 +66,6 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = "Name",
             PasswordHash = entity.PasswordHash
         };
         _mockContext.Setup(m => m.Providers.Find(entity.Id)).Returns(entity);
@@ -109,7 +107,6 @@ public class UpdateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = entity.LastName,
             PasswordHash = entity.PasswordHash
         };
         var command = new UpdateProviderCommand(request,entity.Id);

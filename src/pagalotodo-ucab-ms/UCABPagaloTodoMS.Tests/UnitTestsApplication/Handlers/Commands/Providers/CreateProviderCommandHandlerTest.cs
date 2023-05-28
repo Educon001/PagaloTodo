@@ -41,7 +41,6 @@ public class CreateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = entity.LastName,
             PasswordHash = entity.PasswordHash
         };
         _mockContext.Setup(c => c.Providers.Add(It.IsAny<ProviderEntity>()))
@@ -85,7 +84,6 @@ public class CreateProviderCommandHandlerTest
             Rif = entity.Rif,
             Status = entity.Status,
             AccountNumber = entity.AccountNumber,
-            LastName = entity.LastName,
             PasswordHash = entity.PasswordHash
         };
         _mockContext.Setup(c => c.Providers.Add(It.IsAny<ProviderEntity>()))

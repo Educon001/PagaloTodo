@@ -15,7 +15,6 @@ public static class AdminMapper
             PasswordHash = entity.PasswordHash,
             Email = entity.Email,
             Name = entity.Name, 
-            LastName = entity.LastName,
             Status = entity.Status
         };
         return response;
@@ -29,7 +28,6 @@ public static class AdminMapper
             PasswordHash = request.PasswordHash,
             Email = request.Email,
             Name = request.Name,
-            LastName = request.LastName,
             Status = request.Status
         };
         return entity;

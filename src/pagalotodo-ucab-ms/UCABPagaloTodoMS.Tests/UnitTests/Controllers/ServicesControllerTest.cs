@@ -232,12 +232,12 @@ public class ServicesControllerTest
             new()
             {
                 Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
-                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             },
             new()
             {
                 Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
-                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             }
         };
 
@@ -259,12 +259,12 @@ public class ServicesControllerTest
             new()
             {
                 Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
-                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             },
             new()
             {
                 Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
-                Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+                Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             }
         };
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreateFieldCommand>(), It.IsAny<CancellationToken>()))
@@ -282,7 +282,7 @@ public class ServicesControllerTest
         FieldRequest fieldRequest = new()
         {
             Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
-            Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            Service = new Guid("12345678-1234-1234-1234-1234567890AC")
         };
         ServiceEntity serviceE = new ServiceEntity() {Id = new Guid("12345678-1234-1234-1234-1234567890AC")};
         FieldResponse expectedResponse =
@@ -303,7 +303,7 @@ public class ServicesControllerTest
         FieldRequest fieldRequest = new()
         {
             Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
-            Service = new Guid("12345678-1234-1234-1234-1234567890AC"), Type = "int"
+            Service = new Guid("12345678-1234-1234-1234-1234567890AC")
         };
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());

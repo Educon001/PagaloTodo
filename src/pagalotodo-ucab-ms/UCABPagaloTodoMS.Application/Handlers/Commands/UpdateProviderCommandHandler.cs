@@ -61,7 +61,6 @@ public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderComman
                 }
                 entity.Email = request.Request.Email;
                 entity.Name = request.Request.Name;
-                entity.LastName = request.Request.LastName;
                 entity.Status = request.Request.Status;
                 _dbContext.Providers.Update(entity);
             }
