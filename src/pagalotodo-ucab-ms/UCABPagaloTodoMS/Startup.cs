@@ -57,7 +57,7 @@ public class Startup
         services.AddProviders(Configuration, Folder, _appSettings, environment);
         services.AddMediatR(
                 typeof(GetServicesQueryHandler).GetTypeInfo().Assembly);
-
+        services.AddMemoryCache();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

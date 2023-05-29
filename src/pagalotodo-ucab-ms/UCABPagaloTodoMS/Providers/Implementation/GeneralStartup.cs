@@ -24,7 +24,8 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             }
 
             provider.AddDatabaseService(services, configuration, environment, appSettings.RequireDatabase);
-
+            provider.AddSendGridService(services, configuration);
+            
             return services;
         }
     }
