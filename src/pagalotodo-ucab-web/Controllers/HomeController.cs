@@ -18,6 +18,11 @@ namespace UCABPagaloTodoWeb.Controllers
             return View();
         }
 
+        public ViewResult Index2()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -7,8 +7,6 @@ public class FieldModel
     public int? Length { get; set; }
 
     public string? Format { get; set; }
-
-    public string? Type { get; set; }
-
-    public string? AttrRef { get; set; }
+    
+    public string? AttrReference { get; set; }
 }

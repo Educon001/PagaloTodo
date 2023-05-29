@@ -1,15 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Pagalo Todo";
+    Layout = "_LayoutPartial";
 }
 
-<div class="text-center">
-     <h1 class="display-4">Welcome</h1>
-     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-     <p>Hey maaaxxxx</p>
+<div class="container-fluid p-4">
+    <div class="p-2">
+        <a asp-controller="Login" asp-action="Admin" class="btn btn-primary">Admin Login</a>
+    </div>
+    <div class="p-2">
+        <a asp-controller="Login" asp-action="Consumer" class="btn btn-primary">Consumer Login</a>
+    </div>
+    <div class="p-2">
+        <a asp-controller="Login" asp-action="Provider" class="btn btn-primary">Provider Login</a>
+    </div>
 </div>
-
-
-
-
-
-

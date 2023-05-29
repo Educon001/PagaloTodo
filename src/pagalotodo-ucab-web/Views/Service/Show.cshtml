@@ -19,6 +19,40 @@
     <div>@Model.ServiceStatus</div>
     <div><b>Tipo Servicio</b></div>
     <div>@Model.ServiceType</div>
+      <div><b></b></div>
+        <div>
+            @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Longitud
+                        </th>
+                        <th>
+                            Referencia Atributo
+                        </th>
+                    </tr>
+                    </thead>
+    
+                    @foreach (var obj in @Model.ConciliationFormat)
+                    {
+                        <tr>
+                            <td>@obj.Name</td>
+                            <td>@obj.Length</td>
+                            <td>@obj.AttrReference</td>
+                        </tr>
+                    }
+                </table>
+            }
+            @if (Model.ConciliationFormat == null || Model.ConciliationFormat.Count == 0)
+            {
+                <div>No Fields registered</div>
+            }
+        </div>
     <br>
     <div>
         <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>

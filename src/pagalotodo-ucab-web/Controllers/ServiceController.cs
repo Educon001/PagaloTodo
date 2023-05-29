@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class ServiceController : Controller
     {
         _httpClientFactory = httpClientFactory;
     }
-    
+
     public async Task<IActionResult> Index()
     {
         try
@@ -51,7 +52,8 @@ public class ServiceController : Controller
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-            IEnumerable<ProviderModel> providers = JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(items, options)!;
+            IEnumerable<ProviderModel> providers =
+                JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(items, options)!;
             ViewBag.Message = providers;
             return View();
         }
@@ -61,7 +63,7 @@ public class ServiceController : Controller
             return NotFound();
         }
     }
-    
+
     [ValidateAntiForgeryToken]
     [HttpPost]
     public async Task<IActionResult> Create(ServiceRequest service)
@@ -71,7 +73,8 @@ public class ServiceController : Controller
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
             var response = await client.PostAsJsonAsync("/services", service);
             var result = await response.Content.ReadAsStringAsync();
-            return RedirectToAction("Index");
+            Guid id = JsonSerializer.Deserialize<Guid>(result);
+            return RedirectToRoute("CreateFormat", new { id });
         }
         catch (HttpRequestException e)
         {
@@ -104,7 +107,7 @@ public class ServiceController : Controller
             return NotFound();
         }
     }
-    
+
     public async Task<ActionResult> Delete(Guid id)
     {
         try
@@ -127,7 +130,7 @@ public class ServiceController : Controller
             return NotFound();
         }
     }
-    
+
     [HttpGet]
     [Route("updateService/{id:Guid}", Name = "updateService")]
     public async Task<IActionResult> Update(Guid id)
@@ -143,7 +146,8 @@ public class ServiceController : Controller
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-            IEnumerable<ProviderModel> providers = JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(providersItems, options)!;
+            IEnumerable<ProviderModel> providers =
+                JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(providersItems, options)!;
             ViewBag.Message = providers;
             var servicesResponse = await client.GetAsync($"/services/{id}");
             servicesResponse.EnsureSuccessStatusCode();
@@ -166,7 +170,7 @@ public class ServiceController : Controller
             return NotFound();
         }
     }
-    
+
     [HttpPost]
     [Route("putService/{id:Guid}", Name = "putService")]
     [ValidateAntiForgeryToken]
@@ -185,6 +189,91 @@ public class ServiceController : Controller
             Console.WriteLine(e);
             return NotFound();
         }
-
     }
+
+    [Route("/{id:Guid}", Name="createFormat")]
+    public IActionResult CreateFormat(Guid id)
+    {
+        ViewBag.ServiceId = id;
+        return View();
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("/{id:Guid}", Name="createFormatR")]
+    public async Task<IActionResult> CreateFormat(List<FieldRequest> fieldRequests, Guid id)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            foreach (FieldRequest field in fieldRequests)
+            {
+                field.Service = id;
+            }
+            var response = await client.PostAsJsonAsync("/services/format", fieldRequests);
+            var result = await response.Content.ReadAsStringAsync();
+            // List<Guid> id = JsonSerializer.Deserialize<List<Guid>>(result)!;
+            return RedirectToAction("Index");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+        // try
+        // {
+        //     var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        //     var response = await client.PostAsJsonAsync("/services", service);
+        //     var result = await response.Content.ReadAsStringAsync();
+        //     Guid id = JsonSerializer.Deserialize<Guid>(result);
+        //     return RedirectToAction("CreateFormat", id);
+        // }
+        // catch (HttpRequestException e)
+        // {
+        //     Console.WriteLine(e);
+        //     return NotFound();
+        // }
+    }
+    
+    // [HttpGet]
+    // [Route("createFormat/{id:Guid}", Name = "createFormat")]
+    // public async Task<IActionResult> ConciliationFormat(List<FieldRequest> fieldRequests)
+    // public IActionResult ConciliationFormat(List<FieldRequest> fieldRequests)
+    // {
+        // RedirectToAction("Index");
+        // return View();
+        // try
+        // {
+        //     var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        //     var providersResponse = await client.GetAsync("/providers");
+        //     providersResponse.EnsureSuccessStatusCode();
+        //     var providersItems = await providersResponse.Content.ReadAsStringAsync();
+        //     var options = new JsonSerializerOptions()
+        //     {
+        //         PropertyNameCaseInsensitive = true,
+        //         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        //     };
+        //     IEnumerable<ProviderModel> providers = JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(providersItems, options)!;
+        //     ViewBag.Message = providers;
+        //     var servicesResponse = await client.GetAsync($"/services/{id}");
+        //     servicesResponse.EnsureSuccessStatusCode();
+        //     var serviceItem = await servicesResponse.Content.ReadAsStringAsync();
+        //     ServiceModel service = JsonSerializer.Deserialize<ServiceModel>(serviceItem, options)!;
+        //     ViewBag.Id = id;
+        //     ServiceRequest serviceRequest = new ServiceRequest()
+        //     {
+        //         Name = service.Name,
+        //         Description = service.Description,
+        //         ServiceStatus = (ServiceStatusEnum)Enum.Parse(typeof(ServiceStatusEnum), service.ServiceStatus!),
+        //         ServiceType = (ServiceTypeEnum)Enum.Parse(typeof(ServiceTypeEnum), service.ServiceType!),
+        //         Provider = service.Provider!.Id
+        //     };
+        //     return View(serviceRequest);
+        // }
+        // catch (HttpRequestException e)
+        // {
+        //     Console.WriteLine(e);
+        //     return NotFound();
+        // }
+    // }
 }
