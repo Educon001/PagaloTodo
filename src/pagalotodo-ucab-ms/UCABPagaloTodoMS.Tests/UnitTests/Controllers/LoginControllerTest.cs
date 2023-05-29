@@ -13,6 +13,7 @@ using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
 using UCABPagaloTodoMS.Core.Database;
+using UCABPagaloTodoMS.Token;
 using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
@@ -43,7 +44,8 @@ public class LoginControllerTest
     {
         // Arrange
         var loginRequest = new LoginRequest { Username = "test", PasswordHash = "Password.", UserType = "consumer" };
-        var expectedResponse = new LoginResponse { Id = Guid.NewGuid(), UserType = "consumer", Token = "some.jwt.token" };
+        var result = new LoginResponse{ UserType= "consumer", Id = Guid.NewGuid() };
+        var expectedResponse = new LoginResponse { Id = result.Id, UserType = result.UserType, Token = GenerarToken.GenerateToken(result) };
         _mediatorMock.Setup(m => m.Send(It.IsAny<LoginCommand>(), CancellationToken.None))
             .ReturnsAsync(expectedResponse);
 
@@ -56,6 +58,8 @@ public class LoginControllerTest
     
         Assert.Equal(expectedResponse.Id, loginResponse.Id);
         Assert.Equal(expectedResponse.UserType, loginResponse.UserType);
+        Assert.Equal(expectedResponse.Token, loginResponse.Token);
+
     }
 
     [Fact]
