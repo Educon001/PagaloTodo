@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SendGrid;
+using UCABPagaloTodoMS.Core.Services;
 using UCABPagaloTodoMS.Infrastructure.Database;
+using UCABPagaloTodoMS.Infrastructure.Services;
 using UCABPagaloTodoMS.Infrastructure.Settings;
 using UCABPagaloTodoMS.Providers.Interface;
 
 namespace UCABPagaloTodoMS.Providers.Implementation
 {
-    
     public class Providers : IProviders
     {
         private const string AllowAllOriginsPolicy = "_AllowAllOriginsPolicy";
@@ -29,7 +31,7 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             AppSettings appSettings)
         {
             services.AddControllers();
-           
+
             return services;
         }
 
@@ -53,10 +55,22 @@ namespace UCABPagaloTodoMS.Providers.Implementation
         {
             string DBConnectionString = configuration["DBConnectionString"];
             services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseSqlServer(DBConnectionString));
-           
+
 
             services.AddHealthChecks()
-                .AddDbContextCheck<UCABPagaloTodoDbContext>(null, null, new[] { "ready" });
+                .AddDbContextCheck<UCABPagaloTodoDbContext>(null, null, new[] {"ready"});
+            return services;
+        }
+
+        public IServiceCollection AddSendGridService(IServiceCollection services, IConfiguration configuration)
+        {
+            var apiKey = configuration["SendGrid:ApiKey"];
+            var client = new SendGridClient(apiKey);
+            services.AddSingleton<ISendGridClient>(client);
+            var senderEmail = configuration["SendGrid:SenderEmail"];
+            var senderName = configuration["SendGrid:SenderName"];
+            services.AddTransient<IEmailSender>(provider =>
+                new SendGridEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
             return services;
         }
 
@@ -84,7 +98,7 @@ namespace UCABPagaloTodoMS.Providers.Implementation
                             Email = appSettings.SharedMail,
                             Url = new Uri(appSettings.UCABUrl)
                         },
-                        License = new OpenApiLicense { Name = "UCAB", Url = new Uri(appSettings.UCABUrl) }
+                        License = new OpenApiLicense {Name = "UCAB", Url = new Uri(appSettings.UCABUrl)}
                     });
                 c.AddSecurityDefinition("Authorization",
                     new OpenApiSecurityScheme
@@ -97,7 +111,7 @@ namespace UCABPagaloTodoMS.Providers.Implementation
                         Scheme = "Bearer",
                         BearerFormat = "JWT"
                     });
-                
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
