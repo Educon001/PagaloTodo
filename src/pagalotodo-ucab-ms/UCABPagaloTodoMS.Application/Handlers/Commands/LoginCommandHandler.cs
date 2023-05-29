@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Infrastructure.Database;
@@ -47,7 +48,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
                     if (consumer != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, consumer.PasswordHash!))
                     {
                         _logger.LogInformation($"El consumidor {request.Request.Username} inició sesión con éxito.");
-                        return new LoginResponse {UserType = "consumer", Id = consumer.Id };
+                        return new LoginResponse{
+                            UserType= "consumer",
+                            Id = consumer.Id
+                        };
                     }
                     break;
 
@@ -56,7 +60,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
                     if (provider != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, provider.PasswordHash!))
                     {
                         _logger.LogInformation($"El proveedor {request.Request.Username} inició sesión con éxito.");
-                        return new LoginResponse {UserType = "provider", Id = provider.Id };
+                        return new LoginResponse
+                        {
+                            UserType = "provider",
+                            Id = provider.Id
+                        };
                     }
                     break;
 
@@ -69,15 +77,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
             _logger.LogWarning($"El usuario {request.Request.Username} no pudo iniciar sesión porque no se encontró en la tabla de usuarios o la contraseña es incorrecta.");
             return null;
         }
-        catch (InvalidOperationException ex)
-        {
-           _logger.LogError(ex, $"Ocurrió un error al buscar al usuario {request.Request.Username} en la base de datos.");
-            throw new Exception($"No se pudo encontrar al usuario en la base de datos: {ex.Message}");
-        }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Request.Username}.");
-            throw new Exception($"Ocurrió un error al autenticar al usuario: {ex.Message}");
+            throw new CustomException($"Ocurrió un error al autenticar al usuario: {ex.Message}", ex);
         }
     }
 }

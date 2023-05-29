@@ -128,6 +128,22 @@ public class LoginControllerTest
         Assert.IsType<ActionResult<LoginResponse>>(result);
         Assert.IsType<BadRequestResult>(result.Result);
     }
+
+    [Fact]
+    public async Task Authenticate_ExceptionThrown_ReturnsBadRequestResult()
+    {
+        // Arrange
+        var loginRequest = new LoginRequest { Username = "test", PasswordHash = "Password.", UserType = "consumer" };
+        _mediatorMock.Setup(m => m.Send(It.IsAny<LoginCommand>(), CancellationToken.None))
+            .ThrowsAsync(new Exception("Error de prueba"));
+
+        // Act
+        var response = await _controller.Authenticate(loginRequest);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        Assert.Contains("Se ha producido un error al autenticar al usuario.", badRequestResult.Value.ToString());
+    }
     
 }
 

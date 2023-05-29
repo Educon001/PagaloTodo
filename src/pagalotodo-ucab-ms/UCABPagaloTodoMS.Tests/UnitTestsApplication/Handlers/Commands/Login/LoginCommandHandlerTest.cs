@@ -3,6 +3,7 @@ using Moq;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using Xunit;
@@ -143,5 +144,4 @@ public class LoginCommandHandlerTest
         // Assert
         Assert.Equal("Value cannot be null. (Parameter 'request')", ex.Message);
     }
- 
 }
