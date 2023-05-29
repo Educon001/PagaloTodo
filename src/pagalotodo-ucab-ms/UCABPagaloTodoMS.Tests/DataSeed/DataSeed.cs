@@ -3,6 +3,7 @@ using Moq;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;
+using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Tests.DataSeed
 {
@@ -10,6 +11,20 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
     {
         public static void SetupDbContextData(this Mock<IUCABPagaloTodoDbContext> mockContext)
         {
+            // Admins data
+            var admins = new List<AdminEntity>
+            {
+                new ()
+                {
+                    Id = Guid.NewGuid(),
+                    Username = "admin",
+                    PasswordHash = SecurePasswordHasher.Hash("Password."),
+                    Email = "prueba@prueba.com",
+                    Name = "Jhonny",
+                    Status = true,
+                }
+            };
+            
             //Providers data
             var providers = new List<ProviderEntity>()
             {
@@ -18,7 +33,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "prueba",
-                    PasswordHash = "Password.",
+                    PasswordHash = SecurePasswordHasher.Hash("Password."),
                     Email = "prueba@prueba.com",
                     Name = "Jhonny",
                     Status = true,
@@ -31,7 +46,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "test",
-                    PasswordHash = "Password!",
+                    PasswordHash = SecurePasswordHasher.Hash("Password."),
                     Email = "test@test.com",
                     Name = "Juan",
                     Status = true,
@@ -117,7 +132,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "prueba",
-                    PasswordHash = "Password.",
+                    PasswordHash =  SecurePasswordHasher.Hash("Password."),
                     Email = "prueba@prueba.com",
                     Name = "Jhonny",
                     LastName = "Test",
@@ -130,7 +145,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     Username = "test",
-                    PasswordHash = "Password.",
+                    PasswordHash = SecurePasswordHasher.Hash("Password."),
                     Email = "test@test.com",
                     Name = "Juan",
                     LastName = "Parcial",
@@ -176,6 +191,9 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
             consumers[0].Payments!.Add(payments[0]);
             consumers[1].Payments!.Add(payments[1]);
 
+            //Admins setup
+            mockContext.Setup(c => c.Admins).Returns(admins.AsQueryable().BuildMockDbSet().Object);
+            
             //Providers setup
             mockContext.Setup(c => c.Providers).Returns(providers.AsQueryable().BuildMockDbSet().Object);
 
