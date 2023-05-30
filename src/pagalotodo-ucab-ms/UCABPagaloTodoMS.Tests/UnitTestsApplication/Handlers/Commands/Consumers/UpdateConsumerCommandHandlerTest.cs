@@ -62,7 +62,7 @@ public class UpdateConsumerCommandHandlerTest
         {
             Username = entity.Username,
             Email = entity.Email,
-            Name = "New",
+            Name = "Name",
             ConsumerId = entity.ConsumerId,
             Status = entity.Status,
             LastName = "Name",
