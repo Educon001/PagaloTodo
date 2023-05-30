@@ -39,9 +39,6 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.Entity<ProviderEntity>().HasIndex(e => e.Username).IsUnique();
-        modelBuilder.Entity<ConsumerEntity>().HasIndex(e => e.Username).IsUnique();
-        modelBuilder.Entity<AdminEntity>().HasIndex(e => e.Username).IsUnique();
         //IsDeleted Query Filter
         modelBuilder.Entity<AdminEntity>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<ConsumerEntity>().HasQueryFilter(e => !e.IsDeleted);
