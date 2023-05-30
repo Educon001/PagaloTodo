@@ -276,4 +276,60 @@ public class ServiceController : Controller
         //     return NotFound();
         // }
     // }
+    
+    [Route("updateField/{serviceId:guid}/{id:guid}", Name = "updateField")]
+    public async Task<IActionResult> UpdateField(Guid id, Guid serviceId)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            var fieldResponse = await client.GetAsync($"/services/fields/{id}");
+            fieldResponse.EnsureSuccessStatusCode();
+            var field = await fieldResponse.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            FieldModel fieldFinal =
+                JsonSerializer.Deserialize<FieldModel>(field, options)!;
+            ViewBag.Message = fieldFinal;
+            ViewBag.Id = id;
+            ViewBag.serviceId = serviceId;
+            FieldRequest fieldRequest = new FieldRequest
+            {
+                Name = fieldFinal.Name,
+                Format = fieldFinal.Format,
+                Length = fieldFinal.Length,
+                AttrReference = fieldFinal.AttrReference,
+                // Service = serviceId
+            };
+            return View(fieldRequest);
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    [HttpPost]
+    [Route("putField/{serviceId:Guid}/{id:Guid}", Name = "putField")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> UpdateField(FieldRequest field, Guid id, Guid serviceId)
+    {
+        try
+        {
+            field.Service = serviceId;
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            var response = await client.PutAsJsonAsync($"/services/fields/{id}", field);
+            var result = await response.Content.ReadAsStringAsync();
+            return RedirectToAction("Index");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
 }

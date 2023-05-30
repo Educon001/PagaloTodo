@@ -8,7 +8,7 @@ public class FieldRequest
     public string? Name { get; set; }
     
     [Required]
-    public uint? Length { get; set; }
+    public int? Length { get; set; }
     
     [Required]
     public string? Format { get; set; }

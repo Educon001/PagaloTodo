@@ -15,11 +15,11 @@
     <div>@Model.Name</div>
     <div><b>Description</b></div>
     <div>@Model.Description</div>
-    <div><b>Estatus Servicio</b></div>
+    <div><b>Service Status</b></div>
     <div>@Model.ServiceStatus</div>
-    <div><b>Tipo Servicio</b></div>
+    <div><b>Service Type</b></div>
     <div>@Model.ServiceType</div>
-      <div><b></b></div>
+    <div><b>Conciliation Format</b></div>
         <div>
             @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
             {
@@ -33,8 +33,12 @@
                             Longitud
                         </th>
                         <th>
+                            Formato
+                        </th>
+                        <th>
                             Referencia Atributo
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
     
@@ -43,7 +47,11 @@
                         <tr>
                             <td>@obj.Name</td>
                             <td>@obj.Length</td>
+                            <td>@obj.Format</td>
                             <td>@obj.AttrReference</td>
+                            <td>
+                                <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                            </td>
                         </tr>
                     }
                 </table>

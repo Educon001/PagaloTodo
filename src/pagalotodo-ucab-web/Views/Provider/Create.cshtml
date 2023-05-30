@@ -19,6 +19,11 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="mb-3">
+            <label asp-for="PasswordHash">Password</label>
+            <input asp-for="PasswordHash" class="form-control"  type="password">
+            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+        <div class="mb-3">
             <label asp-for="Name">Nombre Proveedor</label>
             <input asp-for="Name" class="form-control">
             <span asp-validation-for="Name" class="text-danger"></span>

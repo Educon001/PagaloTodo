@@ -10,7 +10,8 @@ public class UserRequest
     [Required(ErrorMessage = "Username requerido")]
     public string? Username { get; set; }
     
-    // [Required(ErrorMessage = "Contraseña requerida")]
+    [Required(ErrorMessage = "Contraseña requerida")]
+    // [RegularExpression(@"[A-Z]|[a-z]", ErrorMessage = "La contraseña debe tener al menos una minúscula y una mayúscula")]
     public string? PasswordHash { get; set; }
     
     [Required(ErrorMessage = "Email requerido")]

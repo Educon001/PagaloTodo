@@ -315,4 +315,38 @@ public class ServicesController : BaseController<ServicesController>
             return BadRequest(ex.Message);
         }
     }
+    
+    /// <summary>
+    ///     Endpoint para la consulta de field por id
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Get field by id
+    ///     ## Url
+    ///     GET /fields/{id}
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna el field con el id que se paso.</returns>
+    [Authorize(Policy = AuthorizationPolicies.AdminOrProviderPolicy )]
+    [HttpGet("fields/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<FieldResponse>> GetFieldById(Guid id)
+    {
+        _logger.LogInformation("Entrando al método que consultas los fields con el id");
+        try
+        {
+            var query = new GetFieldByIdQuery(id);
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de un field dado el id. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
 }
