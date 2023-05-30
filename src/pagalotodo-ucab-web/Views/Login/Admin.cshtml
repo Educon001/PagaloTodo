@@ -1,34 +1,67 @@
 @model LoginRequest
 
 @{
-    ViewBag.Title = "Login Admin";
-    Layout = "_LayoutPartial";
+    ViewBag.Title = "Iniciar Sesión";
+    Layout = "_Layout";
 }
 
-<h2>Login Admin</h2>
-
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Username">Nombre de usuario:</label>
-        <input asp-for="Username" class="form-control" required />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-white pb-4">
+                    <h2 class="text-center font-weight-bold mb-3">Iniciar Sesión</h2>
+                </div>
+                <div class="card-body px-4 py-3">
+                    <form method="post">
+                        <div class="form-group mb-4">
+                            <label for="Username" class="mb-2 font-weight-bold">Nombre de Usuario:</label>
+                            <input asp-for="Username" class="form-control" id="Username" required />
+                            <span asp-validation-for="Username" class="text-danger d-block mt-2"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="PasswordHash" class="mb-2 font-weight-bold">Contraseña:</label>
+                            <div class="input-group">
+                                <input asp-for="PasswordHash" class="form-control" id="PasswordHash" type="password" required />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input" type="checkbox" id="ShowPassword" onclick="showPassword()" />
+                                        <label class="form-check-label" for="ShowPassword"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                
+                            </div>
+                            <span asp-validation-for="PasswordHash" class="text-danger d-block mt-2"></span>
+                        </div>
+                        <input asp-for="UserType" type="hidden" value="admin" />
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary rounded-pill py-2 px-4 mr-3">Iniciar Sesión</button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary rounded-pill py-2 px-4">Cancelar</a>
+                        </div>
+                    </form>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="PasswordHash">Contraseña:</label>
-        <input asp-for="PasswordHash" class="form-control" type="password" required />
-        <span asp-validation-for="PasswordHash" class="text-danger"></span>
-    </div>
-    <input asp-for="UserType" type="hidden" value="admin" />
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </div>
-</form>
-
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.Error
-    </div>
+</div>
+@section Scripts {
+    <script>
+        function showPassword() {
+            var passwordField = document.getElementById("PasswordHash");
+            var showPasswordCheckbox = document.getElementById("ShowPassword");
+            if (showPasswordCheckbox.checked) {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
 }
-
