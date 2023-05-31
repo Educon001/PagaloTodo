@@ -30,7 +30,7 @@
             List<ProviderModel> providers = ViewBag.Message;
             IEnumerable<SelectListItem> selectList = providers.Select(p => new SelectListItem
             {
-                Text = $"{p.Name} {p.LastName}",
+                Text = $"{p.Name}",
                 Value = p.Id.ToString()
             });
         }

@@ -11,7 +11,8 @@ public class UserRequest
     public string? Username { get; set; }
     
     [Required(ErrorMessage = "Contraseña requerida")]
-    // [RegularExpression(@"[A-Z]|[a-z]", ErrorMessage = "La contraseña debe tener al menos una minúscula y una mayúscula")]
+    [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>-]).*$", ErrorMessage = "La contraseña debe tener al menos una minúscula, una mayúscula y un caracte especial")]
+    [MinLength(8, ErrorMessage = "La contraseña debe tener minimo 8 caracteres")]
     public string? PasswordHash { get; set; }
     
     [Required(ErrorMessage = "Email requerido")]
@@ -21,7 +22,5 @@ public class UserRequest
     [Required(ErrorMessage = "Nombre(s) requerido")]
     public string? Name { get; set; }
     
-    [Required(ErrorMessage = "Apellidos requerido")]
-    public string? LastName { get; set; }
     public bool? Status { get; set; }
 }

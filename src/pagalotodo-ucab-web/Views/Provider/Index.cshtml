@@ -39,7 +39,7 @@
             <tr>
                 @* <td> <a asp-controller="Provider" asp-action="Show" asp-route-id="@obj.Id">@obj.Name</a></td> *@
                 <td><a asp-route="showProvider" asp-route-id="@obj.Id">@obj.Username</a></td> 
-                <td>@(obj.Name + " " + obj.LastName)</td>
+                <td>@obj.Name</td>
                 <td>@obj.Email</td>
                 <td>@(obj.Status.GetValueOrDefault() ? "Activo" : "Inactivo") </td>
             </tr>

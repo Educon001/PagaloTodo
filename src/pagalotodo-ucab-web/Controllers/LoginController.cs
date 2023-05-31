@@ -69,6 +69,7 @@ public class LoginController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             LoginModel login = JsonSerializer.Deserialize<LoginModel>(items, options)!;
+            CurrentUser.SetUser(login);
             return RedirectToAction("Index2", "Home");
         }
         catch (HttpRequestException e)
@@ -96,6 +97,7 @@ public class LoginController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             LoginModel login = JsonSerializer.Deserialize<LoginModel>(items, options)!;
+            CurrentUser.SetUser(login);
             return RedirectToAction("Index2", "Home");
         }
         catch (HttpRequestException e)

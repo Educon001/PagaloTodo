@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using UCABPagaloTodoWeb.Models.CurrentUser
 @model ConsumerRequest
 
 <form method="post" asp-route="putConsumer" asp-route-id="@ViewBag.Id">
@@ -52,7 +53,9 @@
             <select name="Status" id="Status" asp-items="selectList"></select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
-        <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+        @if (CurrentUser.GetUser().UserType == "admin"){
+            <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
+        }
     </div>
 </form>
 @section Scripts

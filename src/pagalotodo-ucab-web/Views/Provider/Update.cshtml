@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using UCABPagaloTodoWeb.Models.CurrentUser
 @model ProviderRequest
 
 <form method="post" asp-route="putProvider" asp-route-id="@ViewBag.Id">
@@ -22,11 +23,6 @@
             <label asp-for="Name">Nombre Proveedor</label>
             <input asp-for="Name" class="form-control">
             <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="LastName">Siglas</label>
-            <input asp-for="LastName" class="form-control">
-            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Rif">Rif</label>
@@ -57,7 +53,10 @@
             <select name="Status" id="Status" asp-items="selectList"></select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
-        <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
+        @if (CurrentUser.GetUser().UserType == "admin")
+        {
+            <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
+        }
     </div>
 </form>
 @section Scripts

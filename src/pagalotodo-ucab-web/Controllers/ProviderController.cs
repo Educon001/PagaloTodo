@@ -1,7 +1,9 @@
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoWeb.Models;
+using UCABPagaloTodoWeb.Models.CurrentUser;
 
 namespace UCABPagaloTodoWeb.Controllers;
 
@@ -19,6 +21,8 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.GetAsync("/providers");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -49,6 +53,8 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/providers", provider);
             var result = await response.Content.ReadAsStringAsync();
             return RedirectToAction("Index");
@@ -67,6 +73,8 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.GetAsync($"/providers/{id}");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -90,6 +98,8 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.DeleteAsync($"/providers/{id}");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -115,6 +125,8 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var providersResponse = await client.GetAsync($"/providers/{id}");
             providersResponse.EnsureSuccessStatusCode();
             var providerItem = await providersResponse.Content.ReadAsStringAsync();
@@ -130,7 +142,6 @@ public class ProviderController : Controller
                 Username = provider.Username,
                 Email = provider.Email,
                 Name = provider.Name,
-                LastName = provider.LastName,
                 Status = provider.Status,
                 Rif = provider.Rif,
                 AccountNumber = provider.AccountNumber
@@ -152,9 +163,15 @@ public class ProviderController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             // var stringContent = new StringContent(JsonSerializer.Serialize(Provider));
             var response = await client.PutAsJsonAsync($"/providers/{id}", provider);
             var result = await response.Content.ReadAsStringAsync();
+            if (CurrentUser.GetUser().UserType == "provider")
+            {
+                return RedirectToAction("Index2", "Home");
+            }
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
@@ -162,14 +179,16 @@ public class ProviderController : Controller
             Console.WriteLine(e);
             return NotFound();
         }
-
     }
 
     [HttpGet]
     //TODO: No traer todo de la bdd sino definir una ruta para obtener true/false
+    //TODO: Email check
     public async Task<JsonResult> CheckUsername(string username)
     {
         var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
         var response = await client.GetAsync("/providers");
         response.EnsureSuccessStatusCode();
         var items = await response.Content.ReadAsStringAsync();
@@ -190,4 +209,32 @@ public class ProviderController : Controller
         }
         return Json(isUnique);
     }
+    
+    [Route("/paymentsProvider/{id:Guid}", Name = "paymentsProvider")]
+    public async Task<IActionResult> GetPayments(Guid id)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var response = await client.GetAsync($"/payments/provider/{id}");
+            response.EnsureSuccessStatusCode();
+            var items = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            IEnumerable<PaymentModel> payments = JsonSerializer.Deserialize<IEnumerable<PaymentModel>>(items, options)!;
+            return View(payments);
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    //TODO: Lista de confirmacion
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UCABPagaloTodoWeb.Models;
+using UCABPagaloTodoWeb.Models.CurrentUser;
 
 namespace UCABPagaloTodoWeb.Controllers
 {
@@ -15,6 +16,7 @@ namespace UCABPagaloTodoWeb.Controllers
 
         public ViewResult Index()
         {
+            CurrentUser.EmptyUser();
             return View();
         }
 

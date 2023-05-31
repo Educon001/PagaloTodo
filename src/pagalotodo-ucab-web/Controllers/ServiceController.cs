@@ -1,9 +1,12 @@
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Core.Enums;
 using UCABPagaloTodoWeb.Models;
+using UCABPagaloTodoWeb.Models.CurrentUser;
 
 namespace UCABPagaloTodoWeb.Controllers;
 
@@ -21,6 +24,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.GetAsync("/services");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -44,6 +49,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.GetAsync("/providers");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -71,6 +78,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/services", service);
             var result = await response.Content.ReadAsStringAsync();
             Guid id = JsonSerializer.Deserialize<Guid>(result);
@@ -90,6 +99,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.GetAsync($"/services/{id}");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -113,6 +124,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.DeleteAsync($"/services/{id}");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
@@ -138,6 +151,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var providersResponse = await client.GetAsync("/providers");
             providersResponse.EnsureSuccessStatusCode();
             var providersItems = await providersResponse.Content.ReadAsStringAsync();
@@ -179,6 +194,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             // var stringContent = new StringContent(JsonSerializer.Serialize(service));
             var response = await client.PutAsJsonAsync($"/services/{id}", service);
             var result = await response.Content.ReadAsStringAsync();
@@ -206,6 +223,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             foreach (FieldRequest field in fieldRequests)
             {
                 field.Service = id;
@@ -283,6 +302,8 @@ public class ServiceController : Controller
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var fieldResponse = await client.GetAsync($"/services/fields/{id}");
             fieldResponse.EnsureSuccessStatusCode();
             var field = await fieldResponse.Content.ReadAsStringAsync();
@@ -322,6 +343,8 @@ public class ServiceController : Controller
         {
             field.Service = serviceId;
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PutAsJsonAsync($"/services/fields/{id}", field);
             var result = await response.Content.ReadAsStringAsync();
             return RedirectToAction("Index");

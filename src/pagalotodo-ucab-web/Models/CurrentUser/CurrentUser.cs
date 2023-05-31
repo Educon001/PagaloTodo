@@ -2,7 +2,7 @@ namespace UCABPagaloTodoWeb.Models.CurrentUser;
 
 public static class CurrentUser
 {
-    private static LoginModel _loginModel;
+    private static LoginModel? _loginModel;
     private static readonly object lockObject = new (); 
 
     public static void SetUser(LoginModel user)
@@ -16,5 +16,10 @@ public static class CurrentUser
     public static LoginModel GetUser()
     {
         return _loginModel;
+    }
+
+    public static void EmptyUser()
+    {
+        _loginModel = null;
     }
 }

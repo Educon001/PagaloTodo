@@ -1,0 +1,72 @@
+@using UCABPagaloTodoWeb.Models.CurrentUser
+@using UCABPagaloTodoMS.Core.Enums
+@model PaymentRequest
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Make Payment</h2>
+            <hr>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CardholderName">Card Holder Name</label>
+            <input asp-for="CardholderName" class="form-control">
+            <span asp-validation-for="CardholderName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CardNumber">Card Number</label>
+            <input asp-for="CardNumber" class="form-control">
+            <span asp-validation-for="CardNumber" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CardSecurityCode">Card Security Code</label>
+            <input asp-for="CardSecurityCode" class="form-control">
+            <span asp-validation-for="CardSecurityCode" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ExpirationMonth">Expiration Month</label>
+            <input asp-for="ExpirationMonth" class="form-control">
+            <span asp-validation-for="ExpirationMonth" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ExpirationYear">Expiration Year</label>
+            <input asp-for="ExpirationYear" class="form-control">
+            <span asp-validation-for="ExpirationYear" class="text-danger"></span>
+            </div>
+        <div class="mb-3">
+            <label asp-for="Amount">Amount</label>
+            <input asp-for="Amount" class="form-control">
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+          @{
+              List<ServiceModel> services = ViewBag.Message;
+              IEnumerable<SelectListItem> selectList = services.Select(p => new SelectListItem
+              {
+                  Text = $"{p.Name}",
+                  Value = p.Id.ToString()
+              });
+          }
+        <div class="mb-3">
+            <label asp-for="Service">Estatus</label>
+            <select name="Service" id="Service" asp-items="selectList"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Identifier">Identifier</label>
+            <input asp-for="Identifier" class="form-control">
+            <span asp-validation-for="Identifier" class="text-danger"></span>
+        </div>
+        <input asp-for="Consumer" type="hidden" value="@CurrentUser.GetUser().Id" />
+        <input asp-for="PaymentStatus" type="hidden" value="@PaymentStatusEnum.Pendiente" />
+        <br>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-controller="Home" asp-action="Index2" class="btn btn-secondary">Back</a>
+    </div>
+</form>
+
+@section Scripts
+{   @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
+
+<partial name="_ValidationScriptsPartial"/>

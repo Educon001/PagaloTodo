@@ -9,6 +9,7 @@ using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 using UCABPagaloTodoMS.Core.Enums;
+using System.Linq;
 
 namespace UCABPagaloTodoMS.Controllers;
 
@@ -119,12 +120,18 @@ public class PaymentsController : BaseController<PaymentsController>
             var sericesQuery = new GetServicesByProviderIdQuery(id);
             var servicesResponse = await _mediator.Send(sericesQuery);
             var response = new List<PaymentResponse>();
+            int count = 0;
             foreach (var service in servicesResponse)
             {
                 response.AddRange(
                     service.Payments?.Where(p => p.PaymentDate >= (startDate ?? DateTime.MinValue) && p.PaymentDate <=
                         (endDate ?? DateTime.MaxValue)).ToList() ??
                     Enumerable.Empty<PaymentResponse>());
+                for (int i = count; i < response.Count; i++)
+                {
+                    response[i].Service = new ServiceResponse { Id = service.Id, Name = service.Name};
+                }
+                count = response.Count - count;
             }
             return Ok(response);
         }

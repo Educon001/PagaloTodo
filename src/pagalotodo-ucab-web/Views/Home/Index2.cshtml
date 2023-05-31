@@ -1,9 +1,37 @@
+@using UCABPagaloTodoWeb.Models.CurrentUser
 @{
     ViewData["Title"] = "Pagalo Todo";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Hey maaaxxxx</p>
+    @if (CurrentUser.GetUser().UserType == "admin")
+    {
+        <div>
+            ADMINISTRADOR
+        </div>
+    }
+    
+    @if (CurrentUser.GetUser().UserType == "consumer")
+    {
+        <div class="text-center p-3">
+            <a asp-controller="Consumer" asp-action="MakePayment" class="btn btn-primary">
+                MAKE PAYMENT
+            </a>
+        </div>
+        <div class="text-center p-3">
+            <a asp-controller="Consumer" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser().Id" class="btn btn-primary">
+                GET PAYMENTS
+            </a>
+        </div>
+    }
+    
+    @if (CurrentUser.GetUser().UserType == "provider")
+    {
+        <div class="text-center p-3">
+            <a asp-controller="Provider" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser().Id" class="btn btn-primary">
+                GET PAYMENTS
+            </a>
+        </div>
+    }
+    
 </div>
