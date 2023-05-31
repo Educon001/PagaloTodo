@@ -2,7 +2,8 @@
 
 @{
     ViewBag.Title = "Login Consumer";
-    Layout = "_Layout";
+    Layout = "_LayoutPartial";
+    
 }
 
 <div class="container my-5">
@@ -23,12 +24,6 @@
                             <label for="PasswordHash" class="mb-2 font-weight-bold">Contraseña:</label>
                             <div class="input-group">
                                 <input asp-for="PasswordHash" class="form-control" id="PasswordHash" type="password" required />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <input class="form-check-input" type="checkbox" id="ShowPassword" onclick="showPassword()" />
-                                        <label class="form-check-label" for="ShowPassword"></label>
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-check mb-3">
                                 
@@ -36,9 +31,12 @@
                             <span asp-validation-for="PasswordHash" class="text-danger d-block mt-2"></span>
                         </div>
                         <input asp-for="UserType" type="hidden" value="consumer" />
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary rounded-pill py-2 px-4 mr-3">Iniciar Sesión</button>
+                        <div class="form-group text-center d-flex justify-content-between align-items-center">
+                            <button type="submit" class="btn btn-primary btn-block rounded-pill py-2 px-4 mt-3">Iniciar Sesión</button>
                             <a asp-controller="Home" asp-action="Index" class="btn btn-secondary rounded-pill py-2 px-4">Cancelar</a>
+                        </div>
+                        <div class="form-group text-center">
+                            <a asp-controller="Consumer" asp-action="RegistrerConsumer" class="btn btn-link mt-3">¿No tienes una cuenta? Regístrate aquí</a>
                         </div>
                     </form>
                     @if (ViewBag.Error != null)
@@ -52,17 +50,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        function showPassword() {
-            var passwordField = document.getElementById("PasswordHash");
-            var showPasswordCheckbox = document.getElementById("ShowPassword");
-            if (showPasswordCheckbox.checked) {
-                passwordField.type = "text";
-            } else {
-                passwordField.type = "password";
-            }
-        }
-    </script>
-}

@@ -52,6 +52,11 @@ public class LoginController : Controller
 
         return View();
     }
+
+    public IActionResult Provider()
+    {
+        return View();
+    }
     
     [HttpPost]
     public async Task<IActionResult> Provider(LoginRequest request)
@@ -78,6 +83,11 @@ public class LoginController : Controller
             ViewBag.Error = "Se ha producido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
         }
 
+        return View();
+    }
+    
+    public IActionResult Admin()
+    {
         return View();
     }
     
@@ -109,13 +119,4 @@ public class LoginController : Controller
         return View();
     }
     
-
-    public IActionResult Provider()
-    {
-        return View();
-    }
-    public IActionResult Admin()
-    {
-        return View();
-    }
 }
