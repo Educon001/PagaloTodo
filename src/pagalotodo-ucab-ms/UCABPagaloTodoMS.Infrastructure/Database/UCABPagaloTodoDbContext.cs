@@ -134,7 +134,8 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
                 entity.IsDeleted = true;
                 if (entity.GetType().IsSubclassOf(typeof(UserEntity)))
                 {
-                    ((UserEntity) entity).Username = null;   
+                    ((UserEntity) entity).Username = null;
+                    ((UserEntity) entity).Email = null;
                 }
             }
         }
