@@ -30,15 +30,50 @@ public class UpdatePasswordCommandHandlerTest
     }
 
     [Fact]
-    public async void UpdatePasswordCommandHandle_Ok()
+    public async void UpdatePasswordCommandHandle_Consumer_Ok()
     {
         var request = new UpdatePasswordRequest()
         {
-            PasswordHash = "NewPassword!"
+            PasswordHash = "NewPassword!",
+            UserType = "consumer"
         };
         var entity = _mockContext.Object.Consumers.First();
         var expectedResponse = new UpdatePasswordResponse(entity.Id, "Password updated successfully.");
         _mockContext.Setup(m => m.Consumers.Find(entity.Id)).Returns(entity);
+        var command = new UpdatePasswordCommand(request, entity.Id);
+        var response = await _handler.Handle(command, default);
+        Assert.IsType<UpdatePasswordResponse>(response);
+        Assert.Equal(expectedResponse.ToString(),response.ToString());
+    }
+    
+    [Fact]
+    public async void UpdatePasswordCommandHandle_Provider_Ok()
+    {
+        var request = new UpdatePasswordRequest()
+        {
+            PasswordHash = "NewPassword!",
+            UserType = "provider"
+        };
+        var entity = _mockContext.Object.Providers.First();
+        var expectedResponse = new UpdatePasswordResponse(entity.Id, "Password updated successfully.");
+        _mockContext.Setup(m => m.Providers.Find(entity.Id)).Returns(entity);
+        var command = new UpdatePasswordCommand(request, entity.Id);
+        var response = await _handler.Handle(command, default);
+        Assert.IsType<UpdatePasswordResponse>(response);
+        Assert.Equal(expectedResponse.ToString(),response.ToString());
+    }
+    
+    [Fact]
+    public async void UpdatePasswordCommandHandle_Admin_Ok()
+    {
+        var request = new UpdatePasswordRequest()
+        {
+            PasswordHash = "NewPassword!",
+            UserType = "admin"
+        };
+        var entity = _mockContext.Object.Admins.First();
+        var expectedResponse = new UpdatePasswordResponse(entity.Id, "Password updated successfully.");
+        _mockContext.Setup(m => m.Admins.Find(entity.Id)).Returns(entity);
         var command = new UpdatePasswordCommand(request, entity.Id);
         var response = await _handler.Handle(command, default);
         Assert.IsType<UpdatePasswordResponse>(response);
@@ -66,11 +101,12 @@ public class UpdatePasswordCommandHandlerTest
     }
     
     [Fact]
-    public async void UpdatePasswordCommandHandle_HandleAsyncException()
+    public async void UpdatePasswordCommandHandle_Consumer_HandleAsyncException()
     {
         var request = new UpdatePasswordRequest()
         {
-            PasswordHash = "NewPassword!"
+            PasswordHash = "NewPassword!",
+            UserType= "consumer"
         };
         var entity = _mockContext.Object.Consumers.First();
         var command = new UpdatePasswordCommand(request, entity.Id);
@@ -78,4 +114,35 @@ public class UpdatePasswordCommandHandlerTest
         Assert.IsType<KeyNotFoundException>(response.InnerException);
         Assert.Contains(entity.Id.ToString(), response.Message);
     }
+    
+    [Fact]
+    public async void UpdatePasswordCommandHandle_Provider_HandleAsyncException()
+    {
+        var request = new UpdatePasswordRequest()
+        {
+            PasswordHash = "NewPassword!",
+            UserType= "provider"
+        };
+        var entity = _mockContext.Object.Providers.First();
+        var command = new UpdatePasswordCommand(request, entity.Id);
+        var response = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
+        Assert.IsType<KeyNotFoundException>(response.InnerException);
+        Assert.Contains(entity.Id.ToString(), response.Message);
+    }
+    
+    [Fact]
+    public async void UpdatePasswordCommandHandle_Admin_HandleAsyncException()
+    {
+        var request = new UpdatePasswordRequest()
+        {
+            PasswordHash = "NewPassword!",
+            UserType= "admin"
+        };
+        var entity = _mockContext.Object.Admins.First();
+        var command = new UpdatePasswordCommand(request, entity.Id);
+        var response = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
+        Assert.IsType<KeyNotFoundException>(response.InnerException);
+        Assert.Contains(entity.Id.ToString(), response.Message);
+    }
+    
 }

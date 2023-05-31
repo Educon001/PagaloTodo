@@ -226,4 +226,25 @@ public class ProvidersController : BaseController<ProvidersController>
                 return BadRequest(ex.Message);
             }
         }
+        
+        //[Authorize(Policy = "ProviderPolicy" )]
+        [HttpPut("{id:guid}/password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest request)
+        {
+            _logger.LogInformation("Entrando al método que cambia clave a provider");
+            try
+            {
+                var query = new UpdatePasswordCommand(request,id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al cambiar clave al provider. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+        }
+        
     }
