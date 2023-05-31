@@ -44,10 +44,15 @@ public class LoginController : Controller
             var aa = CurrentUser.GetUser();
             return RedirectToAction("Index2", "Home");
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
         {
-            _logger.LogError("Ocurrió un error al enviar la solicitud de autenticación. Exception: " + e);
-            ViewBag.Error = "Se ha producido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
+            _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
+            ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
+            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
 
         return View();
@@ -77,10 +82,15 @@ public class LoginController : Controller
             CurrentUser.SetUser(login);
             return RedirectToAction("Index2", "Home");
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
         {
-            _logger.LogError("Ocurrió un error al enviar la solicitud de autenticación. Exception: " + e);
-            ViewBag.Error = "Se ha producido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
+            _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
+            ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
+            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
 
         return View();
@@ -110,13 +120,41 @@ public class LoginController : Controller
             CurrentUser.SetUser(login);
             return RedirectToAction("Index2", "Home");
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
         {
-            _logger.LogError("Ocurrió un error al enviar la solicitud de autenticación. Exception: " + e);
-            ViewBag.Error = "Se ha producido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
+            _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
+            ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
+            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
 
         return View();
+    }
+    
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(string request)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            var response = await client.PostAsJsonAsync("/api/login/forgotpassword", request);
+            var result = await response.Content.ReadAsStringAsync();
+            return RedirectToAction("Index2", "Home");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
     }
     
 }

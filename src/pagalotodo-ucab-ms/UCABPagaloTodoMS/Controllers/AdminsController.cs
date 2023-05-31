@@ -23,7 +23,7 @@ public class AdminsController : BaseController<AdminsController>
         _mediator = mediator;
     }
     
-    //[Authorize(Policy = "AdminPolicy" )]
+    [Authorize(Policy = "AdminPolicy" )]
     [HttpPut("{id:guid}/password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

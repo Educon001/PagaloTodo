@@ -227,7 +227,7 @@ public class ProvidersController : BaseController<ProvidersController>
             }
         }
         
-        //[Authorize(Policy = "ProviderPolicy" )]
+        [Authorize(Policy = "ProviderPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

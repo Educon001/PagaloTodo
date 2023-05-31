@@ -9,8 +9,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient("PagaloTodoApi", c =>
 {
     c.BaseAddress = new Uri("https://localhost:5001");
-    // c.DefaultReque?stHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser()?.Token);
-// });
 }).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
 {
     ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
