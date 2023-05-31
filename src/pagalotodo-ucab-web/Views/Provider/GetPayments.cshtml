@@ -4,10 +4,35 @@
     Layout = "_Layout";
 }
 
+
 <div class="container-fluid p-4">
-    <div class="row pt-4">
-        <h2>Payments</h2>
+    <div class="row pt-3">
+        <div class="col-3">
+            <h2>Payments</h2>
+        </div>
+        
+        <div class="col-3">
+            Lower Range: 
+            @using (Html.BeginForm())
+            {
+                @Html.TextBox("dateLower", null, new { id = "dateLower", type = "date"})
+            }
+        </div>
+        <div class="col-3">
+            Upper Range:
+                @using (Html.BeginForm())
+                {
+                    @Html.TextBox("dateUpper", null, new { id = "dateUpper", type = "date"})
+                }
+            </div>
+        <div class="col-3 text-end">
+            @using (Html.BeginForm())
+            {
+                @Html.TextBox("searchQuery", null, new { id = "searchField", placeholder = "Search..." })
+            }
+        </div>
     </div>
+    <br>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -34,9 +59,9 @@
             <tr>
                 @* <td> <a asp-controller="Consumer" asp-action="Show" asp-route-id="@obj.Id">@obj.Name</a></td> *@
                 <td>@obj.Identifier</td>
-                <td>@obj.PaymentDate</td>
+                <td class="paymentDate">@obj.PaymentDate</td>
                 <td>@obj.Service?.Name</td>
-                <td>@("$"+obj.Amount)</td>
+                <td>@("$" + obj.Amount)</td>
                 <td>@obj.PaymentStatus</td>
             </tr>
         }
@@ -46,3 +71,49 @@
         <a asp-controller="Home" asp-action="Index2">BACK</a>
     </button>
 </div>
+
+<script defer>
+  let inputBox = document.querySelector("#searchField");
+  let table = document.querySelector("table");
+  let allRows = table.querySelectorAll("tbody tr");
+  inputBox.addEventListener("input", filterRow);
+
+  function filterRow(e){
+        let dateQueryLower = new Date(inputBoxDateLower.value);
+        dateQueryLower.setHours(dateQueryLower.getHours()+4);
+        let dateQueryUpper = new Date(inputBoxDateUpper.value);
+        dateQueryUpper.setHours(dateQueryUpper.getHours()+4);
+      query = inputBox.value.toLowerCase();
+      allRows.forEach((item) => {
+            let firstTd = item.querySelector("td:first-child");
+              let dateTd = item.querySelector("td.paymentDate");
+              let rowDate = new Date(dateTd.textContent);
+            console.log(`Td Content: ${firstTd.textContent} vs ${query}`);
+            (rowDate.getTime() > dateQueryLower.getTime() && rowDate.getTime() < dateQueryUpper.getTime() && firstTd.textContent.includes(query)) ? item.style.display = "table-row" : item.style.display = "none";
+      });
+  }
+  
+  let inputBoxDateLower = document.querySelector("#dateLower");
+  let inputBoxDateUpper = document.querySelector("#dateUpper");
+  
+  inputBoxDateLower.addEventListener("input", checkDate);
+  inputBoxDateUpper.addEventListener("input", checkDate);
+  
+  // inputBoxDateLower.defaultValue = (new Date(-800000000000000)).toLocaleDateString();
+  // inputBoxDateUpper.defaultValue = (new Date()).toLocaleDateString();
+  //
+  function checkDate(e){
+      let dateQueryLower = new Date(inputBoxDateLower.value);
+      dateQueryLower.setHours(dateQueryLower.getHours()+4);
+      let dateQueryUpper = new Date(inputBoxDateUpper.value);
+      dateQueryUpper.setHours(dateQueryUpper.getHours()+4);
+      query = inputBox.value.toLowerCase();
+      allRows.forEach((item) => {
+              let firstTd = item.querySelector("td:first-child");
+              let dateTd = item.querySelector("td.paymentDate");
+              let rowDate = new Date(dateTd.textContent);
+              console.log(`Td Content: ${rowDate.toLocaleDateString()} vs Upper:${dateQueryUpper.toLocaleDateString()} vs Lower: ${dateQueryLower.toLocaleDateString()}`);
+              (rowDate.getTime() > dateQueryLower.getTime() && rowDate.getTime() < dateQueryUpper.getTime() && firstTd.textContent.includes(query)) ? item.style.display = "table-row" : item.style.display = "none";
+        });
+  }
+</script>
