@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -235,6 +236,36 @@ public class ProviderController : Controller
             return NotFound();
         }
     }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var id = CurrentUser.GetUser().Id;
+            var response = await client.PutAsJsonAsync($"/providers/{id}/password", request);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsStringAsync();
+            if (CurrentUser.GetUser().UserType == "provider")
+            {
+                return RedirectToAction("Index2", "Home");
+            }
+            return RedirectToAction("Index");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+        {
+            ModelState.AddModelError(string.Empty, "La contraseña no cumple con los requisitos. Por favor, inténtalo de nuevo.");
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.");
+        }
 
+        return View(request);
+    }
+    
     //TODO: Lista de confirmacion
 }

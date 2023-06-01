@@ -98,6 +98,7 @@ public class LoginController : BaseController<LoginController>
                     new KeyNotFoundException(token.ToString()));
             }
             var query = new UpdatePasswordCommand(request, (Guid) info["UserId"]);
+            query.Request.UserType = "consumer";
             var response = await _mediator.Send(query);
             _cache.Remove(token);
             return Ok(response);

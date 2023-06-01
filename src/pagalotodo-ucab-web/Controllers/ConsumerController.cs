@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -283,5 +284,67 @@ public class ConsumerController : Controller
             Console.WriteLine(e);
             return NotFound();
         }
+    }
+
+        [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> RegistrerConsumer(ConsumerRequest consumer)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            var response = await client.PostAsJsonAsync("/consumers", consumer);
+            var result = await response.Content.ReadAsStringAsync();
+            return RedirectToAction("Consumer", "Login");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    public IActionResult UpdatePassword()
+    {
+        return View();
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
+    {
+        try
+        {
+            string? token = HttpContext.Request.Query["token"];
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            if (token == null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+                var id = CurrentUser.GetUser().Id;
+                var response = await client.PutAsJsonAsync($"/consumers/{id}/password", request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                if (CurrentUser.GetUser().UserType == "consumer")
+                {
+                    return RedirectToAction("Index2", "Home");
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                
+            }
+            
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+        {
+            ModelState.AddModelError(string.Empty, "La contraseña no cumple con los requisitos. Por favor, inténtalo de nuevo.");
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.");
+        }
+
+        return View(request);
     }
 }

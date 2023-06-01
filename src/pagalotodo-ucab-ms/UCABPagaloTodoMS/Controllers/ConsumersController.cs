@@ -37,7 +37,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     - Operation successful.
         /// </response>
         /// <returns>Retorna la lista de consumidores.</returns>
-        [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
+        //[Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,22 +124,22 @@ public class ConsumersController : BaseController<ConsumersController>
             }
         }
         
-        [Authorize(Policy = "AdminOrConsumerPolicy" )]
+        [Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest consumer)
+        public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest request)
         {
-            _logger.LogInformation("Entrando al método que registra los prestadores");
+            _logger.LogInformation("Entrando al método que cambia clave a consumers");
             try
             {
-                var query = new UpdatePasswordCommand(consumer,id);
+                var query = new UpdatePasswordCommand(request,id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al cambiar clave al consumer. Exception: " + ex);
                 return BadRequest(ex.Message);
             }
         }

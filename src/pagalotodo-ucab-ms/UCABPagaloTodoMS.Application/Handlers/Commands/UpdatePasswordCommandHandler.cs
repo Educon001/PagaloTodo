@@ -45,27 +45,63 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
     private async Task<UpdatePasswordResponse> HandleAsync(UpdatePasswordCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();
+
         try
         {
             _logger.LogInformation("UpdatePasswordCommandHandler.HandleAsync {Request}", request);
-            var consumerId = request.Id;
-            var entity = _dbContext.Consumers.Find(consumerId);
-            if (entity != null)
+
+            switch (request.Request.UserType)
             {
-                if (request.Request.PasswordHash != null)
-                {
-                    entity.PasswordHash = SecurePasswordHasher.Hash(request.Request.PasswordHash);
-                }
-                _dbContext.Consumers.Update(entity);
+                case "consumer":
+                    var consumerId = request.Id;
+                    var consumerEntity = _dbContext.Consumers.Find(consumerId);
+                    if (consumerEntity != null)
+                    {
+                        if (request.Request.PasswordHash != null)
+                            consumerEntity.PasswordHash = SecurePasswordHasher.Hash(request.Request.PasswordHash);
+                        _dbContext.Consumers.Update(consumerEntity);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException($"Object with key {consumerId} not found");
+                    }
+                    break;
+                case "provider":
+                    var providerId = request.Id;
+                    var providerEntity = _dbContext.Providers.Find(providerId);
+                    if (providerEntity != null)
+                    {
+                        if (request.Request.PasswordHash != null)
+                            providerEntity.PasswordHash = SecurePasswordHasher.Hash(request.Request.PasswordHash);
+                        _dbContext.Providers.Update(providerEntity);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException($"Object with key {providerId} not found");
+                    }
+                    break;
+                case "admin":
+                    var adminId = request.Id;
+                    var adminEntity = _dbContext.Admins.Find(adminId);
+                    if (adminEntity != null)
+                    {
+                        if (request.Request.PasswordHash != null)
+                            adminEntity.PasswordHash = SecurePasswordHasher.Hash(request.Request.PasswordHash);
+                        _dbContext.Admins.Update(adminEntity);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException($"Object with key {adminId} not found");
+                    }
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid user type {request.Request.UserType}");
             }
-            else
-            {
-                throw new KeyNotFoundException($"Object with key {consumerId} not found");
-            }
+
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
-            //var response = ConsumerMapper.MapEntityToResponse(entity);
-            var response = new UpdatePasswordResponse(entity.Id, "Password updated successfully.");
+
+            var response = new UpdatePasswordResponse(request.Id, "Password updated successfully.");
             _logger.LogInformation("UpdatePasswordCommandHandler.HandleAsync {Response}", response);
             return response;
         }
