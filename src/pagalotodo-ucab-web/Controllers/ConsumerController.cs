@@ -57,6 +57,7 @@ public class ConsumerController : Controller
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/consumers", consumer);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Consumer Created Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
@@ -109,6 +110,7 @@ public class ConsumerController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             Guid consumer = JsonSerializer.Deserialize<Guid>(items, options)!;
+            TempData["success"] = "Service Deleted Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
@@ -168,6 +170,7 @@ public class ConsumerController : Controller
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PutAsJsonAsync($"/consumers/{id}", consumer);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Consumer Updated Successfully";
             if (CurrentUser.GetUser().UserType == "consumer")
             {
                 return RedirectToAction("Index2", "Home");
@@ -250,6 +253,7 @@ public class ConsumerController : Controller
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/payments", payment);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Payment Done Successfully";
             return RedirectToAction("Index2", "Home");
         }
         catch (HttpRequestException e)

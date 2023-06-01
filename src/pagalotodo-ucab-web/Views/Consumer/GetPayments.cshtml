@@ -33,7 +33,7 @@
         {
             <tr>
                 @* <td> <a asp-controller="Consumer" asp-action="Show" asp-route-id="@obj.Id">@obj.Name</a></td> *@
-                <td>@obj.Identifier</td>
+                <td><a asp-route="showPayment" asp-route-id="@obj.Id"></a> @obj.Identifier</td>
                 <td>@obj.PaymentDate</td>
                 <td>@obj.Service?.Name</td>
                 <td>@("$"+obj.Amount)</td>

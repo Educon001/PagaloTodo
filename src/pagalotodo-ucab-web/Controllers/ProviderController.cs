@@ -57,11 +57,13 @@ public class ProviderController : Controller
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/providers", provider);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Provider Created Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error creating the service";
             return NotFound();
         }
     }
@@ -109,11 +111,13 @@ public class ProviderController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             Guid provider = JsonSerializer.Deserialize<Guid>(items, options)!;
+            TempData["success"] = "Provider Deleted Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error deleting the provider";
             return NotFound();
         }
     }
@@ -146,6 +150,7 @@ public class ProviderController : Controller
                 Rif = provider.Rif,
                 AccountNumber = provider.AccountNumber
             };
+            
             return View(providerRequest);
         }
         catch (HttpRequestException e)
@@ -168,6 +173,7 @@ public class ProviderController : Controller
             // var stringContent = new StringContent(JsonSerializer.Serialize(Provider));
             var response = await client.PutAsJsonAsync($"/providers/{id}", provider);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Provider Updated Successfully";
             if (CurrentUser.GetUser().UserType == "provider")
             {
                 return RedirectToAction("Index2", "Home");
@@ -177,6 +183,7 @@ public class ProviderController : Controller
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error updating the provider";
             return NotFound();
         }
     }

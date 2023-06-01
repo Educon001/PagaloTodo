@@ -1,8 +1,6 @@
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Core.Enums;
 using UCABPagaloTodoWeb.Models;
@@ -29,7 +27,7 @@ public class ServiceController : Controller
             var response = await client.GetAsync("/services");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions()
+            var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
@@ -83,11 +81,13 @@ public class ServiceController : Controller
             var response = await client.PostAsJsonAsync("/services", service);
             var result = await response.Content.ReadAsStringAsync();
             Guid id = JsonSerializer.Deserialize<Guid>(result);
+            TempData["success"] = "Service Created Successfully";
             return RedirectToRoute("CreateFormat", new { id });
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error creating the service";
             return NotFound();
         }
     }
@@ -135,11 +135,13 @@ public class ServiceController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             Guid service = JsonSerializer.Deserialize<Guid>(items, options)!;
+            TempData["success"] = "Service Deleted Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error deleting the service";
             return NotFound();
         }
     }
@@ -199,11 +201,13 @@ public class ServiceController : Controller
             // var stringContent = new StringContent(JsonSerializer.Serialize(service));
             var response = await client.PutAsJsonAsync($"/services/{id}", service);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Service Updated Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error updating the service";
             return NotFound();
         }
     }
@@ -214,10 +218,10 @@ public class ServiceController : Controller
         ViewBag.ServiceId = id;
         return View();
     }
-    
+
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("/{id:Guid}", Name="createFormatR")]
+    [Route("/{id:Guid}", Name = "createFormatR")]
     public async Task<IActionResult> CreateFormat(List<FieldRequest> fieldRequests, Guid id)
     {
         try
@@ -229,73 +233,20 @@ public class ServiceController : Controller
             {
                 field.Service = id;
             }
+
             var response = await client.PostAsJsonAsync("/services/format", fieldRequests);
             var result = await response.Content.ReadAsStringAsync();
-            // List<Guid> id = JsonSerializer.Deserialize<List<Guid>>(result)!;
+            TempData["success"] = "Conciliation Format Created Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error creating the conciliation format";
             return NotFound();
         }
-        // try
-        // {
-        //     var client = _httpClientFactory.CreateClient("PagaloTodoApi");
-        //     var response = await client.PostAsJsonAsync("/services", service);
-        //     var result = await response.Content.ReadAsStringAsync();
-        //     Guid id = JsonSerializer.Deserialize<Guid>(result);
-        //     return RedirectToAction("CreateFormat", id);
-        // }
-        // catch (HttpRequestException e)
-        // {
-        //     Console.WriteLine(e);
-        //     return NotFound();
-        // }
     }
-    
-    // [HttpGet]
-    // [Route("createFormat/{id:Guid}", Name = "createFormat")]
-    // public async Task<IActionResult> ConciliationFormat(List<FieldRequest> fieldRequests)
-    // public IActionResult ConciliationFormat(List<FieldRequest> fieldRequests)
-    // {
-        // RedirectToAction("Index");
-        // return View();
-        // try
-        // {
-        //     var client = _httpClientFactory.CreateClient("PagaloTodoApi");
-        //     var providersResponse = await client.GetAsync("/providers");
-        //     providersResponse.EnsureSuccessStatusCode();
-        //     var providersItems = await providersResponse.Content.ReadAsStringAsync();
-        //     var options = new JsonSerializerOptions()
-        //     {
-        //         PropertyNameCaseInsensitive = true,
-        //         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        //     };
-        //     IEnumerable<ProviderModel> providers = JsonSerializer.Deserialize<IEnumerable<ProviderModel>>(providersItems, options)!;
-        //     ViewBag.Message = providers;
-        //     var servicesResponse = await client.GetAsync($"/services/{id}");
-        //     servicesResponse.EnsureSuccessStatusCode();
-        //     var serviceItem = await servicesResponse.Content.ReadAsStringAsync();
-        //     ServiceModel service = JsonSerializer.Deserialize<ServiceModel>(serviceItem, options)!;
-        //     ViewBag.Id = id;
-        //     ServiceRequest serviceRequest = new ServiceRequest()
-        //     {
-        //         Name = service.Name,
-        //         Description = service.Description,
-        //         ServiceStatus = (ServiceStatusEnum)Enum.Parse(typeof(ServiceStatusEnum), service.ServiceStatus!),
-        //         ServiceType = (ServiceTypeEnum)Enum.Parse(typeof(ServiceTypeEnum), service.ServiceType!),
-        //         Provider = service.Provider!.Id
-        //     };
-        //     return View(serviceRequest);
-        // }
-        // catch (HttpRequestException e)
-        // {
-        //     Console.WriteLine(e);
-        //     return NotFound();
-        // }
-    // }
-    
+
     [Route("updateField/{serviceId:guid}/{id:guid}", Name = "updateField")]
     public async Task<IActionResult> UpdateField(Guid id, Guid serviceId)
     {
@@ -323,7 +274,6 @@ public class ServiceController : Controller
                 Format = fieldFinal.Format,
                 Length = fieldFinal.Length,
                 AttrReference = fieldFinal.AttrReference,
-                // Service = serviceId
             };
             return View(fieldRequest);
         }
@@ -347,11 +297,13 @@ public class ServiceController : Controller
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PutAsJsonAsync($"/services/fields/{id}", field);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Field Updated Successfully";
             return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error updating the field";
             return NotFound();
         }
     }
