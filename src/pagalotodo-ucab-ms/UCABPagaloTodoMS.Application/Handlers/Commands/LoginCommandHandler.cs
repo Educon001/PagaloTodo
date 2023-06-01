@@ -1,3 +1,4 @@
+using System.Net;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -34,37 +35,75 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
             switch (request.Request.UserType.ToUpper())
             {
                 case "ADMIN":
-                    var admin = await _dbContext.Admins.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    var admin = await _dbContext.Admins.FirstOrDefaultAsync(a =>
+                        a.Username == request.Request.Username);
                     if (admin != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, admin.PasswordHash!))
                     {
-                        _logger.LogInformation($"El administrador {request.Request.Username} inició sesión con éxito.");
-                        return new LoginResponse {UserType = "admin", Id = admin.Id };
+                        if (admin.Status == true)
+                        {
+                            _logger.LogInformation(
+                                $"El administrador {request.Request.Username} inició sesión con éxito.");
+                            return new LoginResponse { UserType = "admin", Id = admin.Id };
+                        }
+                        _logger.LogInformation($"La cuenta del administrador {request.Request.Username} está inactiva");
+                        throw new HttpRequestException("La cuenta del administrador está inactiva.", null,
+                            System.Net.HttpStatusCode.Unauthorized);
                     }
+
+                    _logger.LogInformation(
+                        $"El usuario {request.Request.Username} no pudo iniciar sesión porque las credenciales son inválidas.");
+                    throw new HttpRequestException("Credenciales inválidas.", null,
+                        System.Net.HttpStatusCode.BadRequest);
+
                     break;
 
                 case "CONSUMER":
-                    var consumer = await _dbContext.Consumers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
-                    if (consumer != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, consumer.PasswordHash!))
+                    var consumer =
+                        await _dbContext.Consumers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    if (consumer != null &&
+                        SecurePasswordHasher.Verify(request.Request.PasswordHash, consumer.PasswordHash!))
                     {
-                        _logger.LogInformation($"El consumidor {request.Request.Username} inició sesión con éxito.");
-                        return new LoginResponse{
-                            UserType= "consumer",
-                            Id = consumer.Id
-                        };
+                        if (consumer.Status == true)
+                        {
+                            _logger.LogInformation(
+                                $"El consumidor {request.Request.Username} inició sesión con éxito.");
+                            return new LoginResponse { UserType = "consumer", Id = consumer.Id };
+                        }
+
+                        _logger.LogInformation($"La cuenta del consumidor {request.Request.Username} está inactiva");
+                        throw new HttpRequestException("La cuenta del consumidor está inactiva.", null,
+                            System.Net.HttpStatusCode.Unauthorized);
                     }
+
+                    _logger.LogInformation(
+                        $"El usuario {request.Request.Username} no pudo iniciar sesión porque las credenciales son inválidas.");
+                    throw new HttpRequestException("Credenciales inválidas.", null,
+                        System.Net.HttpStatusCode.BadRequest);
+
                     break;
 
                 case "PROVIDER":
-                    var provider = await _dbContext.Providers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
-                    if (provider != null && SecurePasswordHasher.Verify(request.Request.PasswordHash, provider.PasswordHash!))
+                    var provider =
+                        await _dbContext.Providers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
+                    if (provider != null &&
+                        SecurePasswordHasher.Verify(request.Request.PasswordHash, provider.PasswordHash!))
                     {
-                        _logger.LogInformation($"El proveedor {request.Request.Username} inició sesión con éxito.");
-                        return new LoginResponse
+                        if (provider.Status == true)
                         {
-                            UserType = "provider",
-                            Id = provider.Id
-                        };
+                            _logger.LogInformation($"El proveedor {request.Request.Username} inició sesión con éxito.");
+                            return new LoginResponse { UserType = "provider", Id = provider.Id };
+                        }
+
+                        _logger.LogInformation($"La cuenta del proveedor {request.Request.Username} está inactiva");
+                        throw new HttpRequestException("La cuenta del proveedor está inactiva.", null,
+                            System.Net.HttpStatusCode.Unauthorized);
                     }
+
+                    _logger.LogInformation(
+                        $"El usuario {request.Request.Username} no pudo iniciar sesión porque las credenciales son inválidas.");
+                    throw new HttpRequestException("Credenciales inválidas.", null,
+                        System.Net.HttpStatusCode.BadRequest);
+
                     break;
 
                 default:
@@ -73,12 +112,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
             }
 
             // Si no se encuentra al usuario en ninguna de las tablas o la contraseña es incorrecta, devolver nulo
-            _logger.LogWarning($"El usuario {request.Request.Username} no pudo iniciar sesión porque no se encontró en la tabla de usuarios o la contraseña es incorrecta.");
+            _logger.LogWarning(
+                $"El usuario {request.Request.Username} no pudo iniciar sesión porque no se encontró en la tabla de usuarios o la contraseña es incorrecta.");
             return null;
+        }
+        catch (HttpRequestException)
+        {
+            throw; // Si ya es una excepción de tipo HttpRequestException, simplemente relanzarla
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Request.Username}.");
+            _logger.LogError(ex, $"Ocurrió unerror al autenticar al usuario {request.Request.Username}.");
             throw new CustomException($"Ocurrió un error al autenticar al usuario: {ex.Message}", ex);
         }
     }

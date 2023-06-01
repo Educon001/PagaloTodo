@@ -49,12 +49,16 @@ public class LoginController : Controller
             _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
             ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
         }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
+            ViewBag.Error = "La cuenta del usuario está inactiva. Por favor, contacta con el administrador.";
+        }
         catch (Exception ex)
         {
             _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
-            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
+            ViewBag.Error = "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
-
         return View();
     }
 
@@ -87,12 +91,16 @@ public class LoginController : Controller
             _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
             ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
         }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
+            ViewBag.Error = "La cuenta del usuario está inactiva. Por favor, contacta con el administrador.";
+        }
         catch (Exception ex)
         {
             _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
-            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
+            ViewBag.Error = "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
-
         return View();
     }
     
@@ -109,7 +117,7 @@ public class LoginController : Controller
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
             var response = await client.PostAsJsonAsync("/api/login", request);
             response.EnsureSuccessStatusCode();
-            //return RedirectToAction("Index2", "Home");
+
             var items = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {
@@ -125,14 +133,20 @@ public class LoginController : Controller
             _logger.LogError("Se ha producido un error en la solicitud. Exception: " + ex);
             ViewBag.Error = "Las credenciales de inicio de sesión son inválidas. Por favor, inténtalo de nuevo.";
         }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
+            ViewBag.Error = "La cuenta del usuario está inactiva. Por favor, contacta con el administrador.";
+        }
         catch (Exception ex)
         {
             _logger.LogError("Se ha producido un error inesperado. Exception: " + ex);
-            ViewBag.Error = "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
+            ViewBag.Error = "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.";
         }
 
         return View();
     }
+
     
     public IActionResult ForgotPassword()
     {
@@ -157,5 +171,4 @@ public class LoginController : Controller
             return NotFound();
         }
     }
-    
 }

@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,6 +34,8 @@ public class LoginController : BaseController<LoginController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+
     public async Task<ActionResult<LoginResponse>> Authenticate(LoginRequest request)
     {
         try
@@ -45,6 +48,11 @@ public class LoginController : BaseController<LoginController>
             
             string jwtToken = GenerarToken.GenerateToken(result);
             return Ok(new LoginResponse { UserType = result.UserType, Id = result.Id, Token = jwtToken });
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
+            return Unauthorized("La cuenta del usuario está inactiva. Exception: ");
         }
         catch (Exception ex)
         {
