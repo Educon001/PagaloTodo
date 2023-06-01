@@ -141,14 +141,15 @@ public class LoginController : Controller
     
     [ValidateAntiForgeryToken]
     [HttpPost]
-    public async Task<IActionResult> ForgotPassword(string request)
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
     {
         try
         {
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
-            var response = await client.PostAsJsonAsync("/api/login/forgotpassword", request);
+            var response = await client.PostAsJsonAsync("/api/login/forgotpassword", request.Email);
             var result = await response.Content.ReadAsStringAsync();
-            return RedirectToAction("Index2", "Home");
+            TempData["success"] = $"An email was sent to {request.Email} in order to change password.";
+            return RedirectToAction("Index", "Home");
         }
         catch (HttpRequestException e)
         {

@@ -63,8 +63,9 @@ public class LoginController : BaseController<LoginController>
             var query = new GetConsumerByEmailQuery(email);
             var queryResponse = await _mediator.Send(query);
             var token = Guid.NewGuid();
-            var url = Url.Action("ResetPassword", "Login", new {token = token},
-                protocol: HttpContext.Request.Scheme);
+            // var url = Url.Action("ResetPassword", "Login", new {token = token},
+            //     protocol: HttpContext.Request.Scheme);
+            var url = $"https://localhost:7039/consumer/updatePassword/{token}";
             var urlInfo = new Dictionary<string, object>()
                 {
                     {"UserId", queryResponse},

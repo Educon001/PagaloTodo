@@ -209,7 +209,7 @@ public class ProviderController : Controller
         bool isUnique = true;
         foreach (ProviderModel provider in providers)
         {
-            if (provider.Username == username)
+            if (provider.Username == username && provider.Id != CurrentUser.GetUser().Id)
             {
                 isUnique = false;
                 break;
@@ -243,9 +243,16 @@ public class ProviderController : Controller
             return NotFound();
         }
     }
+
+    [Route("provider/updatePassword/{token:guid?}")]
+    public IActionResult UpdatePassword()
+    {
+        return View();
+    }
     
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Route("provider/updatePswd/{token:guid?}", Name="updatePswdPostProvider")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
     {
         try
@@ -270,7 +277,6 @@ public class ProviderController : Controller
         {
             ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.");
         }
-
         return View(request);
     }
     

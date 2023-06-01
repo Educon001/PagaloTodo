@@ -205,7 +205,7 @@ public class ConsumerController : Controller
         bool isUnique = true;
         foreach (ConsumerModel consumer in consumers)
         {
-            if (consumer.Username == username)
+            if (consumer.Username == username && consumer.Id != CurrentUser.GetUser().Id)
             {
                 isUnique = false;
                 break;
@@ -289,8 +289,13 @@ public class ConsumerController : Controller
             return NotFound();
         }
     }
+    
+    public IActionResult RegistrerConsumer()
+    {
+        return View();
+    }
 
-        [ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     [HttpPost]
     public async Task<IActionResult> RegistrerConsumer(ConsumerRequest consumer)
     {
@@ -308,18 +313,20 @@ public class ConsumerController : Controller
         }
     }
     
-    public IActionResult UpdatePassword()
+    [Route("consumer/updatePassword/{token:guid?}")]
+    public IActionResult UpdatePassword(Guid? token)
     {
+        ViewBag.Token = token;
         return View();
     }
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
+    [Route("consumer/updatePswd/{token:guid?}", Name="updatePswdPost")]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request, Guid? token)
     {
         try
         {
-            string? token = HttpContext.Request.Query["token"];
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
             if (token == null)
             {
@@ -328,17 +335,14 @@ public class ConsumerController : Controller
                 var response = await client.PutAsJsonAsync($"/consumers/{id}/password", request);
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
-                if (CurrentUser.GetUser().UserType == "consumer")
-                {
-                    return RedirectToAction("Index2", "Home");
-                }
-                return RedirectToAction("Index");
+                TempData["success"] = "Password changed successfully";
+                return RedirectToAction("Index2", "Home");
             }
-            else
-            {
-                
-            }
-            
+            var responseReset = await client.PostAsJsonAsync($"/api/login/resetpassword?token={token}", request);
+            responseReset.EnsureSuccessStatusCode();
+            var resultReset = await responseReset.Content.ReadAsStringAsync();
+            TempData["success"] = "Password set successfully";
+            return RedirectToAction("Index", "Home");
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
         {

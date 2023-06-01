@@ -23,19 +23,19 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
-          <ul class="navbar-nav me-auto">
-            @if (CurrentUser.GetUser().UserType == "admin")
-            {
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
-                </li>
-            }
+            <ul class="navbar-nav me-auto">
+                @if (CurrentUser.GetUser() != null && CurrentUser.GetUser().UserType == "admin")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
+                    </li>
+                }
             @* <li class="nav-item dropdown"> *@
             @*   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a> *@
             @*   <div class="dropdown-menu"> *@
@@ -46,17 +46,20 @@
             @*     <a class="dropdown-item" href="#">Separated link</a> *@
             @*   </div> *@
             @* </li> *@
-          </ul>
-          <div>
-            <a asp-controller="Home" asp-action="Index">
-              Cerrar Sesion
-            </a>
-          </div>
-          <div class="d-flex pr-2" >
-            <a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser().Id">
-              <i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i>
-            </a>
-          </div>
+        </ul>
+           @if (CurrentUser.GetUser() != null)
+           {
+               <div>
+                   <a asp-controller="Home" asp-action="Index">
+                       Cerrar Sesion
+                   </a>
+               </div>
+               <div class="d-flex pr-2">
+                   <a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser().Id">
+                       <i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i>
+                   </a>
+               </div>
+           }
           @* <form class="d-flex"> *@
           @*   <input class="form-control me-sm-2" type="search" placeholder="Search"> *@
           @*   <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> *@
