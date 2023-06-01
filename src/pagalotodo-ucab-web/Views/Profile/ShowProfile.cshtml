@@ -4,11 +4,15 @@
     string ruta = "";
     if (CurrentUser.GetUser().UserType == "provider")
     {
-        ruta = "updateProvider";
+        ruta = "updatePswdProvider";
     }
     else if (CurrentUser.GetUser().UserType == "consumer")
     {
-        ruta = "updateConsumer";
+        ruta = "updatePswdConsumer";
+    }
+    else if (CurrentUser.GetUser().UserType == "admin")
+    {
+        ruta = "updatePswdAdmin";
     }
 }
 
@@ -46,8 +50,8 @@
         @* <div> *@
         @*     <a asp-route="@ruta" class="btn btn-primary" asp-route-id="@Model.Id">Modify Profile</a> *@
         @* </div> *@
-        <div>
-            <a asp-route="changePassword" class="btn btn-primary" asp-route-id="@Model.Id">Change Password</a>
-        </div>
     }
+        <div>
+            <a asp-route="@ruta" class="btn btn-primary" asp-route-id="@Model.Id">Change Password</a>
+        </div>
 </div>

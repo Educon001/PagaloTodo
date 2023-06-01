@@ -244,7 +244,7 @@ public class ProviderController : Controller
         }
     }
 
-    [Route("provider/updatePassword/{token:guid?}")]
+    [Route("provider/updatePassword/{token:guid?}", Name="updatePswdProvider")]
     public IActionResult UpdatePassword()
     {
         return View();
@@ -263,6 +263,7 @@ public class ProviderController : Controller
             var response = await client.PutAsJsonAsync($"/providers/{id}/password", request);
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Password changed successfully";
             if (CurrentUser.GetUser().UserType == "provider")
             {
                 return RedirectToAction("Index2", "Home");

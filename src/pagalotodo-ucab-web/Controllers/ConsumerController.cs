@@ -313,7 +313,7 @@ public class ConsumerController : Controller
         }
     }
     
-    [Route("consumer/updatePassword/{token:guid?}")]
+    [Route("consumer/updatePassword/{token:guid?}", Name="updatePswdConsumer")]
     public IActionResult UpdatePassword(Guid? token)
     {
         ViewBag.Token = token;
@@ -322,7 +322,7 @@ public class ConsumerController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Route("consumer/updatePswd/{token:guid?}", Name="updatePswdPost")]
+    [Route("consumer/updatePswd/{token:guid?}", Name="updatePswdPostConsumer")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request, Guid? token)
     {
         try

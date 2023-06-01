@@ -40,6 +40,7 @@ public class AdminController : Controller
         }
     }*/
 
+    [Route("admin/updatePassword/{token:guid?}", Name="updatePswdAdmin")]
     public IActionResult UpdatePassword()
     {
         return View();
@@ -47,6 +48,7 @@ public class AdminController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Route("admin/updatePswd", Name="updatePswdPostAdmin")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
     {
         try
@@ -57,6 +59,7 @@ public class AdminController : Controller
             var response = await client.PutAsJsonAsync($"/admins/{id}/password", request);
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Password changed successfully";
             if (CurrentUser.GetUser().UserType == "admin")
             {
                 return RedirectToAction("Index2", "Home");
