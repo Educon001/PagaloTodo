@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Handlers.Commands;
@@ -6,6 +8,7 @@ using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
+using UCABPagaloTodoMS.Core.Entities;
 using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Login;
@@ -139,9 +142,9 @@ public class LoginCommandHandlerTest
         var command = new LoginCommand(request);
 
         // Act & Assert
-        var ex = await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(command, default));
+        var ex = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
 
         // Assert
-        Assert.Equal("Value cannot be null. (Parameter 'request')", ex.Message);
+        Assert.Contains("Value cannot be null. (Parameter 'request')", ex.Message);
     }
 }

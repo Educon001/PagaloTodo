@@ -133,6 +133,7 @@ public class ConsumersController : BaseController<ConsumersController>
             _logger.LogInformation("Entrando al método que cambia clave a consumers");
             try
             {
+                request.UserType = "consumer";
                 var query = new UpdatePasswordCommand(request,id);
                 var response = await _mediator.Send(query);
                 return Ok(response);

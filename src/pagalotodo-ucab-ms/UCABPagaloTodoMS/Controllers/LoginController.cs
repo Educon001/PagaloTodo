@@ -87,7 +87,7 @@ public class LoginController : BaseController<LoginController>
     [HttpPost("ResetPassword")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UpdatePasswordResponse>> ResetPassword([FromQuery] Guid token,
+    public async Task<ActionResult<UpdatePasswordResponse>> ResetPassword([FromQuery] Guid? token,
         [FromBody] UpdatePasswordRequest request)
     {
         try
@@ -98,8 +98,8 @@ public class LoginController : BaseController<LoginController>
                 throw new CustomException($"token {token} not found",
                     new KeyNotFoundException(token.ToString()));
             }
+            request.UserType = "consumer";
             var query = new UpdatePasswordCommand(request, (Guid) info["UserId"]);
-            query.Request.UserType = "consumer";
             var response = await _mediator.Send(query);
             _cache.Remove(token);
             return Ok(response);

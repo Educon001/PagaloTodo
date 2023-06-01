@@ -62,9 +62,5 @@
     <ProjectReference Include="..\UCABPagaloTodoMS\UCABPagaloTodoMS.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UnitTestsInfrastructure\Services\" />
-  </ItemGroup>
-
 
 </Project>

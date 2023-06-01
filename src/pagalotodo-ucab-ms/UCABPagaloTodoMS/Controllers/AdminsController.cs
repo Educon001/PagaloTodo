@@ -32,6 +32,7 @@ public class AdminsController : BaseController<AdminsController>
         _logger.LogInformation("Entrando al método que cambia clave a admin");
         try
         {
+            request.UserType = "admin";
             var query = new UpdatePasswordCommand(request,id);
             var response = await _mediator.Send(query);
             return Ok(response);

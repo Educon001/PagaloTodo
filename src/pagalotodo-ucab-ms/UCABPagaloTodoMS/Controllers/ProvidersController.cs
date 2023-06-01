@@ -236,6 +236,7 @@ public class ProvidersController : BaseController<ProvidersController>
             _logger.LogInformation("Entrando al método que cambia clave a provider");
             try
             {
+                request.UserType = "provider";
                 var query = new UpdatePasswordCommand(request,id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
