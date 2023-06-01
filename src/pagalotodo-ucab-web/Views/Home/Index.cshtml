@@ -3,13 +3,30 @@
 }
 
 <div class="container-fluid p-4">
-    <div class="p-2">
-        <a asp-controller="Login" asp-action="Admin" class="btn btn-primary">Admin Login</a>
-    </div>
-    <div class="p-2">
-        <a asp-controller="Login" asp-action="Consumer" class="btn btn-primary">Consumer Login</a>
-    </div>
-    <div class="p-2">
-        <a asp-controller="Login" asp-action="Provider" class="btn btn-primary">Provider Login</a>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Login</h5>
+                    <a asp-controller="Login" asp-action="Admin" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Consumer Login</h5>
+                    <a asp-controller="Login" asp-action="Consumer" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Provider Login</h5>
+                    <a asp-controller="Login" asp-action="Provider" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
