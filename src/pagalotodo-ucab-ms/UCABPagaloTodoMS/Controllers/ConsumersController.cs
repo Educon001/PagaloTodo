@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
-using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;

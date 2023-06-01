@@ -41,9 +41,21 @@
                 <td><a asp-route="showProvider" asp-route-id="@obj.Id">@obj.Username</a></td> 
                 <td>@obj.Name</td>
                 <td>@obj.Email</td>
-                <td>@(obj.Status.GetValueOrDefault() ? "Activo" : "Inactivo") </td>
+                <td>@(obj.Status.GetValueOrDefault() ? "Activo" : "Inactivo")</td>
             </tr>
         }
         </tbody>
     </table>
 </div>
+
+<script defer>
+    let tableRows = document.querySelectorAll("table tr");
+    tableRows.forEach((item)=>{
+        console.log(item);
+        let lastChild = item.querySelector("td:last-child, th:last-child");
+        console.log(lastChild);
+        if(lastChild.textContent === "Inactivo"){
+            item.style.opacity = "0.4";
+        }
+    })
+</script>

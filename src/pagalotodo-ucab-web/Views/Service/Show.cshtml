@@ -20,47 +20,47 @@
     <div><b>Service Type</b></div>
     <div>@Model.ServiceType</div>
     <div><b>Conciliation Format</b></div>
-        <div>
-            @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
-            {
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Longitud
-                        </th>
-                        <th>
-                            Formato
-                        </th>
-                        <th>
-                            Referencia Atributo
-                        </th>
-                        <th></th>
-                    </tr>
-                    </thead>
+    <div>
+        @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Longitud
+                    </th>
+                    <th>
+                        Formato
+                    </th>
+                    <th>
+                        Referencia Atributo
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
     
-                    @foreach (var obj in @Model.ConciliationFormat)
-                    {
-                        <tr>
-                            <td>@obj.Name</td>
-                            <td>@obj.Length</td>
-                            <td>@obj.Format</td>
-                            <td>@obj.AttrReference</td>
-                            <td>
-                                <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
-                            </td>
-                        </tr>
-                    }
-                </table>
-            }
-            @if (Model.ConciliationFormat == null || Model.ConciliationFormat.Count == 0)
-            {
-                <div>No Fields registered</div>
-            }
-        </div>
+                @foreach (var obj in @Model.ConciliationFormat)
+                {
+                    <tr>
+                        <td>@obj.Name</td>
+                        <td>@obj.Length</td>
+                        <td>@obj.Format</td>
+                        <td>@obj.AttrReference</td>
+                        <td>
+                            <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        @if (Model.ConciliationFormat == null || Model.ConciliationFormat.Count == 0)
+        {
+            <div>No Fields registered</div>
+        }
+    </div>
     <br>
     <div>
         <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
@@ -71,3 +71,5 @@
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
     </div>
 </div>
+
+

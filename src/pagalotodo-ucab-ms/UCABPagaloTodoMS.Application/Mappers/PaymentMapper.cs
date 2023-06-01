@@ -30,9 +30,9 @@ public class PaymentMapper
             CardNumber = new string('*', entity.CardNumber!.Length - 4) +
                          entity.CardNumber.Substring(entity.CardNumber.Length - 4),
             TransactionId = entity.TransactionId,
-            PaymentStatus = entity.PaymentStatus,
+            PaymentStatus = entity.PaymentStatus,        
             Service = isServiceReference ? null : ServiceMapper.MapEntityToResponse(entity.Service!, false),
-            Consumer = isConsumerReference ? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!)
+            Consumer = isConsumerReference ? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!),
         };
         return response;
     }

@@ -29,6 +29,9 @@
                         Servicio
                     </th>
                     <th>
+                        Monto
+                    </th>
+                    <th>
                         Estatus
                     </th>
                 </tr>
@@ -38,13 +41,14 @@
                 {
                     <tr>
                         <td>@obj.Identifier</td>
-                        <td>@obj.Service.Name</td>
+                        <td>@obj.Service?.Name</td>
+                        <td>@(obj.Amount + "$")</td>
                         <td>@obj.PaymentStatus</td>
                     </tr>
                 }
             </table>
         }
-        @if (Model.Payments == null)
+        @if (Model.Payments == null || Model.Payments.Count == 0)
         {
             <div>No payments registered</div>
         }
@@ -59,3 +63,5 @@
         <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
     </div>
 </div>
+
+

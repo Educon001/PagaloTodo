@@ -48,3 +48,15 @@
         </tbody>
     </table>
 </div>
+
+<script defer>
+    let tableRows = document.querySelectorAll("table tr");
+    tableRows.forEach((item)=>{
+        console.log(item);
+        let lastChild = item.querySelector("td:nth-child(3), th:last-child");
+        console.log(lastChild);
+        if(lastChild.textContent === "Inactivo" || lastChild.textContent === "Proximamente"){
+            item.style.opacity = "0.4";
+        }
+    })
+</script>

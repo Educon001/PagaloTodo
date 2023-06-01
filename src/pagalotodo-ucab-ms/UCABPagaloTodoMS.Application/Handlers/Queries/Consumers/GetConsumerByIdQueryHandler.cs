@@ -46,6 +46,8 @@ public class GetConsumerByIdQueryHandler : IRequestHandler<GetConsumerByIdQuery,
         {
             _logger.LogInformation("GetConsumerByIdQueryHandler.HandleAsync");
             var result = await _dbContext.Consumers
+                .Include(c=>c.Payments)
+                .ThenInclude(c=>c.Service).ThenInclude(s=>s.Provider)
                 .SingleAsync(p => p.Id == request.Id);
             return ConsumerMapper.MapEntityToResponse(result);
         }
