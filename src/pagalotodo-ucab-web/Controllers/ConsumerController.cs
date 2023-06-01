@@ -205,7 +205,7 @@ public class ConsumerController : Controller
         bool isUnique = true;
         foreach (ConsumerModel consumer in consumers)
         {
-            if (consumer.Username == username && consumer.Id != CurrentUser.GetUser().Id)
+            if (consumer.Username == username)
             {
                 isUnique = false;
                 break;

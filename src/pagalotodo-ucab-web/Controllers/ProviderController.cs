@@ -209,7 +209,7 @@ public class ProviderController : Controller
         bool isUnique = true;
         foreach (ProviderModel provider in providers)
         {
-            if (provider.Username == username && provider.Id != CurrentUser.GetUser().Id)
+            if (provider.Username == username)
             {
                 isUnique = false;
                 break;
