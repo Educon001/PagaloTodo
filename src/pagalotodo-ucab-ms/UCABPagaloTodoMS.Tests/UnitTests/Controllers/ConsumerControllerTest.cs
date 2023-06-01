@@ -143,7 +143,7 @@ public class ConsumersControllerTest
     }
     
     /// <summary>
-    ///     Prueba de metodo UpdatePassword para prestadores con respuesta BadRequest
+    ///     Prueba de metodo UpdatePassword para consumidores con respuesta BadRequest
     /// </summary>
     [Fact]
     public async void UpdatePasswordHashConsumers_Returns_BadRequest()
@@ -152,7 +152,7 @@ public class ConsumersControllerTest
         var password = new UpdatePasswordRequest() {PasswordHash = "string"};
         var expectedException = new Exception("Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
-            .ThrowsAsync(new Exception("Test Exception"));
+            .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePassword(id,password);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);

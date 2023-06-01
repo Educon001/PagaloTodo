@@ -213,4 +213,37 @@ public class ProvidersControllerTest
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);
     }
+    
+    /// <summary>
+    ///     Prueba de metodo UpdatePassword para prestadores con respuesta Ok
+    /// </summary>
+    [Fact]
+    public async void UpdatePasswordHashProviders_Returns_Ok()
+    {
+        var id = Guid.NewGuid();
+        var password = new UpdatePasswordRequest() {PasswordHash = "Ab123456.r"};
+        var expectedResponse = new UpdatePasswordResponse(id,"Password updated successfully.");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None)).ReturnsAsync(expectedResponse);
+        var response = await _controller.UpdatePassword(id,password);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<UpdatePasswordResponse>(okResult.Value);
+        Assert.Equal(expectedResponse,okResult.Value);
+    }
+    
+    /// <summary>
+    ///     Prueba de metodo UpdatePassword para prestadores con respuesta BadRequest
+    /// </summary>
+    [Fact]
+    public async void UpdatePasswordHashProviders_Returns_BadRequest()
+    {
+        var id = Guid.NewGuid();
+        var password = new UpdatePasswordRequest() {PasswordHash = "string"};
+        var expectedException = new Exception("Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+        var response = await _controller.UpdatePassword(id,password);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
 }

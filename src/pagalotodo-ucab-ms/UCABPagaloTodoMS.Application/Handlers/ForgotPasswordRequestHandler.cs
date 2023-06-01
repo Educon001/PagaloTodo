@@ -14,8 +14,7 @@ public class ForgotPasswordRequestHandler : IRequestHandler<ForgotPasswordReques
     private readonly IEmailSender _emailSender;
     private readonly ILogger<ForgotPasswordRequestHandler> _logger;
 
-    public ForgotPasswordRequestHandler(IEmailSender emailSender, IUCABPagaloTodoDbContext dbContext,
-        ILogger<ForgotPasswordRequestHandler> logger)
+    public ForgotPasswordRequestHandler(IEmailSender emailSender, ILogger<ForgotPasswordRequestHandler> logger)
     {
         _emailSender = emailSender;
         _logger = logger;

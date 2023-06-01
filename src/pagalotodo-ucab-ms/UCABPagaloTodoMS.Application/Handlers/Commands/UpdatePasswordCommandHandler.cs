@@ -94,8 +94,6 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                         throw new KeyNotFoundException($"Object with key {adminId} not found");
                     }
                     break;
-                default:
-                    throw new ArgumentException($"Invalid user type {request.Request.UserType}");
             }
 
             await _dbContext.SaveEfContextChanges("APP");

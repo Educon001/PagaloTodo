@@ -23,14 +23,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        // Verificar que se proporcione el nombre de usuario, la contraseña y el tipo de usuario en la solicitud
-        if (request.Request.Username == null || request.Request.PasswordHash == null || request.Request.UserType == null)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }
-
         try
         {
+            // Verificar que se proporcione el nombre de usuario, la contraseña y el tipo de usuario en la solicitud
+            if (request.Request.Username == null || request.Request.PasswordHash == null || request.Request.UserType == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
             // Buscar al usuario en la tabla correspondiente según el tipo de usuario proporcionado en la solicitud
             switch (request.Request.UserType.ToUpper())
             {
