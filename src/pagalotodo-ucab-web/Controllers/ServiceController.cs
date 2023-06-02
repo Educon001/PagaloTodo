@@ -88,7 +88,7 @@ public class ServiceController : Controller
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error creating the service";
-            return NotFound();
+            return RedirectToAction("Index", "Service");
         }
     }
 
@@ -136,14 +136,13 @@ public class ServiceController : Controller
             };
             Guid service = JsonSerializer.Deserialize<Guid>(items, options)!;
             TempData["success"] = "Service Deleted Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error deleting the service";
-            return NotFound();
         }
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -202,14 +201,13 @@ public class ServiceController : Controller
             var response = await client.PutAsJsonAsync($"/services/{id}", service);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Service Updated Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error updating the service";
-            return NotFound();
         }
+        return RedirectToAction("Index");
     }
 
     [Route("/{id:Guid}", Name="createFormat")]
@@ -237,14 +235,13 @@ public class ServiceController : Controller
             var response = await client.PostAsJsonAsync("/services/format", fieldRequests);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Conciliation Format Created Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error creating the conciliation format";
-            return NotFound();
         }
+        return RedirectToAction("Index", "Service");
     }
 
     [Route("updateField/{serviceId:guid}/{id:guid}", Name = "updateField")]
@@ -298,13 +295,12 @@ public class ServiceController : Controller
             var response = await client.PutAsJsonAsync($"/services/fields/{id}", field);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Field Updated Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error updating the field";
-            return NotFound();
         }
+        return RedirectToAction("Index");
     }
 }

@@ -59,13 +59,13 @@ public class ConsumerController : Controller
             var response = await client.PostAsJsonAsync("/consumers", consumer);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Consumer Created Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            TempData["error"] = "There was an error creating the consumer. Try Again";
         }
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -111,14 +111,14 @@ public class ConsumerController : Controller
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             Guid consumer = JsonSerializer.Deserialize<Guid>(items, options)!;
-            TempData["success"] = "Service Deleted Successfully";
-            return RedirectToAction("Index");
+            TempData["success"] = "Consumer Deleted Successfully";
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            TempData["error"] = "There was an error deleting the consumer";
         }
+        return RedirectToAction("Index");
     }
     
     [HttpGet]
@@ -170,20 +170,17 @@ public class ConsumerController : Controller
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PutAsJsonAsync($"/consumers/{id}", consumer);
+            response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Consumer Updated Successfully";
-            if (CurrentUser.GetUser().UserType == "consumer")
-            {
-                return RedirectToAction("Index2", "Home");
-            }
-            return RedirectToAction("Index");
+
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            TempData["error"] = "There was an error updating the consumer. Try Again.";
         }
-
+        return CurrentUser.GetUser().UserType == "consumer" ? RedirectToAction("Index2", "Home") : RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -255,13 +252,13 @@ public class ConsumerController : Controller
             var response = await client.PostAsJsonAsync("/payments", payment);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Payment Done Successfully";
-            return RedirectToAction("Index2", "Home");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            TempData["success"] = "There was an error processing the payment";
         }
+        return RedirectToAction("GetPayments", "Consumer", new {id=CurrentUser.GetUser().Id});
     }
 
     [Route("/payments/{id:Guid}", Name = "paymentsConsumer")]
@@ -304,11 +301,13 @@ public class ConsumerController : Controller
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
             var response = await client.PostAsJsonAsync("/consumers", consumer);
             var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Consumer Registered Successfully";
             return RedirectToAction("Consumer", "Login");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
+            TempData["error"] = "There was an error registering the consumer";
             return NotFound();
         }
     }

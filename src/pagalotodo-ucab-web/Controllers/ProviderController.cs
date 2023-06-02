@@ -59,14 +59,13 @@ public class ProviderController : Controller
             var response = await client.PostAsJsonAsync("/providers", provider);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Provider Created Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error creating the service";
-            return NotFound();
         }
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -113,14 +112,13 @@ public class ProviderController : Controller
             };
             Guid provider = JsonSerializer.Deserialize<Guid>(items, options)!;
             TempData["success"] = "Provider Deleted Successfully";
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error deleting the provider";
-            return NotFound();
         }
+        return RedirectToAction("Index");
     }
     
     [HttpGet]
@@ -175,18 +173,17 @@ public class ProviderController : Controller
             var response = await client.PutAsJsonAsync($"/providers/{id}", provider);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Provider Updated Successfully";
-            if (CurrentUser.GetUser().UserType == "provider")
-            {
-                return RedirectToAction("Index2", "Home");
-            }
-            return RedirectToAction("Index");
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
             TempData["error"] = "There was an error updating the provider";
-            return NotFound();
         }
+        if (CurrentUser.GetUser().UserType == "provider")
+        {
+            return RedirectToAction("Index2", "Home");
+        }
+        return RedirectToAction("Index");
     }
 
     [HttpGet]

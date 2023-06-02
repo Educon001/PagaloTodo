@@ -24,7 +24,7 @@ public class ServiceMapper
             ConfirmationList = entity.ConfirmationList?.Select(c => DebtorsMapper.MapEntityToResponse(c)).ToList(),
             ServiceStatus = entity.ServiceStatus.ToString(),
             Provider = isProviderReference ? null : ProviderMapper.MapEntityToResponse(entity.Provider!),
-            Payments = entity.Payments?.Select(p=>PaymentMapper.MapEntityToResponse(p,true,false)).ToList(),
+            Payments = entity.Payments?.Select(p=>PaymentMapper.MapEntityToResponse(p,true,true)).ToList(),
             ConciliationFormat = entity.ConciliationFormat?.Select(f=>FieldMapper.MapEntityToResponse(f)).ToList()
         };
         return response;

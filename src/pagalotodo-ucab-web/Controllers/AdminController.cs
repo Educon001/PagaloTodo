@@ -16,29 +16,6 @@ public class AdminController : Controller
     {
         _httpClientFactory = httpClientFactory;
     }
-    
-    /*public async Task<IActionResult> Index()
-    {
-        try
-        {
-            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
-            var response = await client.GetAsync("/admins");
-            response.EnsureSuccessStatusCode();
-            var items = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-            IEnumerable<ConsumerModel> consumers = JsonSerializer.Deserialize<IEnumerable<ConsumerModel>>(items, options)!;
-            return View(consumers);
-        }
-        catch (HttpRequestException e)
-        {
-            Console.WriteLine(e);
-            return NotFound();
-        }
-    }*/
 
     [Route("admin/updatePassword/{token:guid?}", Name="updatePswdAdmin")]
     public IActionResult UpdatePassword()

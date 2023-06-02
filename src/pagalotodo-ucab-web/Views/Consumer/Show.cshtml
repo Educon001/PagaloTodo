@@ -40,7 +40,7 @@
                 @foreach (var obj in @Model.Payments)
                 {
                     <tr>
-                        <td>@obj.Identifier</td>
+                        <td>@obj.TransactionId</td>
                         <td>@obj.Service?.Name</td>
                         <td>@(obj.Amount + "$")</td>
                         <td>@obj.PaymentStatus</td>
