@@ -22,7 +22,17 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Email = "prueba@prueba.com",
                     Name = "Jhonny",
                     Status = true,
+                },
+                new ()
+                {
+                    Id = Guid.NewGuid(),
+                    Username = "admin2",
+                    PasswordHash = SecurePasswordHasher.Hash("Password."),
+                    Email = "prueba@prueba.com",
+                    Name = "Jhonny",
+                    Status = false,
                 }
+                
             };
             
             //Providers data
@@ -49,7 +59,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     PasswordHash = SecurePasswordHasher.Hash("Password."),
                     Email = "test@test.com",
                     Name = "Juan",
-                    Status = true,
+                    Status = false,
                     Rif = "V123456729",
                     AccountNumber = "09876543211234567890",
                     Services = new List<ServiceEntity>()
@@ -149,7 +159,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Email = "test@test.com",
                     Name = "Juan",
                     LastName = "Parcial",
-                    Status = true,
+                    Status = false,
                     ConsumerId = "V12345678",
                     Payments = new List<PaymentEntity>()
                 }

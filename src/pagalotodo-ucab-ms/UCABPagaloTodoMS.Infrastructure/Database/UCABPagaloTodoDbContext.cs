@@ -13,8 +13,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         : base(options)
     {
     }
-
-    public virtual DbSet<ValoresEntity> Valores { get; set; } = null!;
+    
     public virtual DbSet<AdminEntity> Admins { get; set; } = null!;
     public virtual DbSet<ConsumerEntity> Consumers { get; set; } = null!;
     public virtual DbSet<DebtorsEntity> Debtors { get; set; } = null!;
