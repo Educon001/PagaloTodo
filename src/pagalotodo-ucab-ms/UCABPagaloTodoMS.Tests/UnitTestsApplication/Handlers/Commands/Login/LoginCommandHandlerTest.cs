@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -76,48 +77,79 @@ public class LoginCommandHandlerTest
     }
     
     [Fact]
-    public async Task Handle_ConsumerInvalidCredentials_ReturnsNull()
+    public async Task Handle_ConsumerInvalidCredentials_ReturnsBadRequest()
     {
         // Arrange
         var entity = _mockContext.Object.Consumers.First();
         var request = new LoginRequest { Username = entity.Username, PasswordHash = "invalid_password", UserType = "consumer" };
         var command = new LoginCommand(request);
 
-        // Act
-        var response = await _handler.Handle(command, default);
-
-        // Assert
-        Assert.Null(response);
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.BadRequest, ex.StatusCode);
     }
     
     [Fact]
-    public async Task Handle_ProviderInvalidCredentials_ReturnsNull()
+    public async Task Handle_ProviderInvalidCredentials_ReturnsBadRequest()
     {
-        // Arrange
         var entity = _mockContext.Object.Providers.First();
         var request = new LoginRequest { Username = entity.Username, PasswordHash = "invalid_password", UserType = "provider" };
         var command = new LoginCommand(request);
 
-        // Act
-        var response = await _handler.Handle(command, default);
-
-        // Assert
-        Assert.Null(response);
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.BadRequest, ex.StatusCode);
     }
     
     [Fact]
-    public async Task Handle_AdminInvalidCredentials_ReturnsNull()
+    public async Task Handle_AdminInvalidCredentials_ThrowsBadRequestException()
     {
         // Arrange
         var entity = _mockContext.Object.Admins.First();
         var request = new LoginRequest { Username = entity.Username, PasswordHash = "invalid_password", UserType = "admin" };
         var command = new LoginCommand(request);
 
-        // Act
-        var response = await _handler.Handle(command, default);
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.BadRequest, ex.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Handle_ConsumerInvalidCredentials_ReturnsUnauthorized()
+    {
+        // Arrange
+        var entity = _mockContext.Object.Consumers.Skip(1).First();
+        var request = new LoginRequest { Username = entity.Username, PasswordHash = "Password.", UserType = "consumer" };
+        var command = new LoginCommand(request);
 
-        // Assert
-        Assert.Null(response);
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.Unauthorized, ex.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Handle_ProvidervalidCredentials_ReturnsUnauthorized()
+    {
+        var entity = _mockContext.Object.Providers.Skip(1).First();
+        var request = new LoginRequest { Username = entity.Username, PasswordHash = "Password.", UserType = "provider" };
+        var command = new LoginCommand(request);
+
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.Unauthorized, ex.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Handle_AdminInvalidCredentials_ThrowsBadRequestUnauthorized()
+    {
+        // Arrange
+        var entity = _mockContext.Object.Admins.Skip(1).First();
+        var request = new LoginRequest { Username = entity.Username, PasswordHash = "Password.", UserType = "admin" };
+        var command = new LoginCommand(request);
+
+        // Act and Assert
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(async () => await _handler.Handle(command, default));
+        Assert.Equal(HttpStatusCode.Unauthorized, ex.StatusCode);
     }
     
     [Fact]
