@@ -43,7 +43,7 @@ public class GetPaymentsQueryHandler : IRequestHandler<GetPaymentsQuery, List<Pa
         try
         {
             _logger.LogInformation("GetPaymentsQueryHandler.HandleAsync");
-            var result = _dbContext.Payments.Where(p =>
+            var result = _dbContext.Payments.IgnoreQueryFilters().Where(p =>
                     p.CreatedAt >= (request.StartDate ?? DateTime.MinValue) &&
                     p.CreatedAt <= (request.EndDate ?? DateTime.MaxValue))
                 .Include(p => p.Consumer)

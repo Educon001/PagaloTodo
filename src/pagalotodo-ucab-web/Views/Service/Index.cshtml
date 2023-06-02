@@ -17,7 +17,7 @@
             </a>
         </div>
     </div>
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped" id="servicesTable">
         <thead>
         <tr>
             <th>
@@ -48,15 +48,33 @@
         </tbody>
     </table>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script defer>
-    let tableRows = document.querySelectorAll("table tr");
-    tableRows.forEach((item)=>{
-        console.log(item);
-        let lastChild = item.querySelector("td:nth-child(3), th:last-child");
-        console.log(lastChild);
-        if(lastChild.textContent === "Inactivo" || lastChild.textContent === "Proximamente"){
-            item.style.opacity = "0.4";
-        }
-    })
+
+<script>
+        $(document).ready(function () {
+            $('#servicesTable').DataTable({
+                searching: true,
+                ordering: true,
+                language: {
+                    search: "Search Services: ",
+                    zeroRecords: "No se encontraron registros",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de MAX registros totales)"
+                }
+            });
+        });
 </script>
+
+@* <script defer> *@
+@*     let tableRows = document.querySelectorAll("table tr"); *@
+@*     tableRows.forEach((item)=>{ *@
+@*         console.log(item); *@
+@*         let lastChild = item.querySelector("td:nth-child(3), th:last-child"); *@
+@*         console.log(lastChild); *@
+@*         if(lastChild.textContent === "Inactivo" || lastChild.textContent === "Proximamente"){ *@
+@*             item.style.opacity = "0.4"; *@
+@*         } *@
+@*     }) *@
+@* </script> *@
+

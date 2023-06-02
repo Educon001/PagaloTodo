@@ -45,7 +45,7 @@ public class GetConsumerByIdQueryHandler : IRequestHandler<GetConsumerByIdQuery,
         try
         {
             _logger.LogInformation("GetConsumerByIdQueryHandler.HandleAsync");
-            var result = await _dbContext.Consumers
+            var result = await _dbContext.Consumers.IgnoreQueryFilters()
                 .Include(c=>c.Payments)
                 .ThenInclude(c=>c.Service).ThenInclude(s=>s.Provider)
                 .SingleAsync(p => p.Id == request.Id);

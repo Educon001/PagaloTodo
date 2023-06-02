@@ -16,7 +16,7 @@
             </a>
         </div>
     </div>
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped" id="consumersTable">
         <thead>
         <tr>
             <th>
@@ -47,6 +47,23 @@
         </tbody>
     </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+        $(document).ready(function () {
+            $('#consumersTable').DataTable({
+                searching: true,
+                ordering: true,
+                language: {
+                    search: "Search Consumers: ",
+                    zeroRecords: "No se encontraron registros",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de MAX registros totales)"
+                }
+            });
+        });
+</script>
 
 <script defer>
     let tableRows = document.querySelectorAll("table tr");

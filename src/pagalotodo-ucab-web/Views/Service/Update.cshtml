@@ -21,11 +21,11 @@
         </div>
         <div class="mb-3">
             <label asp-for="ServiceType">Tipo</label>
-            <select name="ServiceType" id="ServiceType" asp-items="Html.GetEnumSelectList<ServiceTypeEnum>()"></select>
+            <select name="ServiceType" id="ServiceType" asp-items="Html.GetEnumSelectList<ServiceTypeEnum>()" class="form-control"></select>
         </div>
         <div class="mb-3">
             <label asp-for="ServiceStatus">Status</label>
-            <select name="ServiceStatus" id="ServiceStatus" asp-items="Html.GetEnumSelectList<ServiceStatusEnum>()"></select>
+            <select name="ServiceStatus" id="ServiceStatus" asp-items="Html.GetEnumSelectList<ServiceStatusEnum>()" class="form-control"></select>
         </div>
         @{
             List<ProviderModel> providers = ViewBag.Message;
@@ -37,7 +37,7 @@
         }
         <div class="mb-3">
             <label asp-for="Provider">Provider</label>
-            <select name="Provider" id="Provider" asp-items="selectList"></select>
+            <select name="Provider" id="Provider" asp-items="selectList" class="form-control"></select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>

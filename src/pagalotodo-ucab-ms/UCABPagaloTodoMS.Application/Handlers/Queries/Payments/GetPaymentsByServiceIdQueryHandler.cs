@@ -43,7 +43,7 @@ public class GetPaymentsByServiceIdQueryHandler : IRequestHandler<GetPaymentsByS
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Payments.Where(p =>
+            var result = _dbContext.Payments.IgnoreQueryFilters().Where(p =>
                     p.Service!.Id == request.Id &&
                     p.CreatedAt >= (request.StartDate ?? DateTime.MinValue) &&
                     p.CreatedAt <= (request.EndDate ?? DateTime.MaxValue))
