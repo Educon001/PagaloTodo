@@ -3,9 +3,9 @@ using System.Reflection;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database;
-
 
 public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 {
@@ -13,7 +13,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         : base(options)
     {
     }
-    
+
     public virtual DbSet<AdminEntity> Admins { get; set; } = null!;
     public virtual DbSet<ConsumerEntity> Consumers { get; set; } = null!;
     public virtual DbSet<DebtorsEntity> Debtors { get; set; } = null!;
@@ -24,10 +24,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 
     public DbContext DbContext
     {
-        get
-        {
-            return this;
-        }
+        get { return this; }
     }
 
     public IDbContextTransactionProxy BeginTransaction()
@@ -46,6 +43,19 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         modelBuilder.Entity<PaymentEntity>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<ProviderEntity>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<ServiceEntity>().HasQueryFilter(e => !e.IsDeleted);
+        //Default admin
+        modelBuilder.Entity<AdminEntity>().HasData(new AdminEntity()
+        {
+            Username = "admin",
+            PasswordHash = SecurePasswordHasher.Hash("admin"),
+            Name = "admin",
+            Email = "pagalotodoucabaf@gmail.com",
+            Id = Guid.NewGuid(),
+            Status = true,
+            CreatedAt = DateTime.UtcNow,
+            IsDeleted = false,
+            CreatedBy = "APP"
+        });
     }
 
     virtual public void SetPropertyIsModifiedToFalse<TEntity, TProperty>(TEntity entity,
@@ -74,16 +84,16 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         {
             if (entityEntry.State == EntityState.Added)
             {
-                ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
+                ((BaseEntity) entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+                ((BaseEntity) entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
                 ((BaseEntity) entityEntry.Entity).IsDeleted = false;
             }
 
             if (entityEntry.State == EntityState.Modified)
             {
-                ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
-                Entry((BaseEntity)entityEntry.Entity).Property(x => x.CreatedAt).IsModified = false;
-                Entry((BaseEntity)entityEntry.Entity).Property(x => x.CreatedBy).IsModified = false;
+                ((BaseEntity) entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
+                Entry((BaseEntity) entityEntry.Entity).Property(x => x.CreatedAt).IsModified = false;
+                Entry((BaseEntity) entityEntry.Entity).Property(x => x.CreatedBy).IsModified = false;
             }
 
             if (entityEntry.State == EntityState.Deleted)
@@ -98,7 +108,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 
     public async Task<int> SaveChangesAsync(string user, CancellationToken cancellationToken = default)
     {
-        var state = new List<EntityState> { EntityState.Added, EntityState.Modified, EntityState.Deleted };
+        var state = new List<EntityState> {EntityState.Added, EntityState.Modified, EntityState.Deleted};
 
         var entries = ChangeTracker.Entries().Where(e =>
             e.Entity is BaseEntity && state.Any(s => e.State == s)
@@ -108,7 +118,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 
         foreach (var entityEntry in entries)
         {
-            var entity = (BaseEntity)entityEntry.Entity;
+            var entity = (BaseEntity) entityEntry.Entity;
 
             if (entityEntry.State == EntityState.Added)
             {
@@ -126,7 +136,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
                 Entry(entity).Property(x => x.CreatedAt).IsModified = false;
                 Entry(entity).Property(x => x.CreatedBy).IsModified = false;
             }
-            
+
             if (entityEntry.State == EntityState.Deleted)
             {
                 entityEntry.State = EntityState.Modified;
