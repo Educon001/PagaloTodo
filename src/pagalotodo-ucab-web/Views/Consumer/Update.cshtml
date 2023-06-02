@@ -39,21 +39,21 @@
                 new()
                 {
                     Text = "Activo",
-                    Value = "true"
+                    Value = "true",
                 },
                 new()
                 {
                     Text = "Inactivo",
-                    Value = "false"
+                    Value = "false",
                 }
             };
         }
         <div class="mb-3">
             <label asp-for="Status">Estatus</label>
-            <select name="Status" id="Status" asp-items="selectList" class="form-control"></select>
+            <select name="Status" id="Status" asp-items="selectList"  class="form-control" asp-for="Status"></select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
-        @if (CurrentUser.GetUser().UserType == "admin"){
+        @if (CurrentUser.GetUser() != null && CurrentUser.GetUser().UserType == "admin"){
             <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
         }
     </div>

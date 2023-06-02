@@ -19,6 +19,8 @@
     <div>@Model.ServiceStatus</div>
     <div><b>Service Type</b></div>
     <div>@Model.ServiceType</div>
+    <div><b>Proveedor</b></div>
+    <div>@Model.Provider?.Name</div>
     <div><b>Conciliation Format</b></div>
     <div>
         @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
