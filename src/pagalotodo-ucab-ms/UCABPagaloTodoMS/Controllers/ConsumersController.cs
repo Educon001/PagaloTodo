@@ -57,11 +57,11 @@ public class ConsumersController : BaseController<ConsumersController>
         }
 
         /// <summary>
-        ///     Endpoint para la consulta de consumidores
+        ///     Endpoint para la consulta de un consumidor por id
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Get consumidores
+        ///     ### Get consumidor
         ///     ## Url
         ///     GET /consumers
         /// </remarks>
@@ -69,7 +69,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna la lista de prestadores.</returns>
+        /// <returns>Retorna un consumidor.</returns>
         [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy)]
         [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -123,6 +123,21 @@ public class ConsumersController : BaseController<ConsumersController>
             }
         }
         
+        
+        /// <summary>
+        ///     Endpoint que registra un consumidor.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Post consumidor.
+        ///     ## Url
+        ///     POST /consumers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el id del nuevo registro.</returns>
         [Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]

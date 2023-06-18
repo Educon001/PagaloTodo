@@ -179,4 +179,16 @@ public class LoginCommandHandlerTest
         // Assert
         Assert.Contains("Value cannot be null. (Parameter 'request')", ex.Message);
     }
+    
+    [Fact]
+    public async Task Handle_NullRequest_ThrowsArgumentNullException()
+    {
+        // Arrange
+        LoginRequest request = null;
+        var command = new LoginCommand(request);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.Handle(command, default));
+    }
+    
 }

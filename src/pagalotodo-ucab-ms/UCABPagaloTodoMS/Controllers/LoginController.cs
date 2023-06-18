@@ -31,11 +31,32 @@ public class LoginController : BaseController<LoginController>
         _cache = cache;
     }
 
+    /// <summary>
+    /// Endpoint para la autenticación de usuarios.
+    /// </summary>
+    /// <remarks>
+    /// ## Description
+    /// Este método simula el inicio de sesión de un usuario y devuelve un token JWT válido
+    /// si las credenciales son correctas.
+    /// </remarks>
+    /// <response code="200">
+    /// Accepted:
+    /// - Operación exitosa.
+    /// </response>
+    /// <response code="400">
+    /// BadRequest:
+    /// - Las credenciales proporcionadas son inválidas o incompletas.
+    /// </response>
+    /// <response code="401">
+    /// Unauthorized:
+    /// - Las credenciales proporcionadas no son válidas.
+    /// </response>
+    /// <returns>Retorna un objeto LoginResponse que contiene el tipo de usuario,
+    /// el id y el token JWT generado para el usuario autenticado.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
     public async Task<ActionResult<LoginResponse>> Authenticate(LoginRequest request)
     {
         try

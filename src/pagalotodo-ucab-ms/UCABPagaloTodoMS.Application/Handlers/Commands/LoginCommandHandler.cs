@@ -1,4 +1,3 @@
-using System.Net;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -6,7 +5,6 @@ using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Core.Database;
-using UCABPagaloTodoMS.Infrastructure.Database;
 using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands;
@@ -21,8 +19,47 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         _dbContext = dbContext;
         _logger = logger;
     }
-
+    
+    /// <summary>
+    /// Maneja una solicitud de inicio de sesión. Verifica que la solicitud no sea nula y llama al método HandleAsync para autenticar al usuario.
+    /// Lanza una excepción de tipo ArgumentNullException si la solicitud es nula.
+    /// </summary>
+    /// <param name="request">La solicitud de inicio de sesión.</param>
+    /// <param name="cancellationToken">El token de cancelación.</param>
+    /// <returns>Un objeto LoginResponse que contiene el tipo de usuario y el ID del usuario autenticado.</returns>
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (request.Request == null)
+            {
+                _logger.LogWarning("LoginCommandHandler.Handle: Request nulo.");
+                throw new ArgumentNullException(nameof(request));
+            }
+            return await HandleAsync(request);
+        }
+        catch (HttpRequestException)
+        {
+            throw; // Si ya es una excepción de tipo HttpRequestException, simplemente relanzarla
+        }
+        catch (ArgumentNullException)
+        {
+            throw; // Si ya es una excepción de tipo ArgumentNullException, simplemente relanzarla
+        }
+        catch (Exception e)
+        {
+            throw new CustomException(e);
+        }
+    }
+
+    /// <summary>
+    /// Autentica al usuario y devuelve un objeto LoginResponse que contiene el tipo de usuario y el ID del usuario autenticado.
+    /// Lanza una excepción de tipo HttpRequestException con un mensaje de error y un código de estado HTTP si la cuenta del usuario está inactiva o las credenciales son inválidas.
+    /// Lanza una excepción de tipo CustomException si se produce algún otro tipo de error y lo registra en el log de la aplicación.
+    /// </summary>
+    /// <param name="request">La solicitud de inicio de sesión.</param>
+    /// <returns>Un objeto LoginResponse que contiene el tipo de usuario y el ID del usuario autenticado.</returns>
+    private async Task<LoginResponse> HandleAsync(LoginCommand request)
     {
         try
         {
@@ -55,8 +92,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
                     throw new HttpRequestException("Credenciales inválidas.", null,
                         System.Net.HttpStatusCode.BadRequest);
 
-                    break;
-
                 case "CONSUMER":
                     var consumer =
                         await _dbContext.Consumers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
@@ -80,8 +115,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
                     throw new HttpRequestException("Credenciales inválidas.", null,
                         System.Net.HttpStatusCode.BadRequest);
 
-                    break;
-
                 case "PROVIDER":
                     var provider =
                         await _dbContext.Providers.FirstOrDefaultAsync(a => a.Username == request.Request.Username);
@@ -104,8 +137,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
                     throw new HttpRequestException("Credenciales inválidas.", null,
                         System.Net.HttpStatusCode.BadRequest);
 
-                    break;
-
                 default:
                     _logger.LogWarning($"El tipo de usuario {request.Request.UserType} no es válido.");
                     break;
@@ -124,6 +155,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         {
             _logger.LogError(ex, $"Ocurrió unerror al autenticar al usuario {request.Request.Username}.");
             throw new CustomException($"Ocurrió un error al autenticar al usuario: {ex.Message}", ex);
-        }
+        }        
     }
+
 }

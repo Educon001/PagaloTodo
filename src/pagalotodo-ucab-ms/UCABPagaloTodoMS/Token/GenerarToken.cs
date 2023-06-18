@@ -7,6 +7,11 @@ using UCABPagaloTodoMS.Application.Responses;
 namespace UCABPagaloTodoMS.Token;
 public static class GenerarToken
 {
+    /// <summary>
+    /// Genera un token JWT válido para un usuario autenticado.
+    /// </summary>
+    /// <param name="result">Objeto LoginResponse que contiene el tipo de usuario y el ID del usuario autenticado.</param>
+    /// <returns>Retorna un token JWT en formato de cadena.</returns>
     public static string GenerateToken(LoginResponse result)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
