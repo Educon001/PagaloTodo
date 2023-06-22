@@ -125,19 +125,19 @@ public class ConsumersController : BaseController<ConsumersController>
         
         
         /// <summary>
-        ///     Endpoint que registra un consumidor.
+        ///     Endpoint que actualiza la clave de un consumidor.
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Post consumidor.
+        ///     ### Put consumidor.
         ///     ## Url
-        ///     POST /consumers
+        ///     PUT /consumers
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna el id del nuevo registro.</returns>
+        /// <returns>Retorna el id del consumidor que edito su clave.</returns>
         [Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -158,7 +158,6 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message);
             }
         }
-        
         
         /// <summary>
         ///     Endpoint que actualiza un consumidor.

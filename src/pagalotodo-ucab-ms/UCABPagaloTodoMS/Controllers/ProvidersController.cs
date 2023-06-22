@@ -227,6 +227,20 @@ public class ProvidersController : BaseController<ProvidersController>
             }
         }
         
+        /// <summary>
+        ///     Endpoint que actualiza la clave de un proveedor.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Put provider.
+        ///     ## Url
+        ///     PUT /providers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el id del admin que edito su clave.</returns>
         [Authorize(Policy = "ProviderPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
