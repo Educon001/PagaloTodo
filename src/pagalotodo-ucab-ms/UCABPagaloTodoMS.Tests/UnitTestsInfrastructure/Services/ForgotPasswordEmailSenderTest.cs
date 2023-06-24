@@ -7,15 +7,15 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsInfrastructure.Services;
 
-public class SendGridEmailSenderTest
+public class ForgotPasswordEmailSenderTest
 {
-    private readonly SendGridEmailSender _sender;
+    private readonly ForgotPasswordEmailSender _sender;
     private readonly Mock<ISendGridClient> _mockClient;
 
-    public SendGridEmailSenderTest()
+    public ForgotPasswordEmailSenderTest()
     {
         _mockClient = new Mock<ISendGridClient>();
-        _sender = new SendGridEmailSender(_mockClient.Object, "test@email.com", "Test");
+        _sender = new ForgotPasswordEmailSender(_mockClient.Object, "test@email.com", "Test");
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class SendGridEmailSenderTest
             new Response(HttpStatusCode.Accepted, null,null);
         _mockClient.Setup(m => m.SendEmailAsync(It.IsAny<SendGridMessage>(), CancellationToken.None))
             .ReturnsAsync(expectedResponse);
-        var response = await _sender.SendEmailAsync(email, url);
+        var response = await _sender.SendEmailAsync(email,url);
         Assert.IsType<HttpStatusCode>(response);
         Assert.Equal(expectedResponse.StatusCode,response);
     }

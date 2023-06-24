@@ -69,8 +69,22 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             services.AddSingleton<ISendGridClient>(client);
             var senderEmail = configuration["SendGrid:SenderEmail"];
             var senderName = configuration["SendGrid:SenderName"];
-            services.AddTransient<IEmailSender>(provider =>
-                new SendGridEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient(provider =>
+                new ForgotPasswordEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient(provider =>
+                new ConciliationEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient<SenderResolver>(provider => key =>
+            {
+                switch (key)
+                {
+                    case "ForgotPassword":
+                        return provider.GetService<ForgotPasswordEmailSender>();
+                    case "Conciliation":
+                        return provider.GetService<ConciliationEmailSender>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
             return services;
         }
 

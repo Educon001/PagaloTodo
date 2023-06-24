@@ -5,6 +5,7 @@ namespace UCABPagaloTodoMS.Core.Database
 {
     public interface IUCABPagaloTodoDbContext
     {
+        DbSet<AccountingCloseEntity> AccountingClosures { get; set; }
         DbSet<AdminEntity> Admins { get; set;  }
         DbSet<ConsumerEntity> Consumers { get; set; }
         DbSet<DebtorsEntity> Debtors { get; set;  }

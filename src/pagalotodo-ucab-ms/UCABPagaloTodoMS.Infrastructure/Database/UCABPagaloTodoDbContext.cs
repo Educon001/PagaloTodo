@@ -14,6 +14,7 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     {
     }
 
+    public virtual DbSet<AccountingCloseEntity> AccountingClosures { get; set; } = null!;
     public virtual DbSet<AdminEntity> Admins { get; set; } = null!;
     public virtual DbSet<ConsumerEntity> Consumers { get; set; } = null!;
     public virtual DbSet<DebtorsEntity> Debtors { get; set; } = null!;
