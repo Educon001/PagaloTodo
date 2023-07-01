@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UCABPagaloTodoMS.Infrastructure.Database;
 
@@ -11,9 +12,10 @@ using UCABPagaloTodoMS.Infrastructure.Database;
 namespace UCABPagaloTodoMS.Infrastructure.Migrations
 {
     [DbContext(typeof(UCABPagaloTodoDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230626024328_AddConciliationTable")]
+    partial class AddConciliationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,13 +89,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d1d91f07-7cf1-4583-a2b2-79160531c5fa"),
-                            CreatedAt = new DateTime(2023, 6, 26, 21, 36, 14, 730, DateTimeKind.Utc).AddTicks(7982),
+                            Id = new Guid("ce238520-745e-4237-9438-b9bdb7b4fea2"),
+                            CreatedAt = new DateTime(2023, 6, 26, 2, 43, 27, 861, DateTimeKind.Utc).AddTicks(5251),
                             CreatedBy = "APP",
                             Email = "pagalotodoucabaf@gmail.com",
                             IsDeleted = false,
                             Name = "admin",
-                            PasswordHash = "$PagalTodo$10000$dlYdg6Ij1aCZ8Yw3GZWYLFLN9r7hOo6Iy4PW8ROhFSFmePRh",
+                            PasswordHash = "$PagalTodo$10000$1rcIURTX5q+aiFB7Qlg9Iu2a2/EpCqzZatbHIRpHTdsB+TRG",
                             Status = true,
                             Username = "admin"
                         });
@@ -160,8 +162,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("Amount")
-                        .HasColumnType("float");
+                    b.Property<float?>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -243,8 +245,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("Amount")
-                        .HasColumnType("float");
+                    b.Property<float?>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<string>("CardNumber")
                         .HasColumnType("nvarchar(max)");

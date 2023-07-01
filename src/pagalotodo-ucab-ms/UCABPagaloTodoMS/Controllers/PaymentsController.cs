@@ -131,7 +131,7 @@ public class PaymentsController : BaseController<PaymentsController>
                 {
                     response[i].Service = new ServiceResponse { Id = service.Id, Name = service.Name};
                 }
-                count = response.Count - count;
+                count = response.Count;
             }
             return Ok(response);
         }
@@ -200,6 +200,7 @@ public class PaymentsController : BaseController<PaymentsController>
         _logger.LogInformation("Entrando al método que registra un pago");
         try
         {
+            request.PaymentStatus = PaymentStatusEnum.Pendiente;
             var query = new CreatePaymentCommand(request);
             var response = await _mediator.Send(query);
             return Ok(response);

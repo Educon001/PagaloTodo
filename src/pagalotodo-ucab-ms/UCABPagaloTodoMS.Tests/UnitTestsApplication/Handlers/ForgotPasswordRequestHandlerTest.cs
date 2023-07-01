@@ -20,7 +20,7 @@ public class ForgotPasswordRequestHandlerTest
     {
         _loggerMock = new Mock<ILogger<ForgotPasswordRequestHandler>>();
         _senderMock = new Mock<IEmailSender>();
-        _handler = new ForgotPasswordRequestHandler(_senderMock.Object, _loggerMock.Object);
+        _handler = new ForgotPasswordRequestHandler((key)=>_senderMock.Object, _loggerMock.Object);
     }
 
     [Fact]

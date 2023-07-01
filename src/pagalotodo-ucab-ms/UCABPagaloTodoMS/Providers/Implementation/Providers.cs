@@ -62,6 +62,24 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             return services;
         }
 
+        public IServiceCollection AddRabbitMqService(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient(sp=>new ConciliationProducer());
+            services.AddTransient<ProducerResolver>(provider => key =>
+            {
+                switch (key)
+                {
+                    case "Conciliation":
+                        return provider.GetService<ConciliationProducer>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
+            services.AddSingleton(new DbContextFactory(configuration["DBConnectionString"]));
+            services.AddHostedService<ConciliationRabbitMqConsumer>();
+            return services;
+        }
+        
         public IServiceCollection AddSendGridService(IServiceCollection services, IConfiguration configuration)
         {
             var apiKey = configuration["SendGrid:ApiKey"];
@@ -69,8 +87,22 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             services.AddSingleton<ISendGridClient>(client);
             var senderEmail = configuration["SendGrid:SenderEmail"];
             var senderName = configuration["SendGrid:SenderName"];
-            services.AddTransient<IEmailSender>(provider =>
-                new SendGridEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient(provider =>
+                new ForgotPasswordEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient(provider =>
+                new ConciliationEmailSender(provider.GetRequiredService<ISendGridClient>(), senderEmail, senderName));
+            services.AddTransient<SenderResolver>(provider => key =>
+            {
+                switch (key)
+                {
+                    case "ForgotPassword":
+                        return provider.GetService<ForgotPasswordEmailSender>();
+                    case "Conciliation":
+                        return provider.GetService<ConciliationEmailSender>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
             return services;
         }
 

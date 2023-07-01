@@ -24,8 +24,9 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             }
 
             provider.AddDatabaseService(services, configuration, environment, appSettings.RequireDatabase);
+            provider.AddRabbitMqService(services, configuration);
             provider.AddSendGridService(services, configuration);
-            
+
             return services;
         }
     }

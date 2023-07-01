@@ -11,12 +11,13 @@ namespace UCABPagaloTodoMS.Application.Handlers;
 
 public class ForgotPasswordRequestHandler : IRequestHandler<ForgotPasswordRequest, ForgotPasswordResponse>
 {
+
     private readonly IEmailSender _emailSender;
     private readonly ILogger<ForgotPasswordRequestHandler> _logger;
 
-    public ForgotPasswordRequestHandler(IEmailSender emailSender, ILogger<ForgotPasswordRequestHandler> logger)
+    public ForgotPasswordRequestHandler(SenderResolver resolver, ILogger<ForgotPasswordRequestHandler> logger)
     {
-        _emailSender = emailSender;
+        _emailSender = resolver("ForgotPassword");
         _logger = logger;
     }
 

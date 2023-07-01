@@ -4,7 +4,7 @@ namespace UCABPagaloTodoMS.Application.Requests;
 
 public class PaymentRequest
 {
-    public float? Amount { get; set; }
+    public double? Amount { get; set; }
     public string? CardNumber { get; set; }
     public int? ExpirationMonth { get; set; }
     public int? ExpirationYear { get; set; }
