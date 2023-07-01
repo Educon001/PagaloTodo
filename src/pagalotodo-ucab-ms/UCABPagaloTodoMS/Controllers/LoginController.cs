@@ -75,9 +75,14 @@ public class LoginController : BaseController<LoginController>
             _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
             return Unauthorized("La cuenta del usuario está inactiva. Exception: ");
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Username}.");
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
-            _logger.LogError("Ocurrio un error al intentar autenticar al usuario. Exception: " + ex);
+            _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Username}.");
             return BadRequest("Se ha producido un error al autenticar al usuario.");
         }
     }

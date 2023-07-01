@@ -1,7 +1,6 @@
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoWeb.Models;
 using UCABPagaloTodoWeb.Models.CurrentUser;
@@ -53,5 +52,40 @@ public class AdminController : Controller
         }
 
         return View(request);
+    }
+    
+    [Route("admin/reports/")]
+    public IActionResult Reporte1()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("admin/reports/generarreporte")]
+    public async Task<IActionResult> GenerarReporte(string consumerId, string startDate, string endDate)
+    {
+        try
+        {
+            // Construir la URL para llamar al servidor de informes
+            var url = $"http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId={consumerId}&StartDate={startDate}&EndDate={endDate}&rs:Format=PDF";
+
+            // Crear un cliente HTTP
+            using (var httpClient = new HttpClient())
+            {
+                // Descargar el contenido del archivo PDF en un MemoryStream
+                var response = await httpClient.GetAsync(url);
+                var content = await response.Content.ReadAsByteArrayAsync();
+                var stream = new MemoryStream(content);
+
+                // Devolver el archivo PDF como un archivo para descargar
+                return File(stream, "application/pdf", "report.pdf");
+            }
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde." + ex.Message);
+        }
+
+        return View("Reporte1");
     }
 }

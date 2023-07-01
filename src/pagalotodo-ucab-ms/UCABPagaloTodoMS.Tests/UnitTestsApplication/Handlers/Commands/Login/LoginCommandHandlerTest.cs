@@ -159,11 +159,8 @@ public class LoginCommandHandlerTest
         var request = new LoginRequest { Username = "invalid_username", PasswordHash = "invalid_password", UserType = "invalid_usertype" };
         var command = new LoginCommand(request);
 
-        // Act
-        var response = await _handler.Handle(command, default);
-
-        // Assert
-        Assert.Null(response);
+        // Act & Assert
+        await Assert.ThrowsAsync<HttpRequestException>(() => _handler.Handle(command, default));
     }
 
     [Fact]
