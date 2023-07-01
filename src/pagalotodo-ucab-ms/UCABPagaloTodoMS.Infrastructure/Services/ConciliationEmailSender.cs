@@ -25,7 +25,7 @@ public class ConciliationEmailSender : IEmailSender
         var from = new EmailAddress(_senderEmail, _senderName);
         var to = new EmailAddress(email);
         var mail = MailHelper.CreateSingleEmail(from, to, "PagaloTodo - Archivos de Conciliación",
-            "Marqué el campo de confirmación de cada pago con una S(SI) o una N(NO) para conciliar sus pagos recibidos",
+            "Marque el campo de confirmacion de cada pago con una S(SI) o una N(NO) para conciliar sus pagos recibidos",
             null);
         dynamic list = body;
         var fileList = new List<IEmailAttachment>();

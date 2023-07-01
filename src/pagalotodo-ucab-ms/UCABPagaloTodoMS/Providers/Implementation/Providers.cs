@@ -62,6 +62,24 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             return services;
         }
 
+        public IServiceCollection AddRabbitMqService(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient(sp=>new ConciliationProducer());
+            services.AddTransient<ProducerResolver>(provider => key =>
+            {
+                switch (key)
+                {
+                    case "Conciliation":
+                        return provider.GetService<ConciliationProducer>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
+            services.AddSingleton(new DbContextFactory(configuration["DBConnectionString"]));
+            services.AddHostedService<ConciliationRabbitMqConsumer>();
+            return services;
+        }
+        
         public IServiceCollection AddSendGridService(IServiceCollection services, IConfiguration configuration)
         {
             var apiKey = configuration["SendGrid:ApiKey"];

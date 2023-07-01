@@ -109,7 +109,7 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
             csv.WriteField(field.Name);
         }
 
-        csv.WriteField("Confirmación");
+        csv.WriteField("Confirmacion");
         csv.NextRecord();
         var paymentProperties = typeof(PaymentResponse).GetProperties().ToDictionary(p => p.Name);
         var consumerProperties = typeof(ConsumerResponse).GetProperties().ToDictionary(p => p.Name);
@@ -132,7 +132,7 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
 
                 var stringValue = propValue!.ToString();
                 var formatted = stringValue;
-                if (!string.IsNullOrWhiteSpace(field.Format) || propValue is string)
+                if (!string.IsNullOrWhiteSpace(field.Format) && propValue is not string)
                 {
                     if (propValue is double && double.TryParse(stringValue, out double doubleValue))
                     {

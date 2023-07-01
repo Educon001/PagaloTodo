@@ -248,4 +248,35 @@ public class ProvidersController : BaseController<ProvidersController>
             }
         }
         
+        //[Authorize(Policy = AuthorizationPolicies.ProviderPolicy)]
+        [HttpPost("uploadConciliation")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> UploadConciliationResponse(List<IFormFile> files)
+        {
+            _logger.LogInformation("Entrando al método que recibe la respuesta de conciliacion");
+            try
+            {
+                var success = 0;
+                var errors = 0;
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using var stream = new MemoryStream();
+                        await file.CopyToAsync(stream);
+                        var data = stream.ToArray();
+                        var request = new UploadConciliationResponseRequest(data);
+                        var response = await _mediator.Send(request);
+                        var i = response ? success++ : errors++;
+                    }
+                }
+                return Ok($"Se cargaron {success} archivos a la cola. Errores: {errors}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Ocurrio un error. Exception: " + e);
+                return BadRequest(e.Message);
+            }
+        }
     }

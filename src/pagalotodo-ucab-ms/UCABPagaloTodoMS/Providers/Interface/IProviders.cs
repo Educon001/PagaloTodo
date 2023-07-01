@@ -7,6 +7,10 @@ namespace UCABPagaloTodoMS.Providers.Interface
         IServiceCollection AddDatabaseService(IServiceCollection services, IConfiguration configuration,
             string environment, bool isRequired);
 
+        public IServiceCollection AddRabbitMqService(IServiceCollection services, IConfiguration configuration);
+        
+        IServiceCollection AddSendGridService(IServiceCollection services, IConfiguration configuration);
+        
         IServiceCollection AddControllers(IServiceCollection services, IConfiguration configuration,
             AppSettings appSettings);
 
