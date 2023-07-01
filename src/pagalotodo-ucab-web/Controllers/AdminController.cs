@@ -55,22 +55,43 @@ public class AdminController : Controller
     }
     
     [Route("admin/reports/")]
-    public IActionResult Reporte1()
+    public IActionResult SeleccionarReporte()
     {
         return View();
     }
 
-    [HttpPost]
+    /*[HttpPost]
     [Route("admin/reports/generarreporte")]
-    public async Task<IActionResult> GenerarReporte(string consumerId, string startDate, string endDate)
+    public async Task<IActionResult> GenerarReporte(string reportType, string consumerId = null, string providerId = null, string startDate = null, string endDate = null)
     {
         try
         {
             // Construir la URL para llamar al servidor de informes
-            var url = $"http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId={consumerId}&StartDate={startDate}&EndDate={endDate}&rs:Format=PDF";
+            var url = "";
+
+            switch (reportType)
+            {
+                case "Listado de prestador de servicios registrado":
+                    url = "http://localhost/Reports/report/pagalotodo/Providers";
+                    break;
+                case "Listado de prestador de servicios con opciones de pago en estatus (Inactivas, Próximamente y Publicadas)":
+                    url = $"http://localhost/Reports/report/pagalotodo/ProveedoresPorStatusServicio?Status={providerId}&ProviderId={providerId}";
+                    break;
+                case "Estado de cuenta de un prestador":
+                    url = $"http://localhost/Reports/report/pagalotodo/EdoCuentaProveedor?ProviderId={providerId}";
+                    break;
+                case "Pagos realizados por un consumidor en un lapso de tiempo":
+                    url = $"http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId={consumerId}&StartDate={startDate}&EndDate={endDate}&rs:Format=PDF";
+                    break;
+                case "Listado de operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación":
+                    url = $"http://localhost/Reports/report/pagalotodo/OperacionesCerradas?ProviderId={providerId}";
+                    break;
+                default:
+                    return View("SeleccionarReporte");
+            }
 
             // Crear un cliente HTTP
-            using (var httpClient = new HttpClient())
+            using (var httpClient = _httpClientFactory.CreateClient())
             {
                 // Descargar el contenido del archivo PDF en un MemoryStream
                 var response = await httpClient.GetAsync(url);
@@ -86,6 +107,6 @@ public class AdminController : Controller
             ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde." + ex.Message);
         }
 
-        return View("Reporte1");
-    }
+        return View("SeleccionarReporte");
+    }*/
 }
