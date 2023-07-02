@@ -227,20 +227,20 @@ public class ProvidersController : BaseController<ProvidersController>
             }
         }
         
-        /// <summary>
-        ///     Endpoint que actualiza la clave de un proveedor.
+        ///<summary>
+        ///     Endpoint que actualiza la contraseña del prestador
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Put provider.
+        ///     ### actualizar contraseña
         ///     ## Url
-        ///     PUT /providers
+        ///     PUT /{id}/password
         /// </remarks>
         /// <response code="200">
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna el id del admin que edito su clave.</returns>
+        /// <returns>Retorna un mensaje de exito</returns>
         [Authorize(Policy = "ProviderPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -262,6 +262,20 @@ public class ProvidersController : BaseController<ProvidersController>
             }
         }
         
+        /// <summary>
+        ///     Endpoint que carga el archivo de resultado de conciliación
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### cargar resultado de conciliación
+        ///     ## Url
+        ///     POST /uploadConciliation
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna la cantidad de archivos cargados</returns>
         //[Authorize(Policy = AuthorizationPolicies.ProviderPolicy)]
         [HttpPost("uploadConciliation")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -289,7 +303,7 @@ public class ProvidersController : BaseController<ProvidersController>
             }
             catch (Exception e)
             {
-                _logger.LogError("Ocurrio un error. Exception: " + e);
+                _logger.LogError("Ocurrio un error inesperado. Exception: " + e);
                 return BadRequest(e.Message);
             }
         }
