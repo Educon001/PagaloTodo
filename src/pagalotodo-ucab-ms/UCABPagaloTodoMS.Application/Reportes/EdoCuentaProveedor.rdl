@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-07-02T01:39:12.7127925Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:12:07.2205401Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -83,12 +83,16 @@ GROUP BY
         </QueryParameters>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
         <CommandText>SELECT
-  Payments.Amount
-  ,Payments.TransactionId
-  ,Payments.CreatedAt
-  ,Payments.PaymentStatus
-  ,Providers.Name AS [Providers Name]
-  ,Services.Name AS [Services Name]
+  Payments.Amount,
+  Payments.TransactionId,
+  Payments.CreatedAt,
+  CASE Payments.PaymentStatus
+    WHEN 0 THEN 'Aprobado'
+    WHEN 1 THEN 'Rechazado'
+    WHEN 2 THEN 'Pendiente'
+  END AS PaymentStatus,
+  Providers.Name AS [Providers Name],
+  Services.Name AS [Services Name]
 FROM
   Services
   INNER JOIN Payments
@@ -100,7 +104,7 @@ WHERE
       </Query>
       <Fields>
         <Field Name="Amount">
-          <rd:TypeName>System.Single</rd:TypeName>
+          <rd:TypeName>System.Double</rd:TypeName>
           <DataField>Amount</DataField>
         </Field>
         <Field Name="TransactionId">
@@ -112,7 +116,7 @@ WHERE
           <DataField>CreatedAt</DataField>
         </Field>
         <Field Name="PaymentStatus">
-          <rd:TypeName>System.Int32</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
           <DataField>PaymentStatus</DataField>
         </Field>
         <Field Name="Providers_Name">
