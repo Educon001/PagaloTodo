@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database;
 
-public class DbContextFactory : IDesignTimeDbContextFactory<UCABPagaloTodoDbContext>
+public class DbContextFactory : IDbContextFactory<UCABPagaloTodoDbContext>
 {
     private readonly string _dbConnectionString;
 
@@ -11,8 +11,7 @@ public class DbContextFactory : IDesignTimeDbContextFactory<UCABPagaloTodoDbCont
     {
         _dbConnectionString = dbConnectionString;
     }
-
-    public UCABPagaloTodoDbContext CreateDbContext(string[] args)
+    public UCABPagaloTodoDbContext CreateDbContext()
     {
         var optionsBuilder = new DbContextOptionsBuilder<UCABPagaloTodoDbContext>();
         optionsBuilder.UseSqlServer(_dbConnectionString);

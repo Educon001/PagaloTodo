@@ -65,18 +65,22 @@ namespace UCABPagaloTodoMS.Providers.Implementation
         public IServiceCollection AddRabbitMqService(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient(sp=>new ConciliationProducer());
+            services.AddTransient(sp => new ConfirmationListProducer());
             services.AddTransient<ProducerResolver>(provider => key =>
             {
                 switch (key)
                 {
                     case "Conciliation":
                         return provider.GetService<ConciliationProducer>();
+                    case "Confirmation":
+                        return provider.GetService<ConfirmationListProducer>();
                     default:
                         throw new KeyNotFoundException();
                 }
             });
             services.AddSingleton(new DbContextFactory(configuration["DBConnectionString"]));
             services.AddHostedService<ConciliationRabbitMqConsumer>();
+            services.AddHostedService<ConfirmationListRabbitMqConsumer>();
             return services;
         }
         

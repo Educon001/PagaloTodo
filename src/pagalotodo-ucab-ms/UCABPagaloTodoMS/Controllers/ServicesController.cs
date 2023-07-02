@@ -349,4 +349,29 @@ public class ServicesController : BaseController<ServicesController>
             return BadRequest(ex.Message);
         }
     }
+    
+    // [Authorize(Policy = AuthorizationPolicies.ProviderPolicy)]
+    [HttpPost("{id:guid}/debtors")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<string>> UploadConfirmationList(Guid id, IFormFile file)
+    {
+        _logger.LogInformation("Entrando al método que recibe la lista de deudores de un servicio");
+        try
+        {
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            var data = stream.ToArray();
+            var request = new UploadDebtorsRequest(data, id);
+            return await _mediator.Send(request)
+                ? Ok("El archivo fue agregado a la cola")
+                : BadRequest("Hubo un error agregando el archivo a la cola");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Ocurrio un error inesperado" + e.Message);
+            return BadRequest(e.Message);
+        }
+        
+    }
 }
