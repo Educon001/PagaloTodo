@@ -46,6 +46,9 @@ public class LoginControllerTest
         DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente credenciales válidas.
+    /// </summary>
     [Fact]
     public async Task Login_ValidCredentials_ReturnsOkResult()
     {
@@ -70,8 +73,11 @@ public class LoginControllerTest
         
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente credenciales inválidas.
+    /// </summary>
     [Fact]
-    public async Task Login_InvalidCredentials_ReturnsUnauthorizedResult()
+    public async Task Login_InvalidCredentials_ReturnsBadRequestResult()
     {
         // Arrange
         var loginRequest = new LoginRequest
@@ -86,6 +92,9 @@ public class LoginControllerTest
         Assert.IsType<BadRequestResult>(actionResult.Result);
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente request nulos.
+    /// </summary>
     [Fact]
     public async Task Login_NullRequest_ReturnsBadRequestResult()
     {
@@ -100,6 +109,9 @@ public class LoginControllerTest
         Assert.IsType<BadRequestResult>(result.Result);
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente request con username null.
+    /// </summary>
     [Fact]
     public async Task Login_NullUsername_ReturnsBadRequestResult()
     {
@@ -114,6 +126,9 @@ public class LoginControllerTest
         Assert.IsType<BadRequestResult>(result.Result);
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente request con PasswordHash null.
+    /// </summary>
     [Fact]
     public async Task PasswordHash_ReturnsBadRequestResult()
     {
@@ -128,6 +143,9 @@ public class LoginControllerTest
         Assert.IsType<BadRequestResult>(result.Result);
     }
 
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticate maneja correctamente request con UserType null.
+    /// </summary>
     [Fact]
     public async Task Login_NullUserType_ReturnsBadRequestResult()
     {
@@ -141,7 +159,10 @@ public class LoginControllerTest
         Assert.IsType<ActionResult<LoginResponse>>(result);
         Assert.IsType<BadRequestResult>(result.Result);
     }
-
+    
+    /// <summary>
+    ///     Prueba para verificar que el método Authenticatedevuelve un resultado BadRequest cuando se produce una excepción al autenticar al usuario.
+    /// </summary>
     [Fact]
     public async Task Authenticate_ExceptionThrown_ReturnsBadRequestResult()
     {

@@ -31,11 +31,32 @@ public class LoginController : BaseController<LoginController>
         _cache = cache;
     }
 
+    /// <summary>
+    /// Endpoint para la autenticación de usuarios.
+    /// </summary>
+    /// <remarks>
+    /// ## Description
+    /// Este método simula el inicio de sesión de un usuario y devuelve un token JWT válido
+    /// si las credenciales son correctas.
+    /// </remarks>
+    /// <response code="200">
+    /// Accepted:
+    /// - Operación exitosa.
+    /// </response>
+    /// <response code="400">
+    /// BadRequest:
+    /// - Las credenciales proporcionadas son inválidas o incompletas.
+    /// </response>
+    /// <response code="401">
+    /// Unauthorized:
+    /// - Las credenciales proporcionadas no son válidas.
+    /// </response>
+    /// <returns>Retorna un objeto LoginResponse que contiene el tipo de usuario,
+    /// el id y el token JWT generado para el usuario autenticado.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
     public async Task<ActionResult<LoginResponse>> Authenticate(LoginRequest request)
     {
         try
@@ -54,9 +75,14 @@ public class LoginController : BaseController<LoginController>
             _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
             return Unauthorized("La cuenta del usuario está inactiva. Exception: ");
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Username}.");
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
-            _logger.LogError("Ocurrio un error al intentar autenticar al usuario. Exception: " + ex);
+            _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Username}.");
             return BadRequest("Se ha producido un error al autenticar al usuario.");
         }
     }

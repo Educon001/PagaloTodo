@@ -57,11 +57,11 @@ public class ConsumersController : BaseController<ConsumersController>
         }
 
         /// <summary>
-        ///     Endpoint para la consulta de consumidores
+        ///     Endpoint para la consulta de un consumidor por id
         /// </summary>
         /// <remarks>
         ///     ## Description
-        ///     ### Get consumidores
+        ///     ### Get consumidor
         ///     ## Url
         ///     GET /consumers
         /// </remarks>
@@ -69,7 +69,7 @@ public class ConsumersController : BaseController<ConsumersController>
         ///     Accepted:
         ///     - Operation successful.
         /// </response>
-        /// <returns>Retorna la lista de prestadores.</returns>
+        /// <returns>Retorna un consumidor.</returns>
         [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy)]
         [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -123,6 +123,21 @@ public class ConsumersController : BaseController<ConsumersController>
             }
         }
         
+        
+        /// <summary>
+        ///     Endpoint que actualiza la clave de un consumidor.
+        /// </summary>
+        /// <remarks>
+        ///     ## Description
+        ///     ### Put consumidor.
+        ///     ## Url
+        ///     PUT /consumers
+        /// </remarks>
+        /// <response code="200">
+        ///     Accepted:
+        ///     - Operation successful.
+        /// </response>
+        /// <returns>Retorna el id del consumidor que edito su clave.</returns>
         [Authorize(Policy = "ConsumerPolicy" )]
         [HttpPut("{id:guid}/password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -143,7 +158,6 @@ public class ConsumersController : BaseController<ConsumersController>
                 return BadRequest(ex.Message);
             }
         }
-        
         
         /// <summary>
         ///     Endpoint que actualiza un consumidor.

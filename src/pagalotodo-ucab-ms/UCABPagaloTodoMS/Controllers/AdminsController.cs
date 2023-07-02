@@ -25,19 +25,32 @@ public class AdminsController : BaseController<AdminsController>
     {
         _mediator = mediator;
     }
-
-    [Authorize(Policy = "AdminPolicy")]
+    
+    /// <summary>
+    ///     Endpoint que actualiza la clave de un administrador.
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Put admin.
+    ///     ## Url
+    ///     PUT /admins
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna el id del admin que edito su clave.</returns>
+    [Authorize(Policy = "AdminPolicy" )]
     [HttpPut("{id:guid}/password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id,
-        [FromBody] UpdatePasswordRequest request)
+    public async Task<ActionResult<UpdatePasswordResponse>> UpdatePassword(Guid id, [FromBody]UpdatePasswordRequest request)
     {
         _logger.LogInformation("Entrando al método que cambia clave a admin");
         try
         {
             request.UserType = "admin";
-            var query = new UpdatePasswordCommand(request, id);
+            var query = new UpdatePasswordCommand(request,id);
             var response = await _mediator.Send(query);
             return Ok(response);
         }
@@ -47,7 +60,21 @@ public class AdminsController : BaseController<AdminsController>
             return BadRequest(ex.Message);
         }
     }
-
+    
+    /// <summary>
+    ///     Endpoint para ejecutar el cierre contable
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Accounting Close
+    ///     ## Url
+    ///     GET /cierre
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna el número de archivos emitidos.</returns>
     // [Authorize(Policy = "AdminPolicy" )]
     [HttpGet("Cierre")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -87,4 +114,5 @@ public class AdminsController : BaseController<AdminsController>
             return BadRequest(ex.Message);
         }
     }
+    
 }

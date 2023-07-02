@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UCABPagaloTodoWeb.Models;
 using UCABPagaloTodoWeb.Models.CurrentUser;
 
@@ -54,4 +56,57 @@ public class AdminController : Controller
 
         return View(request);
     }
+    
+    [HttpGet]
+    private async Task<List<ProviderModel>> GetProvidersAsync()
+    {
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+        var response = await client.GetAsync("/providers");
+        response.EnsureSuccessStatusCode();
+        var items = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        List<ProviderModel> providers = JsonSerializer.Deserialize<List<ProviderModel>>(items, options)!;
+        return providers;
+    }
+    
+    [HttpGet]
+    private async Task<List<ConsumerModel>> GetConsumersAsync()
+    {
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+        var response = await client.GetAsync("/consumers");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        List<ConsumerModel> consumers = JsonSerializer.Deserialize<List<ConsumerModel>>(content, options)!;
+        return consumers;
+    }
+
+    
+    [Route("admin/reports/")]
+    public async Task<IActionResult> SeleccionarReporte()
+    {
+        List<ProviderModel> providers = await GetProvidersAsync();
+        List<ConsumerModel> consumers = await GetConsumersAsync();
+
+        var model = new ReportSelectionModel
+        {
+            Providers = providers,
+            Consumers = consumers
+        };
+
+        return View(model);
+    }
+    
 }
