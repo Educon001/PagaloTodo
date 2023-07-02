@@ -64,6 +64,7 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                 var debtor = await _dbContext.Debtors.SingleAsync(d =>
                     d.Service == service && d.Identifier == request.Request.Identifier && d.Status==false);
                 debtor.Status = true;
+                _dbContext.Debtors.Update(debtor);
             }
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
