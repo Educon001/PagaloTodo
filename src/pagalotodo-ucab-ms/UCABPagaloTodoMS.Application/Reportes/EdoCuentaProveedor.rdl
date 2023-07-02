@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-07-02T15:33:05.2766712Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:36:29.1729165Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -103,7 +103,31 @@ FROM
   INNER JOIN Providers
     ON Services.ProviderId = Providers.Id
 WHERE
-  Providers.Id = @Providerid</CommandText>
+  Providers.Id = @Providerid
+  AND Providers.IsDeleted = 0
+  AND Services.IsDeleted = 0
+  AND Payments.IsDeleted = 0SELECT
+  Payments.Amount,
+  Payments.TransactionId,
+  Payments.CreatedAt,
+  CASE Payments.PaymentStatus
+    WHEN 0 THEN 'Aprobado'
+    WHEN 1 THEN 'Rechazado'
+    WHEN 2 THEN 'Pendiente'
+  END AS PaymentStatus,
+  Providers.Name AS [Providers Name],
+  Services.Name AS [Services Name]
+FROM
+  Services
+  INNER JOIN Payments
+    ON Services.Id = Payments.ServiceId
+  INNER JOIN Providers
+    ON Services.ProviderId = Providers.Id
+WHERE
+  Providers.Id = @Providerid
+  AND Providers.IsDeleted = 0
+  AND Services.IsDeleted = 0
+  AND Payments.IsDeleted = 0</CommandText>
       </Query>
       <Fields>
         <Field Name="Amount">
