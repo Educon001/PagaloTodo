@@ -60,7 +60,7 @@ public class AdminsController : BaseController<AdminsController>
             return BadRequest(ex.Message);
         }
     }
-    
+
     /// <summary>
     ///     Endpoint para ejecutar el cierre contable
     /// </summary>

@@ -1,11 +1,13 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
+using UCABPagaloTodoMS.Core.Enums;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 
@@ -57,7 +59,12 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                     : "");
                 throw new KeyNotFoundException(message);
             }
-
+            if (service.ServiceType == ServiceTypeEnum.PorConfirmacion)
+            {
+                var debtor = await _dbContext.Debtors.SingleAsync(d =>
+                    d.Service == service && d.Identifier == request.Request.Identifier && d.Status==false);
+                debtor.Status = true;
+            }
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
             _dbContext.Payments.Add(entity);
