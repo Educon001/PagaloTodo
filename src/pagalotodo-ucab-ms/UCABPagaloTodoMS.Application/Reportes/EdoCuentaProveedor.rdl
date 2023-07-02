@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-07-02T15:12:07.2205401Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:33:05.2766712Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -37,10 +37,10 @@
         </QueryParameters>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
         <CommandText>SELECT
-  Providers.Id AS [Providers Id]
-  ,Providers.Name
-  ,SUM(Payments.Amount) AS [Saldo]
-  ,Providers.AccountNumber
+  Providers.Id AS [Providers Id],
+  Providers.Name,
+  SUM(Payments.Amount) AS [Saldo],
+  Providers.AccountNumber
 FROM
   Services
   INNER JOIN Payments
@@ -49,10 +49,13 @@ FROM
     ON Services.ProviderId = Providers.Id
 WHERE
   Providers.Id = @Providerid
+  AND Providers.IsDeleted = 0
+  AND Services.IsDeleted = 0
+  AND Payments.IsDeleted = 0
 GROUP BY
-  Providers.Id
-  ,Providers.Name
-  ,Providers.AccountNumber</CommandText>
+  Providers.Id,
+  Providers.Name,
+  Providers.AccountNumber</CommandText>
       </Query>
       <Fields>
         <Field Name="Providers_Id">
