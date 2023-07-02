@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-06-26T23:35:22.4631130Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T01:39:12.7127925Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -139,7 +139,7 @@ WHERE
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value />
+                    <Value>=StrConv("Estado de cuenta del proveedor " &amp; First(Fields!Name.Value, "SaldoProveedor"), VbStrConv.ProperCase)</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>28pt</FontSize>
@@ -596,7 +596,7 @@ WHERE
             <Top>28.28415mm</Top>
             <Left>5.02708mm</Left>
             <Height>12mm</Height>
-            <Width>170.0353mm</Width>
+            <Width>170.03529mm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
