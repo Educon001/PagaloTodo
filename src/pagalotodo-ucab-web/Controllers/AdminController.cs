@@ -1,7 +1,10 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UCABPagaloTodoWeb.Models;
 using UCABPagaloTodoWeb.Models.CurrentUser;
 
@@ -54,59 +57,56 @@ public class AdminController : Controller
         return View(request);
     }
     
-    [Route("admin/reports/")]
-    public IActionResult SeleccionarReporte()
+    [HttpGet]
+    private async Task<List<ProviderModel>> GetProvidersAsync()
     {
-        return View();
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+        var response = await client.GetAsync("/providers");
+        response.EnsureSuccessStatusCode();
+        var items = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        List<ProviderModel> providers = JsonSerializer.Deserialize<List<ProviderModel>>(items, options)!;
+        return providers;
+    }
+    
+    [HttpGet]
+    private async Task<List<ConsumerModel>> GetConsumersAsync()
+    {
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+        var response = await client.GetAsync("/consumers");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        List<ConsumerModel> consumers = JsonSerializer.Deserialize<List<ConsumerModel>>(content, options)!;
+        return consumers;
     }
 
-    /*[HttpPost]
-    [Route("admin/reports/generarreporte")]
-    public async Task<IActionResult> GenerarReporte(string reportType, string consumerId = null, string providerId = null, string startDate = null, string endDate = null)
+    
+    [Route("admin/reports/")]
+    public async Task<IActionResult> SeleccionarReporte()
     {
-        try
+        List<ProviderModel> providers = await GetProvidersAsync();
+        List<ConsumerModel> consumers = await GetConsumersAsync();
+
+        var model = new ReportSelectionModel
         {
-            // Construir la URL para llamar al servidor de informes
-            var url = "";
+            Providers = providers,
+            Consumers = consumers
+        };
 
-            switch (reportType)
-            {
-                case "Listado de prestador de servicios registrado":
-                    url = "http://localhost/Reports/report/pagalotodo/Providers";
-                    break;
-                case "Listado de prestador de servicios con opciones de pago en estatus (Inactivas, Próximamente y Publicadas)":
-                    url = $"http://localhost/Reports/report/pagalotodo/ProveedoresPorStatusServicio?Status={providerId}&ProviderId={providerId}";
-                    break;
-                case "Estado de cuenta de un prestador":
-                    url = $"http://localhost/Reports/report/pagalotodo/EdoCuentaProveedor?ProviderId={providerId}";
-                    break;
-                case "Pagos realizados por un consumidor en un lapso de tiempo":
-                    url = $"http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId={consumerId}&StartDate={startDate}&EndDate={endDate}&rs:Format=PDF";
-                    break;
-                case "Listado de operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación":
-                    url = $"http://localhost/Reports/report/pagalotodo/OperacionesCerradas?ProviderId={providerId}";
-                    break;
-                default:
-                    return View("SeleccionarReporte");
-            }
-
-            // Crear un cliente HTTP
-            using (var httpClient = _httpClientFactory.CreateClient())
-            {
-                // Descargar el contenido del archivo PDF en un MemoryStream
-                var response = await httpClient.GetAsync(url);
-                var content = await response.Content.ReadAsByteArrayAsync();
-                var stream = new MemoryStream(content);
-
-                // Devolver el archivo PDF como un archivo para descargar
-                return File(stream, "application/pdf", "report.pdf");
-            }
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde." + ex.Message);
-        }
-
-        return View("SeleccionarReporte");
-    }*/
+        return View(model);
+    }
+    
 }
