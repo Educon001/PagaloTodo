@@ -8,6 +8,7 @@ using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Validators;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Enums;
+using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 
@@ -68,7 +69,20 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             }
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
-            _dbContext.Payments.Add(entity);
+            var paymentId = _dbContext.Payments.Add(entity).Entity.Id;
+            foreach (var detail in request.Request.PaymentDetails!)
+            {
+                detail.Payment = paymentId;
+                PaymentEntity? paymentE = _dbContext.Payments.Find(detail.Payment);
+                
+                //Verificar si el detalle esta en la entidad de PaymentFields
+                var paymentF = _dbContext.PaymentFields.FirstOrDefault(c => c.Name == detail.Name);
+                if (paymentF == null) throw new KeyNotFoundException("Detail not found on database");
+                var entityPDEtail = PaymentDetailMapper.MapRequestToEntity(detail, paymentE!);
+
+                //PaymentDetails entity add
+                _dbContext.PaymentDetails.Add(entityPDEtail);
+            }
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
             var id = entity.Id;

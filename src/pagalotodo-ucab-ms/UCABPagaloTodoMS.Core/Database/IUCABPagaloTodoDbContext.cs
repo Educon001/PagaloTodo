@@ -13,7 +13,8 @@ namespace UCABPagaloTodoMS.Core.Database
         DbSet<PaymentEntity> Payments { get; set; }
         DbSet<ProviderEntity> Providers { get; set; }
         DbSet<ServiceEntity> Services { get; set;  }
-
+        DbSet<PaymentDetailEntity> PaymentDetails { get; set; }
+        DbSet<PaymentFieldEntity> PaymentFields { get; set; }
         DbContext DbContext
         {
             get;

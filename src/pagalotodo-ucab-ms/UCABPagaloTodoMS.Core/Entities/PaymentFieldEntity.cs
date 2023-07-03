@@ -8,6 +8,6 @@ public class PaymentFieldEntity : BaseEntity
     
     public string? Format { get; set; }
     
-    [Required]
     public ServiceEntity? Service { get; set; }
+    
 }

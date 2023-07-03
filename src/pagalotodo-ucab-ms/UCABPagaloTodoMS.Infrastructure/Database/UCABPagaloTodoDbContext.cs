@@ -22,7 +22,10 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
     public virtual DbSet<PaymentEntity> Payments { get; set; } = null!;
     public virtual DbSet<ProviderEntity> Providers { get; set; } = null!;
     public virtual DbSet<ServiceEntity> Services { get; set; } = null!;
+    
+    public virtual DbSet<PaymentDetailEntity> PaymentDetails { get; set; } = null!;
 
+    public virtual DbSet<PaymentFieldEntity> PaymentFields { get; set; } = null!;
     public DbContext DbContext
     {
         get { return this; }
@@ -44,6 +47,8 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
         modelBuilder.Entity<PaymentEntity>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<ProviderEntity>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<ServiceEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<PaymentFieldEntity>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.Entity<PaymentDetailEntity>().HasQueryFilter(e => !e.IsDeleted);
         //Default admin
         modelBuilder.Entity<AdminEntity>().HasData(new AdminEntity()
         {
