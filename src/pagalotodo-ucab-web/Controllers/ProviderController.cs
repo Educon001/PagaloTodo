@@ -278,5 +278,63 @@ public class ProviderController : Controller
         return View(request);
     }
     
+    public IActionResult UploadConciliation()
+    {
+        var model = new UploadConciliationViewModel
+        {
+            SuccessMessage = TempData["success"] as string ?? string.Empty,
+            ErrorMessage = TempData["error"] as string ?? string.Empty
+        };
+
+        return View(model);
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> UploadConciliationPost(List<IFormFile> files)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    // Leer el contenido del archivo y enviarlo a la API
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        var content = new StreamContent(stream);
+                        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "files",
+                            FileName = file.FileName
+                        };
+
+                        var multipartContent = new MultipartFormDataContent();
+                        multipartContent.Add(content);
+                        
+                        // Realizar una solicitud POST a la API para cargar el archivo de conciliación
+                        var response = await client.PostAsync("/providers/uploadconciliation", multipartContent);
+                        response.EnsureSuccessStatusCode();
+                    }
+                }
+            }
+
+            TempData["success"] = "File(s) uploaded successfully";
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            TempData["error"] = "An error occurred while uploading the file(s)";
+        }
+        
+        return RedirectToAction("UploadConciliation");
+    }
+    
     //TODO: Lista de confirmacion
 }

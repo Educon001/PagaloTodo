@@ -1,0 +1,72 @@
+@model UploadConciliationViewModel
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card rounded-lg shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Cargar Conciliación</h2>
+
+                    <form id="uploadForm" method="post" asp-action="UploadConciliationPost" enctype="multipart/form-data">
+                        <div class="form-group mb-3">
+                            <label for="fileInput">Select Files:</label>
+                            <input type="file" name="files" id="fileInput" multiple>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Subir archivos</button>
+                        </div>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                    {
+                        <div class="alert alert-success mt-4">@Model.SuccessMessage</div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-4">@Model.ErrorMessage</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        padding-top: 50px;
+    }
+
+    .card {
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 10px;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .card-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 12px 0;
+        border-radius: 5px;
+    }
+
+    .alert {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
