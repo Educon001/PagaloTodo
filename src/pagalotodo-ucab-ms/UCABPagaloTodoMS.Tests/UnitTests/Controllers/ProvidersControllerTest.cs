@@ -13,6 +13,7 @@ using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
 using UCABPagaloTodoMS.Core.Database;
 using Xunit;
+using OkObjectResult = Microsoft.AspNetCore.Mvc.OkObjectResult;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
@@ -245,5 +246,48 @@ public class ProvidersControllerTest
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);
+    }
+
+    /// <summary>
+    ///     Prueba de metodo UploadConciliationResponse Ok
+    /// </summary>
+    [Fact]
+    public async void UploadConciliationResponse_Returns_Ok()
+    {
+        var mockFile = new Mock<IFormFile>();
+        var fileList = new List<IFormFile>()
+        {
+            mockFile.Object
+        };
+        var expectedResponse = "Se cargaron 1 archivos a la cola. Errores: 0";
+        mockFile.Setup(f => f.Length).Returns(100);
+        mockFile.Setup(f => f.CopyToAsync(It.IsAny<MemoryStream>(), default))
+            .Returns(Task.CompletedTask);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UploadConciliationResponseRequest>(), default))
+            .ReturnsAsync(true);
+        var response = await _controller.UploadConciliationResponse(fileList);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<string>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+
+    }
+
+    /// <summary>
+    ///     Prueba de metodo UploadConciliationResponse BadRequest
+    /// </summary>
+    [Fact]
+    public async void UploadConciliationResponse_Returns_BadRequest()
+    {
+        var mockFile = new Mock<IFormFile>();
+        var fileList = new List<IFormFile>()
+        {
+            mockFile.Object
+        };
+        var expectedException = new Exception("Test exception");
+        mockFile.Setup(f => f.Length).Throws(expectedException);
+        var response = await _controller.UploadConciliationResponse(fileList);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal(expectedException.Message, badRequestResult.Value);
     }
 }

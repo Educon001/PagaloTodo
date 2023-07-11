@@ -18,16 +18,16 @@ public class UploadConciliationResponseRequestHandler : IRequestHandler<UploadCo
         _producer = resolver("Conciliation");
     }
 
-    public Task<bool> Handle(UploadConciliationResponseRequest request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UploadConciliationResponseRequest request, CancellationToken cancellationToken)
     {
         try
         {
             _producer.PublishMessage(request.Data);
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         catch (Exception)
         {
-            return Task.FromResult(false);
+            return await Task.FromResult(false);
         }
     }
 }

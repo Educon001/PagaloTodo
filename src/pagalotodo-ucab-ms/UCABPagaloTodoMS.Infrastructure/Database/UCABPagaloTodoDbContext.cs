@@ -145,8 +145,11 @@ public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 
             if (entityEntry.State == EntityState.Deleted)
             {
-                entityEntry.State = EntityState.Modified;
-                entity.IsDeleted = true;
+                if (entity is not DebtorsEntity)
+                {
+                    entityEntry.State = EntityState.Modified;
+                    entity.IsDeleted = true;
+                }
                 if (entity.GetType().IsSubclassOf(typeof(UserEntity)))
                 {
                     ((UserEntity) entity).Username = null;
