@@ -15,4 +15,7 @@ public class PaymentRequest
     public Guid? Service { get; set; }
     //Para los pagos por confirmacion
     public string? Identifier { get; set; }
+    
+    public List<PaymentDetailRequest>? PaymentDetails { get; set; }
+
 }

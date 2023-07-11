@@ -19,11 +19,11 @@ public class GetLastAccountingCloseQueryHandler : IRequestHandler<GetLastAccount
         _logger = logger;
     }
 
-    public Task<DateTime> Handle(GetLastAccountingCloseQuery request, CancellationToken cancellationToken)
+    public async Task<DateTime> Handle(GetLastAccountingCloseQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            return HandleAsync();
+            return await HandleAsync();
         }
         catch (Exception e)
         {

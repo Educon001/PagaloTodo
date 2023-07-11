@@ -17,7 +17,7 @@ public class UploadDebtorsRequestHandler : IRequestHandler<UploadDebtorsRequest,
         _producer = resolver("Confirmation");
     }
     
-    public Task<bool> Handle(UploadDebtorsRequest request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UploadDebtorsRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -25,11 +25,11 @@ public class UploadDebtorsRequestHandler : IRequestHandler<UploadDebtorsRequest,
             Array.Copy(request.ServiceId.ToByteArray(), 0, body, 0, 16);
             Array.Copy(request.Data, 0, body, 16, request.Data.Length);
             _producer.PublishMessage(body);
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         catch (Exception e)
         {
-            return Task.FromResult(false);
+            return await Task.FromResult(false);
         }
     }
 }

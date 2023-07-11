@@ -245,4 +245,42 @@ public class PaymentsController : BaseController<PaymentsController>
             return BadRequest(ex.Message);
         }
     }
+    
+    /// <summary>
+    ///     Endpoint que registra un formato de campos de pago
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Post registra campos de pago.
+    ///     ## Url
+    ///     POST /paymentformat
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna la lista de los ids de los campos .</returns>
+    [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
+    [HttpPost("paymentformat")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<Guid>>> CreatePaymentFormat(List<PaymentFieldRequest> fieldsRequests)
+    {
+        _logger.LogInformation("Entrando al método que registra el formato de conciliacion dado un servicio");
+        try
+        {
+            List<Guid> responsesList = new();
+            foreach (var fieldRequest in fieldsRequests)
+            {
+                var query = new CreatePaymentFieldCommand(fieldRequest);
+                responsesList.Add((await _mediator.Send(query)));
+            }
+            return Ok(responsesList);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un campo de Pago. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
 }

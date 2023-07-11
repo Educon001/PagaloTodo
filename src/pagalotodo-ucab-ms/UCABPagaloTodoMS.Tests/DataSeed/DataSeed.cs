@@ -113,8 +113,26 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     Name = "Field 2",
                     Format = "XXXXX.XX",
-                    Length = 8,
+                    Length = 10,
+                    AttrReference = "Consumer.LastName",
+                    Service = services[0]
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Field 3",
+                    Format = "#.00",
+                    Length = 10,
                     AttrReference = "Payment.Amount",
+                    Service = services[0]
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Field 4",
+                    Format = "dd/MM/YYYY",
+                    Length = 10,
+                    AttrReference = "Payment.PaymentDate",
                     Service = services[0]
                 }
             };
@@ -171,6 +189,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 new()
                 {
                     Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
                     Amount = 25,
                     CardNumber = "4111111111111111",
                     ExpirationMonth = 8,
@@ -178,13 +197,14 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     CardholderName = "JHONNY TEST",
                     CardSecurityCode = "123",
                     TransactionId = Guid.NewGuid().ToString(),
-                    PaymentStatus = PaymentStatusEnum.Aprovado,
+                    PaymentStatus = PaymentStatusEnum.Pendiente,
                     Service = services[0],
                     Consumer = consumers[0]
                 },
                 new()
                 {
                     Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
                     Amount = 50,
                     CardNumber = "5111111111111118",
                     ExpirationMonth = 9,
@@ -195,12 +215,41 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     PaymentStatus = PaymentStatusEnum.Aprovado,
                     Service = services[0],
                     Consumer = consumers[1]
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
+                    Amount = 10,
+                    Identifier = "1234",
+                    CardNumber = "5111111111111118",
+                    ExpirationMonth = 9,
+                    ExpirationYear = 2024,
+                    CardholderName = "JUAN PARCIAL",
+                    CardSecurityCode = "456",
+                    TransactionId = Guid.NewGuid().ToString(),
+                    PaymentStatus = PaymentStatusEnum.Aprovado,
+                    Service = services[1],
+                    Consumer = consumers[1]
                 }
             };
-            services[0].Payments!.AddRange(payments);
+            services[0].Payments!.Add(payments[0]);
+            services[0].Payments!.Add(payments[1]);
+            services[1].Payments!.Add(payments[2]);
             consumers[0].Payments!.Add(payments[0]);
             consumers[1].Payments!.Add(payments[1]);
+            consumers[1].Payments!.Add(payments[2]);
 
+            //AccountingClose data
+            var accountingClosures = new List<AccountingCloseEntity>()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ExecutedAt = new DateTime(2023, 6, 1)
+                }
+            };
+            
             //Admins setup
             mockContext.Setup(c => c.Admins).Returns(admins.AsQueryable().BuildMockDbSet().Object);
             
@@ -221,6 +270,10 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
 
             //Payments setup
             mockContext.Setup(c => c.Payments).Returns(payments.AsQueryable().BuildMockDbSet().Object);
+            
+            //AccountingClose setup
+            mockContext.Setup(c => c.AccountingClosures).Returns(accountingClosures.AsQueryable().BuildMockDbSet().Object);
+
         }
     }
 }

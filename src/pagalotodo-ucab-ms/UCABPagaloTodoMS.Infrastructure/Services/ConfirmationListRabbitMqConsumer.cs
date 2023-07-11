@@ -17,13 +17,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Services;
 public class ConfirmationListRabbitMqConsumer : BackgroundService
 {
     private readonly DbContextFactory _dbContextFactory;
-    private IConnection _connection;
-    private IModel _channel;
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
 
     public ConfirmationListRabbitMqConsumer(DbContextFactory dbContextFactory)
     {
         _dbContextFactory = dbContextFactory;
-        var factory = new ConnectionFactory {HostName = "localhost"};
+        var factory = new ConnectionFactory() {HostName = "localhost"};
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _channel.QueueDeclare(queue: "confirmation_list_queue",
@@ -56,6 +56,19 @@ public class ConfirmationListRabbitMqConsumer : BackgroundService
     private async Task AddConfirmationList(byte[] csvData, Guid serviceId)
     {
         await using var dbContext = _dbContextFactory.CreateDbContext();
+        var transaccion = dbContext.BeginTransaction();
+        try
+        {
+            var oldDebtors = dbContext.Debtors.Where(d=>d.Service!.Id==serviceId);
+            dbContext.Debtors.RemoveRange(oldDebtors);
+            await dbContext.SaveEfContextChanges("APP");
+            transaccion.Commit();
+        }
+        catch (Exception)
+        {
+            transaccion.Rollback();
+        }
+        
         using var stream = new MemoryStream(csvData);
         using var reader = new StreamReader(stream);
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -79,7 +92,7 @@ public class ConfirmationListRabbitMqConsumer : BackgroundService
         var serviceEntity = await dbContext.Services.FindAsync(serviceId);
         for (int i = 0; i < identifierList.Count; i++)
         {
-            var transaccion = dbContext.BeginTransaction();
+            transaccion = dbContext.BeginTransaction();
             try
             {
                 var entity = new DebtorsEntity()

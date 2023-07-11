@@ -312,4 +312,38 @@ public class ServicesControllerTest
         Assert.Equal(400, response.StatusCode);
         _mediatorMock.Verify();
     }
+    
+    /// <summary>
+    ///     Prueba de metodo UploadConfirmationList Ok
+    /// </summary>
+    [Fact]
+    public async void UploadConfirmationList_Returns_Ok()
+    {
+        var mockFile = new Mock<IFormFile>();
+        var expectedResponse = "El archivo fue agregado a la cola";
+        mockFile.Setup(f => f.CopyToAsync(It.IsAny<MemoryStream>(), default))
+            .Returns(Task.CompletedTask);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UploadDebtorsRequest>(), default))
+            .ReturnsAsync(true);
+        var response = await _controller.UploadConfirmationList(Guid.Empty, mockFile.Object);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<string>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+    }
+
+    /// <summary>
+    ///     Prueba de metodo UploadConciliationResponse BadRequest
+    /// </summary>
+    [Fact]
+    public async void UploadConfirmationList_Returns_BadRequest()
+    {
+        var mockFile = new Mock<IFormFile>();
+        var expectedException = new Exception("Test exception");
+        mockFile.Setup(f => f.CopyToAsync(It.IsAny<MemoryStream>(),default))
+            .Throws(expectedException);
+        var response = await _controller.UploadConfirmationList(Guid.Empty, mockFile.Object);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal(expectedException.Message, badRequestResult.Value);
+    }
 }
