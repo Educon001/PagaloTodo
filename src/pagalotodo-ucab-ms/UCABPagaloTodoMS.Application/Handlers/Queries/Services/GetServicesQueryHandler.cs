@@ -43,7 +43,10 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         try
         {
             _logger.LogInformation("GetServicesQueryHandler.HandleAsync");
-            var result = _dbContext.Services.Include(s=>s.Provider).Select(c => ServiceMapper.MapEntityToResponse(c, false));
+            var result = _dbContext.Services
+                .Include(s => s.Provider)
+                .Include(s => s.ConfirmationList)
+                .Select(c => ServiceMapper.MapEntityToResponse(c, false));
             return await result.ToListAsync();
         }
         catch (Exception ex)
