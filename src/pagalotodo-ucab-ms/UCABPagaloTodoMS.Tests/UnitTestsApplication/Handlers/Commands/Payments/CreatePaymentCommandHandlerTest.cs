@@ -32,7 +32,7 @@ public class CreatePaymentCommandHandlerTest
     public async void CreatePaymentCommandHandler_Ok()
     {
         var expectedResponse = Guid.NewGuid();
-        var entity = _mockContext.Object.Payments.First();
+        var entity = _mockContext.Object.Payments.Last();
         var request = new PaymentRequest()
         {
             PaymentStatus = entity.PaymentStatus,
