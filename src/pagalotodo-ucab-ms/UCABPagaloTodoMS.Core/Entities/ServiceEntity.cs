@@ -14,4 +14,6 @@ public class ServiceEntity : BaseEntity
     public List<PaymentEntity>? Payments { get; set; }
     public List<DebtorsEntity>? ConfirmationList { get; set; }
     public List<FieldEntity>? ConciliationFormat { get; set; }
+    
+    public List<PaymentFieldEntity>? PaymentFormat { get; set; }
 }

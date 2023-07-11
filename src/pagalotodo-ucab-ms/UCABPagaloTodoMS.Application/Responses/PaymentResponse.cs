@@ -15,4 +15,6 @@ public class PaymentResponse
     public ServiceResponse? Service { get; set; }
     //Para los pagos por confirmacion
     public string? Identifier { get; set; }
+    
+    public List<PaymentDetailResponse>? PaymentDetails { get; set; }
 }

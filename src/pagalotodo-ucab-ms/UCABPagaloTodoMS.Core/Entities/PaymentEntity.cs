@@ -17,4 +17,6 @@ public class PaymentEntity : BaseEntity
     public ServiceEntity? Service { get; set; }
     //Para los pagos por confirmacion
     public string? Identifier { get; set; }
+    
+    public List<PaymentDetailEntity>? PaymentDetails { get; set; }
 }
