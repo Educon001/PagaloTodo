@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-06-25T01:53:34.6382420Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:56:37.3597907Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -43,7 +43,9 @@
     ELSE 'Inactivo'
   END AS Status
 FROM
-  Providers</CommandText>
+  Providers
+WHERE
+  Providers.IsDeleted = 0</CommandText>
       </Query>
       <Fields>
         <Field Name="Rif">
@@ -973,8 +975,8 @@ FROM
             <DataSetName>Providers</DataSetName>
             <Top>20.28823mm</Top>
             <Left>11.57557mm</Left>
-            <Height>19.44141mm</Height>
-            <Width>165.04119mm</Width>
+            <Height>19.4414mm</Height>
+            <Width>165.04117mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1030,7 +1032,7 @@ FROM
       <Width>183.46723mm</Width>
       <Page>
         <PageHeader>
-          <Height>30.42157mm</Height>
+          <Height>30.4216mm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>

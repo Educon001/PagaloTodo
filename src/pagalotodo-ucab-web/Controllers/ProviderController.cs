@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using UCABPagaloTodoWeb.Models;
 using UCABPagaloTodoWeb.Models.CurrentUser;
 
@@ -276,6 +277,146 @@ public class ProviderController : Controller
             ModelState.AddModelError(string.Empty, "Se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde.");
         }
         return View(request);
+    }
+    
+    public IActionResult UploadConciliation()
+    {
+        var model = new UploadConciliationViewModel
+        {
+            SuccessMessage = TempData["success"] as string ?? string.Empty,
+            ErrorMessage = TempData["error"] as string ?? string.Empty
+        };
+
+        return View(model);
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> UploadConciliationPost(List<IFormFile> files)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    // Leer el contenido del archivo y enviarlo a la API
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        var content = new StreamContent(stream);
+                        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "files",
+                            FileName = file.FileName
+                        };
+
+                        var multipartContent = new MultipartFormDataContent();
+                        multipartContent.Add(content);
+                        
+                        // Realizar una solicitud POST a la API para cargar el archivo de conciliación
+                        var response = await client.PostAsync("/providers/uploadconciliation", multipartContent);
+                        response.EnsureSuccessStatusCode();
+                        
+                        TempData["success"] = "File(s) uploaded successfully";
+                    }
+                }
+            }
+
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            TempData["error"] = "An error occurred while uploading the file(s)";
+        }
+        
+        // Espera 5 segundos antes de redirigir al usuario.
+        await Task.Delay(1500);
+
+        // Redirige al usuario a la página de inicio.
+        return RedirectToAction("Index2", "Home");
+    }
+    
+    public async Task<IActionResult> ShowMyServices(Guid id)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var response = await client.GetAsync($"/providers/{id}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            var services = JsonSerializer.Deserialize<IEnumerable<ServiceModel>>(JObject.Parse(content)["services"].ToString(), options);
+            return View(services);
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    
+    
+    [Route("/{id:Guid}/debtors", Name="UploadConfirmationList")]
+    public IActionResult UploadConfirmationList(Guid id)
+    {
+        ViewBag.ServiceId = id;
+        return View();
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("/{id:Guid}/debtors", Name = "UploadConfirmationList")]
+    public async Task<IActionResult> UploadConfirmationList(ConfirmationList request, Guid id)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+    
+            if (request.File.Length > 0)
+            {
+                // Leer el contenido del archivo y enviarlo a la API
+                using (var stream = new MemoryStream())
+                {
+                    await request.File.CopyToAsync(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    var content = new StreamContent(stream);
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                    {
+                        Name = "file",
+                        FileName = request.File.FileName
+                    };
+    
+                    var multipartContent = new MultipartFormDataContent();
+                    multipartContent.Add(content);
+    
+                    // Realizar una solicitud POST a la API para cargar el archivo deudores
+                    var response = await client.PostAsync($"/services/{id}/debtors", multipartContent);
+                    var result = await response.Content.ReadAsStringAsync();
+                    TempData["success"] = $"Debtors file uploaded successfully. Result: {result}";
+                }
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            TempData["error"] = $"There was an error creating the conciliation format: {e.Message}";
+        }
+        return RedirectToRoute("showService", new { id });
     }
     
     //TODO: Lista de confirmacion

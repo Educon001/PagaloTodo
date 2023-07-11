@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-06-26T21:59:48.3630904Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:37:40.9039525Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -30,25 +30,20 @@
     <DataSet Name="OperacionesCerradas">
       <Query>
         <DataSourceName>pagalotodo</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ProviderId">
-            <Value>=Parameters!ProviderId.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
         <CommandText>SELECT
-  Payments.TransactionId
-  ,CASE Payments.PaymentStatus
-        WHEN 0 THEN 'Aprobado'
-        WHEN 1 THEN 'Rechazado'
-    END AS [Payment Status]
-  ,Payments.Identifier
-  ,Payments.CreatedAt
-  ,Providers.Name AS [Providers Name]
-  ,Services.Name AS [Services Name]
-  ,Consumers.Name AS [Consumers Name]
-  ,Consumers.LastName
-  ,Payments.Amount
+  Payments.TransactionId,
+  CASE Payments.PaymentStatus
+    WHEN 0 THEN 'Aprobado'
+    WHEN 1 THEN 'Rechazado'
+  END AS [Payment Status],
+  Payments.Identifier,
+  Payments.CreatedAt,
+  Providers.Name AS [Providers Name],
+  Services.Name AS [Services Name],
+  Consumers.Name AS [Consumers Name],
+  Consumers.LastName,
+  Payments.Amount
 FROM
   Payments
   INNER JOIN Consumers
@@ -58,8 +53,10 @@ FROM
   INNER JOIN Providers
     ON Services.ProviderId = Providers.Id
 WHERE
-  Payments.PaymentStatus = 0 OR Payments.PaymentStatus = 1
-  AND Providers.Id = @ProviderId</CommandText>
+  (Payments.PaymentStatus = 0 OR Payments.PaymentStatus = 1)
+  AND Providers.IsDeleted = 0
+  AND Services.IsDeleted = 0
+  AND Consumers.IsDeleted = 0</CommandText>
       </Query>
       <Fields>
         <Field Name="TransactionId">
@@ -95,7 +92,7 @@ WHERE
           <DataField>LastName</DataField>
         </Field>
         <Field Name="Amount">
-          <rd:TypeName>System.Single</rd:TypeName>
+          <rd:TypeName>System.Double</rd:TypeName>
           <DataField>Amount</DataField>
         </Field>
       </Fields>
@@ -973,8 +970,8 @@ WHERE
             <DataSetName>OperacionesCerradas</DataSetName>
             <Top>24.34167mm</Top>
             <Left>4.9647mm</Left>
-            <Height>26.81667mm</Height>
-            <Width>171.45379mm</Width>
+            <Height>26.81668mm</Height>
+            <Width>171.4538mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>

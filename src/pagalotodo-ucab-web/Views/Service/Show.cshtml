@@ -1,4 +1,10 @@
+@using UCABPagaloTodoWeb.Models.CurrentUser
+@using UCABPagaloTodoMS.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model ServiceModel
+@{
+    ViewBag.Controlador = "Services";
+}
 
 @functions
 {
@@ -8,7 +14,7 @@
     }
 }
 
-<div class="container p-4">
+    <div class="container p-4">
     <div><b>Id</b></div>
     <div>@Model.Id</div>
     <div><b>Name</b></div>
@@ -52,7 +58,10 @@
                         <td>@obj.Format</td>
                         <td>@obj.AttrReference</td>
                         <td>
-                            <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                            @if (CurrentUser.GetUser().UserType == "admin")
+                            {
+                                <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                            }
                         </td>
                     </tr>
                 }
@@ -64,14 +73,56 @@
         }
     </div>
     <br>
-    <div>
-        <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
-        <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+        @if (Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString())
+        {
+            <div><b>Confirmation List</b></div>
+            <div>
+                @if (Model.ConfirmationList!= null && Model.ConfirmationList.Count > 0)
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                Identifier
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                        </thead>
+                            @foreach (var obj in @Model.ConfirmationList)
+                            {
+                                <tr>
+                                    <td>@obj.Identifier</td>
+                                    <td>@obj.Amount</td>
+                                    <td>@obj.Status</td>
+                                </tr>
+                            }
+                    </table>
+                }
+                @if (Model.ConfirmationList == null || Model.ConfirmationList.Count == 0)
+                {
+                    <div>No Debtors registered</div>
+                }
+            </div>
+        }
     </div>
-    <br>
-    <div>
+    
+<div>
+    @if (CurrentUser.GetUser().UserType == "admin")
+    {
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
-    </div>
+    }
+    else if (CurrentUser.GetUser().UserType == "provider")
+    {
+        <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser().Id" class="btn btn-secondary">Back</a>
+    }
+    @if (CurrentUser.GetUser().UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() && (Model.ConfirmationList == null || Model.ConfirmationList.Count == 0))
+    {
+        <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id" type="submit" class="btn btn-primary">Upload Confirmation List</a>
+    }
 </div>
-
 

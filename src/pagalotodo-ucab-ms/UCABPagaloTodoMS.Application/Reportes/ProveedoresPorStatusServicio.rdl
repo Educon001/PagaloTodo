@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-07-01T03:27:34.8151723Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-02T15:54:05.0262679Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -40,17 +40,17 @@
         </QueryParameters>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
         <CommandText>SELECT
-  Providers.Rif
-  ,Providers.Name AS [Providers Name]
-  ,Services.CreatedAt AS [Services CreatedAt]
-  ,Services.Name AS [Services Name]
-  ,CASE Services.ServiceType
+  Providers.Rif,
+  Providers.Name AS [Providers Name],
+  Services.CreatedAt AS [Services CreatedAt],
+  Services.Name AS [Services Name],
+  CASE Services.ServiceType
         WHEN 0 THEN 'Directo'
         WHEN 1 THEN 'Por Confirmación'
         ELSE 'Desconocido'
-    END AS [Services Type]
-  ,Services.Description AS [Services Description]
-  ,CASE Services.ServiceStatus
+    END AS [Services Type],
+  Services.Description AS [Services Description],
+  CASE Services.ServiceStatus
         WHEN 0 THEN 'Activo'
         WHEN 1 THEN 'Inactivo'
         WHEN 2 THEN 'Próximamente'
@@ -66,7 +66,8 @@ WHERE
                                      WHEN 'INACTIVO' THEN 1
                                      WHEN 'PROXIMAMENTE' THEN 2
                                  END
-  AND Providers.Id = @ProviderId</CommandText>
+  AND Providers.Id = @ProviderId
+  AND Providers.IsDeleted = 0</CommandText>
       </Query>
       <Fields>
         <Field Name="Rif">

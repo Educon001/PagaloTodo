@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Debtors;
 using UCABPagaloTodoMS.Application.Queries.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -374,4 +375,39 @@ public class ServicesController : BaseController<ServicesController>
         }
         
     }
+    
+    /// <summary>
+    ///     Endpoint para la consulta de deudores de un servicio
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Get field by id
+    ///     ## Url
+    ///     GET /fields/{id}
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna el field con el id que se paso.</returns>
+    [Authorize(Policy = AuthorizationPolicies.AdminOrProviderPolicy )]
+    [HttpGet("debtors/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<List<DebtorsResponse>>> GetDebtorsByServiceIdQuery(Guid id)
+    {
+        _logger.LogInformation("Entrando al método que consulta los deudores dado el id de un servicio");
+        try
+        {
+            var query = new GetDebtorsByServiceIdQuery(id);
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de los deudores dado el id del servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
+    
 }
