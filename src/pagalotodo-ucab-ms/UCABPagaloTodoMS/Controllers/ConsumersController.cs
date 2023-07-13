@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
@@ -152,10 +153,15 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al cambiar clave al consumer. Exception: " + ex);
-                return BadRequest(ex.Message);
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest("Error al cambiar la clave del consumer.");
             }
         }
         

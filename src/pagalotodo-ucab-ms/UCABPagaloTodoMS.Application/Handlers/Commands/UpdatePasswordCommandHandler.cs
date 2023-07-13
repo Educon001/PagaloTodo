@@ -23,6 +23,12 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
         _logger = logger;
     }
 
+    /// <summary>
+    /// Manejador de comandos para actualizar la contraseña de un usuario.
+    /// </summary>
+    /// <param name="request">Comando para actualizar la contraseña del usuario.</param>
+    /// <param name="cancellationToken">Token de cancelación.</param>
+    /// <returns>Respuesta que indica si la contraseña se actualizó correctamente.</returns>
     public async Task<UpdatePasswordResponse> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
     {
         try
@@ -42,6 +48,11 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
         }
     }
 
+    /// <summary>
+    /// Método asincrónico que actualiza la contraseña de un usuario.
+    /// </summary>
+    /// <param name="request">Comando para actualizar la contraseña del usuario.</param>
+    /// <returns>Respuesta que indica si la contraseña se actualizó correctamente.</returns>
     private async Task<UpdatePasswordResponse> HandleAsync(UpdatePasswordCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();
@@ -53,8 +64,7 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             switch (request.Request.UserType)
             {
                 case "consumer":
-                    var consumerId = request.Id;
-                    var consumerEntity = _dbContext.Consumers.Find(consumerId);
+                    var consumerEntity = _dbContext.Consumers.Find(request.Id);
                     if (consumerEntity != null)
                     {
                         if (request.Request.PasswordHash != null)
@@ -63,12 +73,11 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                     }
                     else
                     {
-                        throw new KeyNotFoundException($"Object with key {consumerId} not found");
+                        throw new KeyNotFoundException($"Object with key {request.Id} not found");
                     }
                     break;
                 case "provider":
-                    var providerId = request.Id;
-                    var providerEntity = _dbContext.Providers.Find(providerId);
+                    var providerEntity = _dbContext.Providers.Find(request.Id);
                     if (providerEntity != null)
                     {
                         if (request.Request.PasswordHash != null)
@@ -77,12 +86,11 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                     }
                     else
                     {
-                        throw new KeyNotFoundException($"Object with key {providerId} not found");
+                        throw new KeyNotFoundException($"Object with key {request.Id} not found");
                     }
                     break;
                 case "admin":
-                    var adminId = request.Id;
-                    var adminEntity = _dbContext.Admins.Find(adminId);
+                    var adminEntity = _dbContext.Admins.Find(request.Id);
                     if (adminEntity != null)
                     {
                         if (request.Request.PasswordHash != null)
@@ -91,7 +99,7 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
                     }
                     else
                     {
-                        throw new KeyNotFoundException($"Object with key {adminId} not found");
+                        throw new KeyNotFoundException($"Object with key {request.Id} not found");
                     }
                     break;
             }
@@ -107,7 +115,7 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
         {
             _logger.LogError(ex, "Error UpdatePasswordCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw;
+            throw new CustomException(ex);
         }
     }
 }
