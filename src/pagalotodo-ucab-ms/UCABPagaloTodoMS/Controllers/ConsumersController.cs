@@ -50,6 +50,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los consumidores. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los consumidores. Exception: " + ex);
@@ -116,6 +121,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var query = new CreateConsumerCommand(valor);
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -192,6 +202,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
@@ -225,6 +240,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var query = new DeleteConsumerCommand(id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

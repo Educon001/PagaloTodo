@@ -41,8 +41,8 @@ public class DeleteConsumerCommandHandlerTest
     {
         var id = Guid.NewGuid();
         var command = new DeleteConsumerCommand(id);
-        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command,default));
-        Assert.IsType<KeyNotFoundException>(result.InnerException);
-        Assert.Contains(id.ToString(),result.Message);
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<CustomException>(result.InnerException);
+        Assert.Contains($"Object with key {id} not found", result.InnerException.Message);
     }
 }

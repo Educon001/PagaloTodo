@@ -56,7 +56,7 @@ public class DeleteConsumerCommandHandler : IRequestHandler<DeleteConsumerComman
         {
             _logger.LogError(ex, "Error DeleteConsumerCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw;
+            throw new CustomException(ex);
         }
     }
 }

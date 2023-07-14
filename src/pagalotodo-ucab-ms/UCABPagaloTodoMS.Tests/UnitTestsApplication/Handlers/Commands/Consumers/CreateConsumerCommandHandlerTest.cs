@@ -89,7 +89,7 @@ public class CreateConsumerCommandHandlerTest
         _mockContext.Setup(c => c.Consumers.Add(It.IsAny<ConsumerEntity>()))
             .Throws(expectedException);
         var command = new CreateConsumerCommand(request);
-        var result = await Assert.ThrowsAnyAsync<Exception>(()=>_handler.Handle(command, default));
-        Assert.Equal(expectedException.Message, result.Message);
+        var exception = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.Equal(expectedException.Message, exception.InnerException.Message);
     }
 }

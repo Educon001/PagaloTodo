@@ -217,5 +217,77 @@ public class ConsumersControllerTest
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);
     }
+    
+    [Fact]
+    public async Task GetConsumers_ReturnsBadRequest_OnCustomException()
+    {
+        // Arrange
+        var expectedException = new Exception("Test exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<ConsumersQuery>(), default))
+            .ThrowsAsync(new CustomException(expectedException));
+    
+        // Act
+        var result = await _controller.GetConsumers();
+    
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        var value = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal("Test exception", value);
+    }
+    
+    [Fact]
+    public async Task PostConsumer_ReturnsBadRequest_OnCustomException()
+    {
+        // Arrange
+        var consumer = new ConsumerRequest() { Name = "Test Consumer" };
+        var expectedException = new Exception("Test exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateConsumerCommand>(), CancellationToken.None))
+            .ThrowsAsync(new CustomException(expectedException));
+    
+        // Act
+        var result = await _controller.PostConsumer(consumer);
+    
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        var value = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal("Test exception", value);
+    }
+    
+    [Fact]
+    public async Task UpdatePassword_ReturnsBadRequest_OnException()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var request = new UpdatePasswordRequest() { PasswordHash = "new password" };
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
+            .ThrowsAsync(new Exception("Test exception"));
+    
+        // Act
+        var result = await _controller.UpdatePassword(id, request);
+    
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        var value = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal("Error al cambiar la clave del consumer.", value);
+    }
+    
+    [Fact]
+    public async Task UpdateConsumer_ReturnsBadRequest_OnCustomException()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var consumer = new ConsumerRequest() { Name = "Test Consumer" };
+        var expectedException = new CustomException(new Exception("Test exception"));
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateConsumerCommand>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+    
+        // Act
+        var result = await _controller.UpdateConsumer(id, consumer);
+    
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        var value = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal("Test exception", value);
+    }
 
 }

@@ -21,6 +21,13 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
         _logger = logger;
     }
 
+    /// <summary>
+    /// Este método maneja una solicitud de inicio de sesión. Verifica que la solicitud no sea nula y llama al método HandleAsync para autenticar al usuario.
+    /// Lanza una excepción de tipo ArgumentNullException si la solicitud es nula.
+    /// </summary>
+    /// <param name="request">La solicitud de inicio de sesión.</param>
+    /// <param name="cancellationToken">El token de cancelación.</param>
+    /// <returns>Un objeto LoginResponse que contiene el tipo de usuario y el ID del usuario autenticado.</returns>
     public async Task<Guid> Handle(CreateConsumerCommand request, CancellationToken cancellationToken)
     {
         try
@@ -40,6 +47,13 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
         }
     }
 
+    /// <summary>
+    /// Este método HandleAsync maneja la creación de un nuevo consumidor en la base de datos.
+    /// Recibe un objeto CreateConsumerCommand que contiene la solicitud de creación del consumidor.
+    /// Retorna un Guid que representa el id del consumidor creado.
+    /// </summary>
+    /// <param name="request">La solicitud de creación del consumidor.</param>
+    /// <returns>Un Guid que representa el id del consumidor creado.</returns>
     private async Task<Guid> HandleAsync(CreateConsumerCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();
@@ -58,7 +72,7 @@ public class CreateConsumerCommandHandler : IRequestHandler<CreateConsumerComman
         {
             _logger.LogError(ex, "Error CreateConsumerCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw;
+            throw new CustomException(ex);
         }
     }
 }
