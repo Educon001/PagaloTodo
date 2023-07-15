@@ -33,7 +33,7 @@ public class PaymentMapper
             PaymentStatus = entity.PaymentStatus,        
             Service = isServiceReference ? null : ServiceMapper.MapEntityToResponse(entity.Service!, false),
             Consumer = isConsumerReference ? null : ConsumerMapper.MapEntityToResponse(entity.Consumer!),
-            PaymentDetails = entity?.PaymentDetails.Select(f=>PaymentDetailMapper.MapEntityToResponse(f)).ToList()
+            PaymentDetails = entity.PaymentDetails?.Select(f=>PaymentDetailMapper.MapEntityToResponse(f)).ToList()
         };
         return response;
     }
