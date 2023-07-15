@@ -92,7 +92,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 
             if (user == null || !SecurePasswordHasher.Verify(request.Request.PasswordHash, user.PasswordHash))
             {
-                throw new HttpRequestException("Credenciales inválidas.", null, HttpStatusCode.BadRequest);
+                throw new HttpRequestException("Las credenciales de inicio de sesión son inválidas.", null, HttpStatusCode.BadRequest);
             }
 
             if (user.Status == false)

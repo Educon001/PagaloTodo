@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Providers;
 using UCABPagaloTodoMS.Application.Requests;
@@ -48,6 +49,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var query = new ConsumersQuery();
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los consumidores. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -116,6 +122,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
@@ -152,10 +163,15 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error al cambiar clave al consumer. Exception: " + ex);
-                return BadRequest(ex.Message);
+                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                return BadRequest("Error al cambiar la clave del consumer.");
             }
         }
         
@@ -185,6 +201,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var query = new UpdateConsumerCommand(consumer,id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -219,6 +240,11 @@ public class ConsumersController : BaseController<ConsumersController>
                 var query = new DeleteConsumerCommand(id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

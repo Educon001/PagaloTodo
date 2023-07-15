@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Queries.Providers;
@@ -54,10 +55,15 @@ public class AdminsController : BaseController<AdminsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
-            _logger.LogError("Ocurrio un error al cambiar clave al admin. Exception: " + ex);
-            return BadRequest(ex.Message);
+            _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+            return BadRequest("Error al cambiar la clave del consumer.");
         }
     }
 

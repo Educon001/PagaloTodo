@@ -416,6 +416,7 @@ public class ProviderController : Controller
             Console.WriteLine(e);
             TempData["error"] = $"There was an error creating the conciliation format: {e.Message}";
         }
+        await Task.Delay(3000); 
         return RedirectToRoute("showService", new { id });
     }
     

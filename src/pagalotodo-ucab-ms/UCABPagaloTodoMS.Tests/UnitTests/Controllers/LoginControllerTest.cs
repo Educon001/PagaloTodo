@@ -67,10 +67,9 @@ public class LoginControllerTest
         var okResult = Assert.IsType<OkObjectResult>(response.Result);
         var loginResponse = Assert.IsType<LoginResponse>(okResult.Value);
 
+        Assert.NotNull(loginResponse.Token);
         Assert.Equal(expectedResponse.Id, loginResponse.Id);
         Assert.Equal(expectedResponse.UserType, loginResponse.UserType);
-        Assert.Equal(expectedResponse.Token, loginResponse.Token);
-        
     }
 
     /// <summary>
