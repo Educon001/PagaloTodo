@@ -69,23 +69,26 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             }
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
-            var paymentId = _dbContext.Payments.Add(entity).Entity.Id;
-            foreach (var detail in request.Request.PaymentDetails!)
+            _dbContext.Payments.Add(entity);
+            await _dbContext.SaveEfContextChanges("APP");
+            var id = entity.Id;
+            if (request.Request.PaymentDetails is not null)
             {
-                detail.Payment = paymentId;
-                PaymentEntity? paymentE = _dbContext.Payments.Find(detail.Payment);
-                
-                //Verificar si el detalle esta en la entidad de PaymentFields
-                var paymentF = _dbContext.PaymentFields.FirstOrDefault(c => c.Name == detail.Name);
-                if (paymentF == null) throw new KeyNotFoundException("Detail not found on database");
-                var entityPDEtail = PaymentDetailMapper.MapRequestToEntity(detail, paymentE!);
+                foreach (var detail in request.Request.PaymentDetails!)
+                {
+                    detail.Payment = id;
+                    
+                    //Verificar si el detalle esta en la entidad de PaymentFields
+                    await _dbContext.PaymentFields.SingleAsync(c => c.Service == entity.Service && c.Name == detail.Name);
+                    var entityPDetail = PaymentDetailMapper.MapRequestToEntity(detail, entity);
 
-                //PaymentDetails entity add
-                _dbContext.PaymentDetails.Add(entityPDEtail);
+                    //PaymentDetails entity add
+                    _dbContext.PaymentDetails.Add(entityPDetail);
+                }
             }
+            
             await _dbContext.SaveEfContextChanges("APP");
             transaccion.Commit();
-            var id = entity.Id;
             _logger.LogInformation("CreatePaymentCommandHandler.HandleAsync {Response}", id);
             return id;
         }

@@ -111,22 +111,26 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
 
         csv.WriteField("Confirmacion");
         csv.NextRecord();
-        var paymentProperties = typeof(PaymentResponse).GetProperties().ToDictionary(p => p.Name);
-        var consumerProperties = typeof(ConsumerResponse).GetProperties().ToDictionary(p => p.Name);
+        var paymentProperties = typeof(PaymentResponse).GetProperties().ToDictionary(p => p.Name.ToLower());
+        var consumerProperties = typeof(ConsumerResponse).GetProperties().ToDictionary(p => p.Name.ToLower());
         foreach (var payment in service.Payments!)
         {
+            var paymentDetails = payment.PaymentDetails?.ToDictionary(d => d.Name!.ToLower(), d => d.Value!);
             foreach (var field in service.ConciliationFormat)
             {
                 var className = field.AttrReference!.Split(".")[0];
-                var propName = field.AttrReference!.Split(".")[1];
+                var propName = field.AttrReference!.Split(".")[1].ToLower();
                 object? propValue = null;
-                switch (className)
+                switch (className.ToLower())
                 {
-                    case "Payment":
+                    case "payment":
                         propValue = paymentProperties.GetValueOrDefault(propName)!.GetValue(payment);
                         break;
-                    case "Consumer":
+                    case "consumer":
                         propValue = consumerProperties.GetValueOrDefault(propName)!.GetValue(payment.Consumer);
+                        break;
+                    case "paymentdetail":
+                        propValue = paymentDetails!.GetValueOrDefault(propName);
                         break;
                 }
 
