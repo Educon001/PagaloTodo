@@ -210,9 +210,8 @@ public class ConsumerController : Controller
         }
         return Json(isUnique);
     }
-    
-    //TODO: Paso anterior a pagar
-    public async Task<IActionResult> MakePayment()
+
+    public async Task<ActionResult> SelectService()
     {
         try
         {
@@ -222,14 +221,66 @@ public class ConsumerController : Controller
             var response = await client.GetAsync("/services");
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions()
+            var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-            IEnumerable<ServiceModel> services =
-                JsonSerializer.Deserialize<IEnumerable<ServiceModel>>(items, options)!;
+            IEnumerable<ServiceModel> services = JsonSerializer.Deserialize<IEnumerable<ServiceModel>>(items, options)!;
             ViewBag.Message = services;
+            return View();
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+
+    public class ServiceIdObject
+    {
+        public Guid Id { get; set; }
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+
+    public async Task<ActionResult> SelectService(ServiceIdObject currObj)
+    {
+        try
+        {
+            var id = currObj.Id.ToString();
+            // return RedirectToAction("MakePayment", "Consumer");
+            return RedirectToRoute("makePayment", new { id });
+
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    //TODO: Paso anterior a pagar
+    [Route("makePayment/{id:Guid}", Name="makePayment")]
+    public async Task<IActionResult> MakePayment(Guid id)
+    {
+        try
+        {
+            ViewBag.ServiceId = id.ToString();
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var response = await client.GetAsync($"/payments/paymentformat/{id}");
+            response.EnsureSuccessStatusCode();
+            var items = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            IEnumerable<PaymentFieldModel> paymentFormat = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(items, options)!;
+            ViewBag.Message = paymentFormat;
             return View();
         }
         catch (HttpRequestException e)
@@ -242,6 +293,7 @@ public class ConsumerController : Controller
     
     [ValidateAntiForgeryToken]
     [HttpPost]
+    [Route("makePaymentR", Name="makePaymentR")]
     public async Task<IActionResult> MakePayment(PaymentRequest payment)
     {
         try
@@ -250,13 +302,14 @@ public class ConsumerController : Controller
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
             var response = await client.PostAsJsonAsync("/payments", payment);
+            response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Payment Done Successfully";
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            TempData["success"] = "There was an error processing the payment";
+            TempData["error"] = "There was an error processing the payment";
         }
         return RedirectToAction("GetPayments", "Consumer", new {id=CurrentUser.GetUser().Id});
     }
@@ -283,7 +336,8 @@ public class ConsumerController : Controller
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            return NotFound();
+            TempData["error"] = "There was an error getting the payments";
+            return RedirectToAction("Index2", "Home");
         }
     }
     

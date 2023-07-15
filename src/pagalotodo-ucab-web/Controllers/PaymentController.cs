@@ -40,8 +40,8 @@ public class PaymentController : Controller
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            TempData["error"] = "Error getting payments. Try again.";
-            return NotFound();
+            TempData["error"] = e.Message + "Error getting payments. Try again.";
+            return RedirectToAction("Index2", "Home");
         }
     }
 }

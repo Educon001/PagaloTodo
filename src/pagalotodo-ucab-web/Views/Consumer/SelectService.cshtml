@@ -1,0 +1,19 @@
+@model UCABPagaloTodoWeb.Controllers.ConsumerController.ServiceIdObject
+
+@{
+    List<ServiceModel> services = ViewBag.Message;
+    IEnumerable<SelectListItem> selectList = services.Select(p => new SelectListItem
+    {
+        Text = $"{p.Name}",
+        Value = p.Id.ToString()
+    });
+}
+<form method="post">
+    <div>
+        <div class="mb-3">
+            <label asp-for="Id">Elija el Servicio</label>
+            <select name="Id" id="Id" asp-items="selectList"></select>
+        </div>
+        <button type="submit" class="btn btn-primary">OK</button>
+    </div>
+</form>

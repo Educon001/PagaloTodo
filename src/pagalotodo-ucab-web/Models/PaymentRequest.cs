@@ -7,7 +7,7 @@ public class PaymentRequest
 {
     [Required(ErrorMessage = "El monto es requerido")]
     [Range(0, int.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
-    public float? Amount { get; set; }
+    public double? Amount { get; set; }
     
     [Required(ErrorMessage = "Numero de tarjeta es requerido")]
     [RegularExpression(@"^\d{13,18}$", ErrorMessage = "Introduzca un numero de tarjeta valido")] 
@@ -36,4 +36,6 @@ public class PaymentRequest
     
     [Required(ErrorMessage = "El identificador es obligatorio")]
     public string? Identifier { get; set; }
+    
+    public List<PaymentDetailRequest>? PaymentDetails { get; set; }
 }
