@@ -10,11 +10,12 @@
                     <form id="uploadForm" method="post" asp-action="UploadConciliationPost" enctype="multipart/form-data">
                         <div class="form-group mb-3">
                             <label for="fileInput">Select Files:</label>
-                            <input type="file" name="files" id="fileInput"  accept=".csv" multiple>
+                            <input type="file" name="files" id="fileInput" accept=".csv" multiple>
                         </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Subir archivos</button>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary" id="submitButton" disabled>Subir archivos</button>
+                            <button asp-controller="Home" asp-action="Index2" class="btn btn-secondary">Back</button>
                         </div>
                     </form>
 
@@ -32,6 +33,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const submitButton = document.getElementById('submitButton');
+
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    });
+</script>
 
 <style>
     .container {

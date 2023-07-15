@@ -114,15 +114,17 @@
 <div>
     @if (CurrentUser.GetUser().UserType == "admin")
     {
+        <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+        <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
         <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
     }
     else if (CurrentUser.GetUser().UserType == "provider")
     {
         <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser().Id" class="btn btn-secondary">Back</a>
     }
-    @if (CurrentUser.GetUser().UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() && (Model.ConfirmationList == null || Model.ConfirmationList.Count == 0))
+    @if (CurrentUser.GetUser().UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() )
     {
-        <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id" type="submit" class="btn btn-primary">Upload Confirmation List</a>
+        <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id"  class="btn btn-primary">Upload Confirmation List</a>
     }
 </div>
 

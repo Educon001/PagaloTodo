@@ -39,7 +39,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna la lista de servicios.</returns>
-    [Authorize(Policy = AuthorizationPolicies.AdminOrConsumerPolicy )]
+    [Authorize(Policy = AuthorizationPolicies.AllPolicies )]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
