@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Payments;
@@ -41,7 +42,7 @@ public class AdminControllerTest
     ///     Prueba de metodo UpdatePassword para administradores con respuesta Ok
     /// </summary>
     [Fact]
-    public async void UpdatePasswordHashProviders_Returns_Ok()
+    public async void UpdatePasswordHashAdmin_Returns_Ok()
     {
         var id = Guid.NewGuid();
         var password = new UpdatePasswordRequest() {PasswordHash = "Ab123456.r"};
@@ -58,11 +59,11 @@ public class AdminControllerTest
     ///     Prueba de metodo UpdatePassword para administradores con respuesta BadRequest
     /// </summary>
     [Fact]
-    public async void UpdatePasswordHashProviders_Returns_BadRequest()
+    public async void UpdatePasswordHashAdmin_Returns_BadRequest()
     {
         var id = Guid.NewGuid();
         var password = new UpdatePasswordRequest() {PasswordHash = "string"};
-        var expectedException = new Exception("Test Exception");
+        var expectedException = new CustomException(new Exception("Test Exception"));
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePassword(id, password);

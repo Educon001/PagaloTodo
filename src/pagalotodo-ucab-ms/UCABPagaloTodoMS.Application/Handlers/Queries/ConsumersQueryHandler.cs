@@ -52,7 +52,7 @@ public class ConsumersQueryHandler : IRequestHandler<ConsumersQuery, List<Consum
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error ConsumersQueryHandler.HandleAsync. {Mensaje}", ex.Message);
-            throw;
+            throw new CustomException(ex);;
         }
     }
 }

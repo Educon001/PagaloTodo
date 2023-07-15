@@ -78,7 +78,7 @@ public class UpdateConsumerCommandHandler : IRequestHandler<UpdateConsumerComman
         {
             _logger.LogError(ex, "Error UpdateConsumerCommandHandler.HandleAsync. {Mensaje}", ex.Message);
             transaccion.Rollback();
-            throw;
+            throw new CustomException(ex);
         }
     }
 }

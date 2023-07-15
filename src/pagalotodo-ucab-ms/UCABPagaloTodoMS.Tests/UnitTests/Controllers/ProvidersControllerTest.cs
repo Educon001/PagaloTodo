@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Providers;
@@ -239,10 +240,10 @@ public class ProvidersControllerTest
     {
         var id = Guid.NewGuid();
         var password = new UpdatePasswordRequest() {PasswordHash = "string"};
-        var expectedException = new Exception("Test Exception");
+        var expectedException = new CustomException(new Exception("Test Exception"));
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
-        var response = await _controller.UpdatePassword(id,password);
+        var response = await _controller.UpdatePassword(id, password);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);

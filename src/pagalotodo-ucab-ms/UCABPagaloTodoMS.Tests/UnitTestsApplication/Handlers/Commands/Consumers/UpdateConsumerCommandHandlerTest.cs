@@ -109,9 +109,9 @@ public class UpdateConsumerCommandHandlerTest
             LastName = entity.LastName,
             PasswordHash = entity.PasswordHash
         };
-        var command = new UpdateConsumerCommand(request,entity.Id);
-        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(command, default));
-        Assert.IsType<KeyNotFoundException>(result.InnerException);
-        Assert.Contains(entity.Id.ToString(),result.Message);
+        var command = new UpdateConsumerCommand(request, entity.Id);
+        var result = await Assert.ThrowsAsync<CustomException>(() => _handler.Handle(command, default));
+        Assert.IsType<CustomException>(result.InnerException);
+        Assert.Contains($"Object with key {entity.Id} not found", result.InnerException.Message);
     }
 }

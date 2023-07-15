@@ -75,6 +75,11 @@ public class LoginController : BaseController<LoginController>
             _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
             return Unauthorized("La cuenta del usuario está inactiva. Exception: ");
         }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+        {
+            _logger.LogError("Las credenciales de inicio de sesión son inválidas. Exception: " + ex);
+            return BadRequest("Las credenciales de inicio de sesión son inválidas. Exception: ");
+        }
         catch (CustomException ex)
         {
             _logger.LogError(ex, $"Ocurrió un error al autenticar al usuario {request.Username}.");
@@ -87,6 +92,13 @@ public class LoginController : BaseController<LoginController>
         }
     }
 
+    /// <summary>
+    /// Endpoint para enviar un correo electrónico al usuario con un enlace para restablecer su contraseña.
+    /// </summary>
+    /// <param name="email">El correo electrónico del usuario.</param>
+    /// <returns>Retorna un objeto ForgotPasswordResponse que contiene un mensaje de éxito.</returns>
+    /// <response code="200">Operación exitosa.</response>
+    /// <response code="400">Se produjo un error al enviar el correo electrónico.</response>
     [HttpPost("ForgotPassword")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,6 +130,14 @@ public class LoginController : BaseController<LoginController>
         }
     }
 
+    /// <summary>
+    /// Endpoint para resetear la contraseña del usuario.
+    /// </summary>
+    /// <param name="token">El token generado para el usuario.</param>
+    /// <param name="request">La solicitud de cambio de contraseña.</param>
+    /// <returns>Retorna un objeto UpdatePasswordResponse que contiene un mensaje de éxito.</returns>
+    /// <response code="200">Operación exitosa.</response>
+    /// <response code="400">Se produjo un error al procesar la solicitud de cambio de contraseña.</response>
     [HttpPost("ResetPassword")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
