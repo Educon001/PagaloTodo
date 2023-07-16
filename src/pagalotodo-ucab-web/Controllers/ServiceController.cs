@@ -82,7 +82,7 @@ public class ServiceController : Controller
             var result = await response.Content.ReadAsStringAsync();
             Guid id = JsonSerializer.Deserialize<Guid>(result);
             TempData["success"] = "Service Created Successfully";
-            return RedirectToRoute("CreateFormat", new { id });
+            return RedirectToRoute("CreatePaymentFormat", new { id });
         }
         catch (HttpRequestException e)
         {
@@ -142,6 +142,7 @@ public class ServiceController : Controller
             Console.WriteLine(e);
             TempData["error"] = "There was an error deleting the service";
         }
+
         return RedirectToAction("Index");
     }
 
@@ -207,7 +208,15 @@ public class ServiceController : Controller
             Console.WriteLine(e);
             TempData["error"] = "There was an error updating the service";
         }
+
         return RedirectToAction("Index");
+    }
+
+    [Route("paymentformat/{id:Guid}", Name="createPaymentFormat")]
+    public IActionResult CreatePaymentFormat(Guid id)
+    {
+        ViewBag.PaymentId = id;
+        return View();
     }
 
     [Route("/{id:Guid}", Name="createFormat")]
@@ -215,6 +224,34 @@ public class ServiceController : Controller
     {
         ViewBag.ServiceId = id;
         return View();
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("paymentformat/{id:Guid}", Name = "createPaymentFormatR")]
+    public async Task<IActionResult> CreatePaymentFormat(List<PaymentFieldRequest> paymentFieldRequests, Guid id)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            foreach (PaymentFieldRequest paymentField in paymentFieldRequests)
+            {
+                paymentField.Service = id;
+            }
+
+            var response = await client.PostAsJsonAsync("payments/paymentformat", paymentFieldRequests);
+            var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Payment Format Created Successfully";
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            TempData["error"] = "There was an error creating the conciliation format";
+        }
+        // return RedirectToAction("Index", "Service");
+        return RedirectToRoute("CreateFormat", new { id });
     }
 
     [ValidateAntiForgeryToken]

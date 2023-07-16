@@ -14,7 +14,7 @@
     @if (CurrentUser.GetUser() != null && CurrentUser.GetUser().UserType == "consumer")
     {
         <div class="text-center p-3">
-            <a asp-controller="Consumer" asp-action="MakePayment" class="btn btn-primary">
+            <a asp-controller="Consumer" asp-action="SelectService" class="btn btn-primary">
                 MAKE PAYMENT
             </a>
         </div>

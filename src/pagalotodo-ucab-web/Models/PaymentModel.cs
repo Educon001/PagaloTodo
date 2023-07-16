@@ -6,7 +6,7 @@ public class PaymentModel
 {
     public Guid Id { get; set; }
     public DateTime? PaymentDate { get; set; }
-    public float? Amount { get; set; }
+    public double? Amount { get; set; }
     public string? CardholderName { get; set; }
     public string? CardNumber { get; set; }
     public string? TransactionId { get; set; }

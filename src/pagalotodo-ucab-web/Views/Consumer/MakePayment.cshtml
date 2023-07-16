@@ -4,7 +4,12 @@
 @using Newtonsoft.Json
 @model PaymentRequest
 
-<form method="post">
+@* @{ *@
+@*     var httpClient = new HttpClient(); *@
+@*     var response = httpClient.GetAsync($"https://localhost:5001/paymentformat") *@
+@* } *@
+
+<form method="post" asp-route="makePaymentR">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2>Make Payment</h2>
@@ -35,16 +40,6 @@
             <input asp-for="ExpirationYear" class="form-control">
             <span asp-validation-for="ExpirationYear" class="text-danger"></span>
             </div>
-        @{
-            var services = ViewBag.Message as List<ServiceModel>;
-            var selectList = new SelectList(services, "Id", "Name");
-        }
-        
-        <div class="mb-3">
-            <label asp-for="Service">Servicio</label>
-            <select name="Service" id="Service" asp-items="@selectList"></select>
-        </div>
-        
         <div class="mb-3">
             <label asp-for="Amount">Amount</label>
             <input asp-for="Amount" class="form-control" type="number" step="0.01">
@@ -57,11 +52,31 @@
             <span asp-validation-for="Identifier" class="text-danger"></span>
         </div>
         <div class="warning-message">Por favor, introduzca un identificador asociado a una deuda para realizar el pago.</div>
-        <input asp-for="Consumer" type="hidden" value="@CurrentUser.GetUser().Id" />
+        <div class="form-group">
+            <input asp-for="Service" type="hidden" value="@ViewBag.ServiceId" hidden="hidden"/>
+            </div>
+        @{
+            List<PaymentFieldModel> paymentFormat = ViewBag.Message;
+            int cont = 0;
+        }
+        @if (paymentFormat is not null)
+        {
+            @foreach (var obj in paymentFormat)
+            {
+                <input asp-for="@Model.PaymentDetails[@cont].Name" type="hidden" value="@obj.Name" hidden="hidden"/>
+                <div class="mb-3">
+                    <label asp-for="@Model.PaymentDetails[@cont].Value">@obj.Name</label>
+                    <input asp-for="@Model.PaymentDetails[@cont].Value" class="form-control">
+                    @* <input class="form-control"> *@
+                </div>
+                cont++;
+            }
+        }
+          <input asp-for="Consumer" type="hidden" value="@CurrentUser.GetUser().Id" />
         <input asp-for="PaymentStatus" type="hidden" value="@PaymentStatusEnum.Pendiente" />
         <br>
-        <button type="submit" id="submitButton" class="btn btn-primary">Create</button>
-        <a asp-controller="Home" asp-action="Index2" class="btn btn-secondary">Back</a>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-controller="Consumer" asp-action="SelectService" class="btn btn-secondary">Back</a>
     </div>
 </form>
 

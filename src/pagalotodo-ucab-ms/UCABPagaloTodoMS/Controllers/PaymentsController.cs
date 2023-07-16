@@ -283,4 +283,39 @@ public class PaymentsController : BaseController<PaymentsController>
             return BadRequest(ex.Message);
         }
     }
+    
+    /// <summary>
+    ///     Endpoint que retorna los campos de pago dado un id de servicio
+    /// </summary>
+    /// <remarks>
+    ///     ## Description
+    ///     ### Get campos de pago dado un servicio.
+    ///     ## Url
+    ///     GET /paymentformat
+    /// </remarks>
+    /// <response code="200">
+    ///     Accepted:
+    ///     - Operation successful.
+    /// </response>
+    /// <returns>Retorna la lista de los campos de pago.</returns>
+    // [Authorize(Policy = AuthorizationPolicies.AdminPolicy )]
+    [HttpGet("paymentformat/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public async Task<ActionResult<List<PaymentFieldResponse>>> GetPaymentFormat(Guid id)
+    {
+        _logger.LogInformation("Entrando al método que consultas los fields con el id");
+        try
+        {
+            var query = new GetPaymentFieldsByServiceIdQuery(id);
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de un field dado el id. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
 }
