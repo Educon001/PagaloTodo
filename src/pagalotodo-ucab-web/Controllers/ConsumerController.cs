@@ -271,16 +271,21 @@ public class ConsumerController : Controller
             var client = _httpClientFactory.CreateClient("PagaloTodoApi");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
-            var response = await client.GetAsync($"/payments/paymentformat/{id}");
-            response.EnsureSuccessStatusCode();
-            var items = await response.Content.ReadAsStringAsync();
+            var paymentFormatResponse = await client.GetAsync($"/payments/paymentformat/{id}");
+            var serviceResponse = await client.GetAsync($"/services/{id}");
+            paymentFormatResponse.EnsureSuccessStatusCode();
+            serviceResponse.EnsureSuccessStatusCode();
+            var paymentFormatJson = await paymentFormatResponse.Content.ReadAsStringAsync();
+            var serviceJson = await serviceResponse.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-            IEnumerable<PaymentFieldModel> paymentFormat = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(items, options)!;
-            ViewBag.Message = paymentFormat;
+            var paymentFormat = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(paymentFormatJson, options)!;
+            var service = JsonSerializer.Deserialize<ServiceModel>(serviceJson, options)!;
+            ViewBag.PaymentFormat = paymentFormat;
+            ViewBag.Service = service;
             return View();
         }
         catch (HttpRequestException e)
