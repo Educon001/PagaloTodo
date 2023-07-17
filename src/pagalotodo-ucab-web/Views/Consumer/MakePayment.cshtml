@@ -108,7 +108,7 @@
         // Agregar event listener para el cambio de selección del servicio y la entrada de texto en el campo Identifier
         $('#Identifier').on('change blur', function () {
             // Verificar si el campo Identifier está lleno
-            if ($('#Identifier').val()) {
+            if ($('#Identifier').val() && (service.ServiceType === "PorConfirmacion")) {
                 // El campo Identifier está lleno, buscar la confirmación correspondiente en el servicio
                 var identifier = $('#Identifier').val(); // Obtener el valor del campo Identifier del formulario
                 var confirmation = service.ConfirmationList.find(function (c) { return c.Identifier === identifier; });
@@ -141,5 +141,3 @@
         });
     });
 </script>
-
-        
