@@ -48,7 +48,7 @@
         
         <div class="mb-3">
             <label asp-for="Identifier">Identifier</label>
-            <input asp-for="Identifier" class="form-control">
+            <input asp-for="Identifier" id="Identifier" class="form-control">
             <span asp-validation-for="Identifier" class="text-danger"></span>
         </div>
         <div class="warning-message">Por favor, introduzca un identificador asociado a una deuda para realizar el pago.</div>
@@ -75,7 +75,7 @@
           <input asp-for="Consumer" type="hidden" value="@CurrentUser.GetUser().Id" />
         <input asp-for="PaymentStatus" type="hidden" value="@PaymentStatusEnum.Pendiente" />
         <br>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button id="submitButton" type="submit" class="btn btn-primary">Create</button>
         <a asp-controller="Consumer" asp-action="SelectService" class="btn btn-secondary">Back</a>
     </div>
 </form>
@@ -103,59 +103,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json.stringify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/newtonsoft-json/12.0.3/json.min.js"></script>
 <script>
+    var service = @Html.Raw(JsonConvert.SerializeObject(ViewBag.Service));
     $(document).ready(function () {
         // Agregar event listener para el cambio de selección del servicio y la entrada de texto en el campo Identifier
-        $('#Service, #Identifier').on('change blur', function () {
-            var isSubmitEnabled = false; // Inicializar la variable que indica si el botón de envío debe habilitarse o no
-
-            // Verificar si ambos campos están llenos
-            if ($('#Service').val() && $('#Identifier').val()) {
-                // Ambos campos están llenos, mostrar una notificación en la consola y serializar el ViewBag.Message a JSON
-                var services = @Html.Raw(JsonConvert.SerializeObject(ViewBag.Message));
-                var selectedService = null;
-                $.each(services, function (index, service) {
-                    if (service.Id === $('#Service').val() && service.ServiceType === "PorConfirmacion") {
-                        selectedService = service;
-                        return false; // Salir del ciclo $.each() cuando se encuentre el servicio seleccionado
-                    }
-                });
-
-                // Si se encontró el servicio seleccionado y el Identifier del formulario coincide con un elemento en la lista de confirmaciones del servicio seleccionado, obtener el valor del atributo Amount y habilitar el botón de envío
-                if (selectedService != null) {
-                    var identifier = $('#Identifier').val(); // Obtener el valor del campo Identifier del formulario
-                    $.each(selectedService.ConfirmationList, function (index, confirmation) {
-                        if (confirmation.Identifier === identifier) {
-                            if (confirmation.Status === true) {
-                                $('#submitButton').attr('disabled', 'disabled');
-                                $('.warning-message').text('El identificador ha expirado porque la factura ya ha sido pagada. Por favor, ingrese un nuevo identificador.').show();
-                                return false; // Salir del ciclo $.each() cuando se encuentra una confirmación con estado true
-                            }
-                            var amount = confirmation.Amount;
-                            $('#Amount').val(amount); // Asignar el valor de Amount al campo de cantidad
-                            isSubmitEnabled = true; // Habilitar el botón de envío
-                            return false; // Salir del ciclo $.each() cuando se encuentre el elemento que coincide con el Identifier del formulario
-                        }
-                    });
-                    // Habilitar o deshabilitar el botón de envío según el valor de la variable isSubmitEnabled
-                    if (isSubmitEnabled) {
-                        $('#submitButton').removeAttr('disabled');
-                        $('.warning-message').hide(); // Ocultar el mensaje de advertencia si el botón de envío está habilitado
-                    } else {
+        $('#Identifier').on('change blur', function () {
+            // Verificar si el campo Identifier está lleno
+            if ($('#Identifier').val()) {
+                // El campo Identifier está lleno, buscar la confirmación correspondiente en el servicio
+                var identifier = $('#Identifier').val(); // Obtener el valor del campo Identifier del formulario
+                var confirmation = service.ConfirmationList.find(function (c) { return c.Identifier === identifier; });
+                if (confirmation) {
+                    if (confirmation.Status === true) {
+                        // La factura ya ha sido pagada, deshabilitar el botón de envío y mostrar un mensaje de advertencia
                         $('#submitButton').attr('disabled', 'disabled');
-                        if (selectedService != null && selectedService.ServiceType === "PorConfirmacion") {
-                            $('.warning-message').show(); // Mostrar el mensaje de advertencia si el servicio seleccionado es de tipo "PorConfirmacion" y el botón de envío está deshabilitado
-                        } else {
-                            $('.warning-message').hide(); // Ocultar el mensaje de advertencia en cualquier otro caso
-                        }
+                        $('.warning-message').text('El identificador ha expirado porque la factura ya ha sido pagada. Por favor, ingrese un nuevo identificador.').show();
+                    } else {
+                        // La factura no ha sido pagada, asignar el valor de Amount al campo de cantidad y habilitar el botón de envío
+                        var amount = confirmation.Amount;
+                        $('#Amount').val(amount);
+                        $('#submitButton').removeAttr('disabled');
+                        $('.warning-message').hide();
+                    }
+                } else {
+                    // No se encontró una confirmación correspondiente, deshabilitar el botón de envío y mostrar un mensaje de advertencia si el servicio seleccionado es de tipo "PorConfirmacion"
+                    $('#submitButton').attr('disabled', 'disabled');
+                    if (service.ServiceType === "PorConfirmacion") {
+                        $('.warning-message').show();
+                    } else {
+                        $('.warning-message').hide();
                     }
                 }
+            } else {
+                // El campo Identifier está vacío, deshabilitar el botón de envío y ocultar el mensaje de advertencia
+                $('#submitButton').attr('disabled', 'disabled');
+                $('.warning-message').hide();
             }
-        });
-
-        // Agregar evento de cambio al campo de servicio (#Service) y ocultar el mensaje de advertencia
-        $('#Service').on('change', function () {
-            $('#submitButton').removeAttr('disabled');
-            $('.warning-message').hide();
         });
     });
 </script>

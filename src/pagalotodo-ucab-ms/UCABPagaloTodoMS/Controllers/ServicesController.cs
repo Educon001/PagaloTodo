@@ -73,7 +73,7 @@ public class ServicesController : BaseController<ServicesController>
     ///     - Operation successful.
     /// </response>
     /// <returns>Retorna el servicio con el id que se paso.</returns>
-    [Authorize(Policy = AuthorizationPolicies.AdminOrProviderPolicy )]
+    [Authorize(Policy = AuthorizationPolicies.AllPolicies )]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
