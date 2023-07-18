@@ -203,8 +203,14 @@
         document.getElementById('paymentForm').addEventListener('submit', function(event) {
           event.preventDefault();
           var consumerId = consumerSelect.value;
-          var startDateValue = formatDate(startDateInput.value);
-          var endDateValue = formatDate(endDateInput.value);
+         
+          var startDate = new Date(startDateInput.value);
+          startDate.setDate(startDate.getDate() + 1);
+          var startDateValue = formatDate(startDate);
+          var endDate = new Date(endDateInput.value);
+          endDate.setDate(endDate.getDate() + 1);
+          var endDateValue = formatDate(endDate);
+          
           var url = 'http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId=' + consumerId + '&StartDate=' + startDateValue + '&EndDate=' + endDateValue;
           window.open(url, '_blank');
         });
