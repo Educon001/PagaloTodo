@@ -136,7 +136,7 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
 
                 var stringValue = propValue!.ToString();
                 var formatted = stringValue;
-                if (!string.IsNullOrWhiteSpace(field.Format) && propValue is not string)
+                if (!string.IsNullOrWhiteSpace(field.Format))
                 {
                     if (double.TryParse(stringValue, out double doubleValue))
                     {
