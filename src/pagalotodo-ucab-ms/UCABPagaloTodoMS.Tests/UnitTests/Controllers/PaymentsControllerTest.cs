@@ -246,7 +246,7 @@ public class PaymentsControllerTest
     }
 
     /// <summary>
-    ///   Prueba de metodo get para formatos de pago
+    ///   Prueba de metodo GetPaymentFormat Ok
     /// </summary>
     [Fact]
     public async void GetPaymentFormat_Returns_Ok()
@@ -261,7 +261,7 @@ public class PaymentsControllerTest
     }
     
     /// <summary>
-    ///   Prueba de metodo get para formatos de pago con respuesta BadRequest
+    ///   Prueba de metodo GetPaymentFormat con respuesta BadRequest
     /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
@@ -279,7 +279,7 @@ public class PaymentsControllerTest
     }
     
     /// <summary>
-    ///   Prueba de metodo crearpara formatos de pago
+    ///   Prueba de metodo CreatePaymentFormat Ok
     /// </summary>
     [Fact]
     public async void CreatePaymentFormat_Returns_Ok()

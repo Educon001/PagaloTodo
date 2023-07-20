@@ -294,6 +294,9 @@ public class LoginControllerTest
         Assert.Contains(token.ToString(), ex);
     }
     
+    /// <summary>
+    ///     Prueba de metodo de ResetPassword con respuesta BadRequest
+    /// </summary>
     [Fact]
     public async void ResetPassword_Returns_BadRequest_Exception()
     {

@@ -10,6 +10,7 @@ using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
+using UCABPagaloTodoMS.Application.Queries.Debtors;
 using UCABPagaloTodoMS.Application.Queries.Services;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -41,6 +42,9 @@ public class ServicesControllerTest
         DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
 
+    /// <summary>
+    ///     Prueba de metodo GetServices Ok
+    /// </summary>
     [Fact]
     public async Task GetServices_Returns_OK()
     {
@@ -61,6 +65,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo GetServices retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -75,6 +82,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo GetServiceByProviderId Ok
+    /// </summary>
     [Fact]
     public async Task GetServicesByProviderId_Returns_OK()
     {
@@ -89,6 +99,9 @@ public class ServicesControllerTest
         Assert.Equal(expectedResponse, okResult.Value);
     }
 
+    /// <summary>
+    ///     Prueba de metodo GetServiceByProviderId retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -103,6 +116,9 @@ public class ServicesControllerTest
         Assert.Contains("Test Exception", ex);
     }
 
+    /// <summary>
+    ///     Prueba de metodo GetServiceById Ok
+    /// </summary>
     [Fact]
     public async Task GetServiceById_Returns_Ok()
     {
@@ -121,7 +137,10 @@ public class ServicesControllerTest
         Assert.Equal(200, response.StatusCode);
         _mediatorMock.Verify();
     }
-
+    
+    /// <summary>
+    ///     Prueba de metodo GetServiceById retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -138,6 +157,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo DeleteService Ok
+    /// </summary>
     [Fact]
     public async Task DeleteService_Returns_OK()
     {
@@ -151,6 +173,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo DeleteService retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -166,6 +191,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo CreateService retorna Ok
+    /// </summary>
     [Fact]
     public async Task CreateService_Returns_OK()
     {
@@ -184,6 +212,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo CreateService retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -201,6 +232,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo UpdateService retorna Ok
+    /// </summary>
     [Fact]
     public async Task UpdateService_Returns_Ok()
     {
@@ -223,6 +257,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo UpdateService retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -244,7 +281,10 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-
+    
+    /// <summary>
+    ///     Prueba de metodo CreateFormat Ok
+    /// </summary>
     [Fact]
     public async Task CreateFormat_Returns_Ok()
     {
@@ -272,6 +312,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo CreateFormat retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -298,7 +341,10 @@ public class ServicesControllerTest
         Assert.Equal(400, response.StatusCode);
         _mediatorMock.Verify();
     }
-
+    
+    /// <summary>
+    ///     Prueba de metodo UpdateField Ok
+    /// </summary>
     [Fact]
     public async Task Update_Field_Returns_Ok()
     {
@@ -320,6 +366,9 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
+    /// <summary>
+    ///     Prueba de metodo UpdateField retorna BadRequest
+    /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(CustomException))]
@@ -399,7 +448,7 @@ public class ServicesControllerTest
     }
     
     ///<summary>
-    ///     Prueba de metodo de GetFieldById
+    ///     Prueba de metodo de GetFieldById Retorna BadRequest
     /// </summary>
     [Theory]
     [InlineData(typeof(Exception))]
@@ -415,6 +464,50 @@ public class ServicesControllerTest
             .ThrowsAsync(expectedException);
         
         var response  = await _controller.GetFieldById(id);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+        _mediatorMock.Verify();
+    }
+
+    ///<summary>
+    ///     Prueba de metodo de GetDebtorsByServiceId retorna Ok
+    /// </summary>
+    [Fact]
+    public async void GetDebtorsByServiceId_Returns_Ok()
+    {
+        Guid id = Guid.NewGuid();
+        List<DebtorsResponse> expectedResponse = new List<DebtorsResponse>
+            {new(){Id = id, Amount = 200, Identifier = "hola"}};
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetDebtorsByServiceIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetDebtorsByServiceIdQuery(id);
+        var response = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<List<DebtorsResponse>>(response.Value);
+        Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+    
+    ///<summary>
+    ///     Prueba de metodo de GetDebtorsByServiceId retorna BadRequest
+    /// </summary>
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetDebtorsByServiceId_Returns_BadRequest(Type exceptionType)
+    {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
+        Guid id = Guid.NewGuid();
+        List<DebtorsResponse> expectedResponse = new List<DebtorsResponse>
+            {new(){Id = id, Amount = 200, Identifier = "hola"}};
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetDebtorsByServiceIdQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(expectedException);
+
+        var response  = await _controller.GetDebtorsByServiceIdQuery(id);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);
