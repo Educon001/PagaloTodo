@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
+[ExcludeFromCodeCoverage]
 public class ConsumersControllerTest
 {
     private readonly ConsumersController _controller;
@@ -177,11 +179,13 @@ public class ConsumersControllerTest
     /// <summary>
     ///     Prueba de metodo Delete para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void DeleteConsumers_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void DeleteConsumers_Returns_BadRequest(Type exceptionType)
     {
         var id = Guid.NewGuid();
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteConsumerCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.DeleteConsumer(id);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -207,10 +211,12 @@ public class ConsumersControllerTest
     /// <summary>
     ///     Prueba de metodo get para consumers con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetConsumerById_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetConsumerById_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetConsumerByIdQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetConsumerById(Guid.Empty);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);

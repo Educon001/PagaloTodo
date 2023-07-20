@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
@@ -12,6 +13,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Providers;
 
+[ExcludeFromCodeCoverage]
 public class UpdateProviderCommandHandlerTest
 {
     private readonly UpdateProviderCommandHandler _handler;

@@ -14,17 +14,17 @@ using Xunit;
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
 [ExcludeFromCodeCoverage]
-public class GetServicesByProviderIdQueryHandlerTest
+public class GetFieldByIdQueryHandlerTest
 {
-    private readonly GetServicesByProviderIdQueryHandler _handler;
-    private readonly Mock<ILogger<GetServicesByProviderIdQueryHandler>> _loggerMock;
+    private readonly GetFieldByIdQueryHandler _handler;
+    private readonly Mock<ILogger<GetFieldByIdQueryHandler>> _loggerMock;
     private readonly Mock<IUCABPagaloTodoDbContext> _mockContext;
 
-    public GetServicesByProviderIdQueryHandlerTest()
+    public GetFieldByIdQueryHandlerTest()
     {
-        _loggerMock = new Mock<ILogger<GetServicesByProviderIdQueryHandler>>();
+        _loggerMock = new Mock<ILogger<GetFieldByIdQueryHandler>>();
         _mockContext = new Mock<IUCABPagaloTodoDbContext>();
-        _handler = new GetServicesByProviderIdQueryHandler(_mockContext.Object, _loggerMock.Object);
+        _handler = new GetFieldByIdQueryHandler(_mockContext.Object, _loggerMock.Object);
         DataSeed.DataSeed.SetupDbContextData(_mockContext);
     }
     
@@ -32,14 +32,14 @@ public class GetServicesByProviderIdQueryHandlerTest
     ///     Prueba de handler con respuesta Ok
     /// </summary>
     [Fact]
-    public async void GetServicesByProviderIdQueryHandle_Returns_List()
+    public async void GetFieldByIdQueryHandle_Returns_FieldResponse()
     {
-        var provider = _mockContext.Object.Providers.First();
-        var expectedResponse = provider.Services!.Select(s=>ServiceMapper.MapEntityToResponse(s,false)).ToList();
-        var query = new GetServicesByProviderIdQuery(provider.Id);
+        var entity = _mockContext.Object.Fields.First();
+        var expectedResponse = FieldMapper.MapEntityToResponse(entity);
+        var query = new GetFieldByIdQuery(entity.Id);
         var response = await _handler.Handle(query,default);
-        Assert.IsType<List<ServiceResponse>>(response);
-        Assert.Equal(expectedResponse!.ToString(), response.ToString());
+        Assert.IsType<FieldResponse>(response);
+        Assert.Equal(expectedResponse.ToString(), response.ToString());
     }
     
     
@@ -47,12 +47,12 @@ public class GetServicesByProviderIdQueryHandlerTest
     ///     Prueba de handler con excepción en HandleAsync
     /// </summary>
     [Fact]
-    public async void GetServicesByProviderIdQueryHandle_HandleAsyncException()
+    public async void GetFieldByIdQueryHandle_HandleAsyncException()
     {
-        var provider = _mockContext.Object.Providers.First();
+        var entity = _mockContext.Object.Fields.First();
         var expectedException = new Exception("Test Exception");
-        _mockContext.Setup(c => c.Services).Throws(expectedException);
-        var query = new GetServicesByProviderIdQuery(provider.Id);
+        _mockContext.Setup(c => c.Fields).Throws(expectedException);
+        var query = new GetFieldByIdQuery(entity.Id);
         var result = await Assert.ThrowsAnyAsync<Exception>(()=>_handler.Handle(query, default));
         Assert.Equal(expectedException.Message,result.Message);
     }
@@ -61,10 +61,9 @@ public class GetServicesByProviderIdQueryHandlerTest
     ///     Prueba de handler con request nulo
     /// </summary>
     [Fact]
-    public async void GetServicesByProviderIdQueryHandle_ArgumentNullException()
+    public async void GetFieldByIdQueryHandle_ArgumentNullException()
     {
-        var query = new GetServicesByProviderIdQuery(Guid.Empty);
-        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(query, default));
+        var result = await Assert.ThrowsAsync<CustomException>(()=>_handler.Handle(null, default));
         Assert.IsType<ArgumentNullException>(result.InnerException);
     }
 }

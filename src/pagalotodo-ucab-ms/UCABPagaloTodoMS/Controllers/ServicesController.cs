@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Debtors;
 using UCABPagaloTodoMS.Application.Queries.Services;
@@ -52,10 +53,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de los servicios. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -86,10 +92,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -120,10 +131,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de los servicios dado el id. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -156,10 +172,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -193,10 +214,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar actualizar un servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -227,10 +253,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar eliminar un servicio. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar eliminar un servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -263,11 +294,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
-            _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " +
-                             ex.Message);
-            return BadRequest(ex.Message);
+            _logger.LogError("Ocurrio un error al intentar actualizar los campos de un servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -310,10 +345,15 @@ public class ServicesController : BaseController<ServicesController>
 
             return Ok(responsesList);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar registrar un campo. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un campo. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     
@@ -344,10 +384,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de un field dado el id. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de un field dado el id. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     
@@ -368,10 +413,15 @@ public class ServicesController : BaseController<ServicesController>
                 ? Ok("El archivo fue agregado a la cola")
                 : BadRequest("Hubo un error agregando el archivo a la cola");
         }
-        catch (Exception e)
+        catch (CustomException e)
         {
             _logger.LogError("Ocurrio un error inesperado" + e.Message);
             return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Ocurrio un error inesperado" + e.Message);
+            return BadRequest(e.Message + e.InnerException?.Message);
         }
         
     }
@@ -403,10 +453,15 @@ public class ServicesController : BaseController<ServicesController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de los deudores dado el id del servicio. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error en la consulta de los deudores dado el id del servicio. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     

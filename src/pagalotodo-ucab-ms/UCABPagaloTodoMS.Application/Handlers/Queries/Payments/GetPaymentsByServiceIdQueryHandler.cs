@@ -48,6 +48,7 @@ public class GetPaymentsByServiceIdQueryHandler : IRequestHandler<GetPaymentsByS
                     p.CreatedAt >= (request.StartDate ?? DateTime.MinValue) &&
                     p.CreatedAt <= (request.EndDate ?? DateTime.MaxValue))
                 .Include(p => p.Consumer)
+                .Include(p=>p.PaymentDetails)
                 .Select(c => PaymentMapper.MapEntityToResponse(c, true, false));
             return await result.ToListAsync();
         }

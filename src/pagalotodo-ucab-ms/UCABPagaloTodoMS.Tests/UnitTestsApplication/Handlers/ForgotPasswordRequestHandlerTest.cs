@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers;
 
+[ExcludeFromCodeCoverage]
 public class ForgotPasswordRequestHandlerTest
 {
     private readonly ForgotPasswordRequestHandler _handler;

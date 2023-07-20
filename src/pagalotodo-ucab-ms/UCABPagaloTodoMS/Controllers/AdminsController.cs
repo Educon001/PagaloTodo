@@ -63,7 +63,7 @@ public class AdminsController : BaseController<AdminsController>
         catch (Exception ex)
         {
             _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
-            return BadRequest("Error al cambiar la clave del consumer.");
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -114,10 +114,15 @@ public class AdminsController : BaseController<AdminsController>
             var response = await _mediator.Send(request);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al ejecutar el cierre contable. Exception: " + ex);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al ejecutar el cierre contable. Exception: " + ex);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     

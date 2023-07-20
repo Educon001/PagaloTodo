@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Login;
 
+[ExcludeFromCodeCoverage]
 public class LoginCommandHandlerTest
 {
     private readonly LoginCommandHandler _handler;

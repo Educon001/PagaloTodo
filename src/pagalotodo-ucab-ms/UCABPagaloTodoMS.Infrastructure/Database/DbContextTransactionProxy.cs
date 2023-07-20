@@ -1,10 +1,11 @@
-﻿using UCABPagaloTodoMS.Core.Database;
+﻿using System.Diagnostics.CodeAnalysis;
+using UCABPagaloTodoMS.Core.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database
 {
-    
+    [ExcludeFromCodeCoverage]
     public class DbContextTransactionProxy : IDbContextTransactionProxy
     {
         /// <summary>

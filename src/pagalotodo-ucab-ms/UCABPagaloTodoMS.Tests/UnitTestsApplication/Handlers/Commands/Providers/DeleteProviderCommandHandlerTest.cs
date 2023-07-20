@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Exceptions;
@@ -8,6 +9,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Providers;
 
+[ExcludeFromCodeCoverage]
 public class DeleteProviderCommandHandlerTest
 {
     private readonly DeleteProviderCommandHandler _handler;

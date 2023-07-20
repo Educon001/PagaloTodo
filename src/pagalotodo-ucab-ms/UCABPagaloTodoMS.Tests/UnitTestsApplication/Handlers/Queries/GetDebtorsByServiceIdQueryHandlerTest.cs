@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Handlers.Queries;
@@ -11,6 +12,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
+[ExcludeFromCodeCoverage]
 public class GetDebtorsByServiceIdQueryHandlerTest
 {
     private readonly GetDebtorsByServiceIdQueryHandler _handler;
