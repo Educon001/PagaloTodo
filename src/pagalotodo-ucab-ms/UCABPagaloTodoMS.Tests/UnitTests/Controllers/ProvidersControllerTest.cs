@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -18,6 +19,7 @@ using OkObjectResult = Microsoft.AspNetCore.Mvc.OkObjectResult;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
+[ExcludeFromCodeCoverage]
 public class ProvidersControllerTest
 {
     private readonly ProvidersController _controller;

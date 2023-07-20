@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
@@ -11,6 +12,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Consumers;
 
+[ExcludeFromCodeCoverage]
 public class CreateConsumerCommandHandlerTest
 {
     private readonly CreateConsumerCommandHandler _handler;

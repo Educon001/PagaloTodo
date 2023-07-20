@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Moq;
 using SendGrid;
@@ -8,7 +9,7 @@ using UCABPagaloTodoMS.Infrastructure.Services;
 using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsInfrastructure.Services;
-
+[ExcludeFromCodeCoverage]
 public class ConciliationEmailSenderTest
 {
     private readonly ConciliationEmailSender _sender;

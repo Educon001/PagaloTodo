@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Infrastructure.Database;
@@ -15,7 +16,7 @@ using UCABPagaloTodoMS.Authorization;
 
 namespace UCABPagaloTodoMS;
 
-
+[ExcludeFromCodeCoverage]
 public class Startup
 {
     

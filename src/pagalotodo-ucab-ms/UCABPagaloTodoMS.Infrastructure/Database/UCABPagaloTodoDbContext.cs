@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Reflection;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
@@ -7,6 +8,7 @@ using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database;
 
+[ExcludeFromCodeCoverage]
 public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
 {
     public UCABPagaloTodoDbContext(DbContextOptions<UCABPagaloTodoDbContext> options)

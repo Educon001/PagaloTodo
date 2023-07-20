@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
@@ -22,6 +23,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
+[ExcludeFromCodeCoverage]
 public class LoginControllerTest
 {
     private readonly LoginController _controller;

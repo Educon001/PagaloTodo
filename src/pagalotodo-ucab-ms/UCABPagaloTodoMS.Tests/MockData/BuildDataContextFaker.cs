@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
 using Bogus;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -6,6 +7,7 @@ using UCABPagaloTodoMS.Core.Enums;
 
 namespace UCABPagaloTodoMS.Tests.MockData
 {
+    [ExcludeFromCodeCoverage]
     public static class BuildDataContextFaker
     {
         /*public static Faker<ServiceRequest> BuildServicesRequest()

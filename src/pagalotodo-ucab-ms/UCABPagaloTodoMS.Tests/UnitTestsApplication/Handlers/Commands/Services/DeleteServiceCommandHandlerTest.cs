@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Handlers.Commands.Services;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Services;
 
+[ExcludeFromCodeCoverage]
 public class DeleteServiceCommandHandlerTest
 {
     private readonly DeleteServiceCommandHandler _handler;

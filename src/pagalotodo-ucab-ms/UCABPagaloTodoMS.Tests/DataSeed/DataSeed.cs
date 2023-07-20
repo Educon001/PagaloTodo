@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using MockQueryable.Moq;
 using Moq;
 using UCABPagaloTodoMS.Core.Database;
@@ -7,6 +8,7 @@ using UCABPagaloTodoMS.Infrastructure.Utils;
 
 namespace UCABPagaloTodoMS.Tests.DataSeed
 {
+    [ExcludeFromCodeCoverage]
     public static class DataSeed
     {
         public static void SetupDbContextData(this Mock<IUCABPagaloTodoDbContext> mockContext)

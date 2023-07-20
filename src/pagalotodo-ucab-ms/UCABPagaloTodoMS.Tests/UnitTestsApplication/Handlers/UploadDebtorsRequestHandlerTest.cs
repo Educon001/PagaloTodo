@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Exceptions;
@@ -9,6 +10,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers;
 
+[ExcludeFromCodeCoverage]
 public class UploadDebtorsRequestHandlerTest
 {
     private readonly UploadDebtorsRequestHandler _handler;

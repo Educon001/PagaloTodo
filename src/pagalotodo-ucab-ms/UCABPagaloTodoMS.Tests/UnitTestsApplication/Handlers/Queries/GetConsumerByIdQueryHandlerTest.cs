@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Handlers.Queries.Consumers;
@@ -9,6 +10,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
+[ExcludeFromCodeCoverage]
 public class GetConsumerByIdQueryHandlerTest
 {
     private readonly GetConsumerByIdQueryHandler _handler;

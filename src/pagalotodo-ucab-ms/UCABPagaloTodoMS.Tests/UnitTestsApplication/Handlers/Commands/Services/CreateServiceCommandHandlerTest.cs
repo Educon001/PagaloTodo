@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
@@ -11,6 +12,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Services;
 
+[ExcludeFromCodeCoverage]
 public class CreateServiceCommandHandlerTest
 {
     private readonly CreateServiceCommandHandler _handler;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -12,6 +13,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Payments;
 
+[ExcludeFromCodeCoverage]
 public class UpdatePaymentStatusCommandHandlerTest
 {
     private readonly UpdatePaymentStatusCommandHandler _handler;
