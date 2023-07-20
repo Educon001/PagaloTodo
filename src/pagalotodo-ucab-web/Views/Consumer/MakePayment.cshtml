@@ -54,7 +54,7 @@
                 <input asp-for="Service" type="hidden" value="@ViewBag.ServiceId" hidden="hidden"/>
                 </div>
             @{
-                List<PaymentFieldModel> paymentFormat = ViewBag.Message;
+                List<PaymentFieldModel> paymentFormat = ViewBag.PaymentFormat;
                 int cont = 0;
             }
             @if (paymentFormat is not null)

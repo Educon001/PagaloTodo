@@ -1,3 +1,5 @@
+@using System.Reflection
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model FieldRequest
 
 @Html.Partial("InnerPageHeader", "Update Field")
@@ -19,9 +21,32 @@
                 <input asp-for="@Model.Length" class="form-control">
                 <span asp-validation-for="@Model.Length" class="text-danger"></span>
             </div>
+            @{
+                List<string> finalProps = new List<string>();
+                Type PaymentType = typeof(PaymentModel);
+                PropertyInfo[] paymentProps = PaymentType.GetProperties();
+                foreach (var prop in paymentProps)
+                {
+                    finalProps.Add($"payment.{prop.Name}");
+                }
+                
+                Type ConsumerType = typeof(ConsumerModel);
+                PropertyInfo[] consumerProps = ConsumerType.GetProperties();
+                foreach (var prop in consumerProps)
+                {
+                    finalProps.Add($"consumer.{prop.Name}");
+                }
+                
+                IEnumerable<SelectListItem> selectList = finalProps.Select(p => new SelectListItem
+                     {
+                         Text = p,
+                         Value = p
+                     });
+                ViewBag.List = selectList;
+            }
             <div class="form-group">
                 <label asp-for="@Model.AttrReference">Referencia</label>
-                <input asp-for="@Model.AttrReference" class="form-control">
+                <select asp-for="@Model.AttrReference" asp-items="selectList" class="form-control"></select>
                 <span asp-validation-for="@Model.AttrReference" class="text-danger"></span>
             </div>
             <br>

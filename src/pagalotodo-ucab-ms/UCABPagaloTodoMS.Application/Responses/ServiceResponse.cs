@@ -13,4 +13,6 @@ public class ServiceResponse
     public List<PaymentResponse>? Payments { get; set; }
     public List<DebtorsResponse>? ConfirmationList { get; set; }
     public List<FieldResponse>? ConciliationFormat { get; set; }
+    
+    public List<PaymentFieldResponse> PaymentFormat { get; set; }
 }

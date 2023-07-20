@@ -1,3 +1,5 @@
+@using System.Reflection
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model List<FieldRequest>
 
 @{
@@ -32,10 +34,36 @@
                 <input asp-for="@Model[0].Length" class="form-control">
                 <span asp-validation-for="@Model[0].Length" class="text-danger"></span>
             </div>
+            
+            @{
+                List<string> finalProps = new List<string>();
+                
+                List<ProviderModel> providers = ViewBag.Message;
+                Type PaymentType = typeof(PaymentModel);
+                PropertyInfo[] paymentProps = PaymentType.GetProperties();
+                foreach (var prop in paymentProps)
+                {
+                    finalProps.Add($"payment.{prop.Name}");
+                }
+                
+                Type ConsumerType = typeof(ConsumerModel);
+                PropertyInfo[] consumerProps = ConsumerType.GetProperties();
+                foreach (var prop in consumerProps)
+                {
+                    finalProps.Add($"consumer.{prop.Name}");
+                }
+                
+                IEnumerable<SelectListItem> selectList = finalProps.Select(p => new SelectListItem
+                     {
+                         Text = p,
+                         Value = p
+                     });
+                ViewBag.List = selectList;
+            }
+            
             <div class="form-group col-auto d-inline-block">
                 <label asp-for="@Model[0].AttrReference">Referencia</label>
-                <input asp-for="@Model[0].AttrReference" class="form-control">
-                <span asp-validation-for="@Model[0].AttrReference" class="text-danger"></span>
+                <select asp-for="@Model[0].AttrReference" asp-items="selectList" class="form-control"></select>
             </div>
         </div>
         <br>
@@ -62,6 +90,8 @@
     let element = document.getElementById("btnRenderHtml");
     let container = document.getElementById("htmlContainer");
     let mainForm = document.querySelector("form");
+    let selectTag = document.getElementById("z0__AttrReference");
+    let optionElements = selectTag.options;
     
     element.addEventListener("click", function (){
         count++;
@@ -83,10 +113,23 @@
                                         </div>
                                         <div class="form-group col-auto d-inline-block">
                                              <label for="z${count}__AttrReference">Atributo Referencia</label>
-                                             <input type="text" id="z${count}__AttrReference" name="[${count}].AttrReference" class="form-control" data-val="true" data-val-required="The AttrReference field is required." value>
+                                             <select id="z${count}__AttrReference" name="[${count}].AttrReference" class="form-control" data-val="true" data-val-required="The AttrReference field is required." value>
+                                             </select>
                                              <span class="text-danger field-validation-valid" data-valmsg-for="[${count}].AttrReference" data-valmsg-replace="true"></span>
                                         </div>`;
         container.appendChild(newDiv);
+        let secondSelectTag = document.getElementById(`z${count}__AttrReference`)
+        
+       // Iterate through the list of option elements and add them to the second select tag.
+       for (var i = 0; i < optionElements.length; i++) {
+         var optionElement = optionElements[i];
+         var value = optionElement.value;
+         var text = optionElement.text;
+         var newOption = document.createElement("option");
+         newOption.value = value;
+         newOption.text = text;
+         secondSelectTag.appendChild(newOption);
+       }
     });
 
 </script>
