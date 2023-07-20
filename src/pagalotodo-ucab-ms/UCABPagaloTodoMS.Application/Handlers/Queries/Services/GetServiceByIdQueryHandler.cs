@@ -46,6 +46,7 @@ public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, S
             var result = await _dbContext.Services.Include(s=>s.Provider)
                 .Include(s => s.ConciliationFormat)
                 .Include(s => s.ConfirmationList)
+                .Include(s=>s.PaymentFormat)
                 .SingleAsync(c => c.Id == request.Id);
             return ServiceMapper.MapEntityToResponse(result,false);
         }

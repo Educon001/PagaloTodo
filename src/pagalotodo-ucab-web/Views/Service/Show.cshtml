@@ -103,22 +103,53 @@
                 }
             </div>
         }
-    <div>
-        @if (CurrentUser.GetUser()?.UserType == "admin")
-        {
-            <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
-            <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
-            <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
-        }
-        else if (CurrentUser.GetUser()?.UserType == "provider")
-        {
-            <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser()?.Id" class="btn btn-secondary">Back</a>
-        }
-        @if (CurrentUser.GetUser()?.UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() )
-        {
-            <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id"  class="btn btn-primary">Upload Confirmation List</a>
-        }
-    </div>
+        <div>
+            <div>
+                @if (Model.PaymentFormat != null && Model.PaymentFormat.Count > 0)
+                {
+                    <div><b>Payment Fields</b></div>
+                    
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Format
+                            </th>
+                        </tr>
+                        </thead>
+    
+                        @foreach (var obj in @Model.PaymentFormat)
+                        {
+                            <tr>
+                                <td>@obj.Name</td>
+                                <td>@obj.Format</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                @if (Model.PaymentFormat == null)
+                {
+                    <div>No Dynamic Payments registered</div>
+                }
+            </div>
+            @if (CurrentUser.GetUser()?.UserType == "admin")
+            {
+                <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+                <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+                <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
+            }
+            else if (CurrentUser.GetUser()?.UserType == "provider")
+            {
+                <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser()?.Id" class="btn btn-secondary">Back</a>
+            }
+            @if (CurrentUser.GetUser()?.UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString())
+            {
+                <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id" class="btn btn-primary">Upload Confirmation List</a>
+            }
+        </div>
     </div>
 </section>
 

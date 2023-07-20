@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.Validators;
 using UCABPagaloTodoMS.Application.Requests;
+using UCABPagaloTodoMS.Application.Responses;
 
 namespace UCABPagaloTodoMS.Application.Validators;
 
@@ -13,11 +14,28 @@ public class FieldValidator : AbstractValidator<FieldRequest>
         RuleFor(c => c.Service)
             .NotEmpty().WithMessage("Debe Incluir un Servicio");
         RuleFor(c => c.AttrReference)
-            .NotEmpty().WithMessage("Debe Incluir el Atributo de Referencia");
-        RuleFor(c => c.Format)
-            .NotEmpty().WithMessage("Formato vacio");
-        RuleFor(c => c.Length)
-            .NotEmpty().WithMessage("Longitud del campo no valida");
-        //TODO: Añadir validacion de referencia para que solo pueda ser a pagos o a consumidor.
+            .NotEmpty().WithMessage("Debe Incluir el Atributo de Referencia")
+            .Matches(@"^(?i)(payment\.|consumer\.|paymentdetail\.)\w+$")
+            .Must(ValidAttribute).WithMessage("Atributo invalido");
+    }
+
+    private bool ValidAttribute(string attr)
+    {
+        var table = attr.Split(".")[0];
+        var attribute = attr.Split(".")[1];
+
+        switch (table.ToLower())
+        {
+            case "payment":
+                var pProperties = typeof(PaymentResponse).GetProperties().Select(p => p.Name.ToLower()).ToList();
+                return pProperties.Contains(attribute);
+            case "consumer":
+                var cProperties = typeof(ConsumerResponse).GetProperties().Select(p => p.Name.ToLower()).ToList();
+                return cProperties.Contains(attribute);
+            case "paymentdetail":
+                return true;
+            default:
+                return false;
+        }
     }
 }

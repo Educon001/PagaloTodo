@@ -54,7 +54,7 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
                     Name = "Id Pago",
                     Length = 36,
                     IsDeleted = false,
-                    AttrReference = "Payment.Id",
+                    AttrReference = "payment.id",
                     Format = "",
                     Service = entity,
                 };

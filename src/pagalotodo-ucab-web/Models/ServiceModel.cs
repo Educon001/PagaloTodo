@@ -21,4 +21,6 @@ public class ServiceModel
     public List<DebtorsModel>? ConfirmationList { get; set; }
     
     public List<FieldModel>? ConciliationFormat { get; set; }
+    
+    public List<PaymentFieldModel> PaymentFormat { get; set; }
 }
