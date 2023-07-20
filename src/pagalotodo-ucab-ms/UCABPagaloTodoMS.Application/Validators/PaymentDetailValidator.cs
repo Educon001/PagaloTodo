@@ -28,7 +28,7 @@ public class PaymentDetailValidator : AbstractValidator<PaymentDetailRequest>
             case "string":
                 return true;
             default:
-                return false;
+                return true;
         }
     }
 }
