@@ -78,7 +78,8 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                     detail.Payment = id;
                     
                     //Verificar si el detalle esta en la entidad de PaymentFields
-                    var field = await _dbContext.PaymentFields.SingleAsync(c => c.Service == entity.Service && c.Name == detail.Name);
+                    var field = await _dbContext.PaymentFields.SingleAsync(c =>
+                        c.Service == entity.Service && c.Name == detail.Name);
                     if (field.Format is not null)
                     {
                         var validator = new PaymentDetailValidator(field.Format);
