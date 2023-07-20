@@ -183,8 +183,11 @@ public class PaymentsControllerTest
     [Fact]
     public async void PostPayment_Returns_Ok()
     {
-        var payment = new PaymentRequest() {Amount = 10};
         var expectedResponse = Guid.NewGuid();
+        var payment = new PaymentRequest() {Amount = 10, PaymentDetails = new List<PaymentDetailRequest>()
+        {
+            new(){ Name="hola", Payment = expectedResponse}
+        }};
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreatePaymentCommand>(), CancellationToken.None))
             .ReturnsAsync(expectedResponse);
         var response = await _controller.PostPayment(payment);

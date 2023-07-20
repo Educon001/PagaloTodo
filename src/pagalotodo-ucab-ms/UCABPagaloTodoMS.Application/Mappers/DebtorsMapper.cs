@@ -17,15 +17,4 @@ public static class DebtorsMapper
         };
         return response;
     }
-
-    public static DebtorsEntity MapRequestToEntity(DebtorsRequest request)
-    {
-        var entity = new DebtorsEntity()
-        {
-            Identifier = request.Identifier,
-            Amount = request.Amount,
-            Status = request.Status
-        };
-        return entity;
-    }
 }
