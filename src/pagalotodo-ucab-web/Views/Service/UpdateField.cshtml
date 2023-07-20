@@ -27,14 +27,14 @@
                 PropertyInfo[] paymentProps = PaymentType.GetProperties();
                 foreach (var prop in paymentProps)
                 {
-                    finalProps.Add($"payment.{prop.Name}");
+                    finalProps.Add($"payment.{prop.Name.ToLower()}");
                 }
                 
                 Type ConsumerType = typeof(ConsumerModel);
                 PropertyInfo[] consumerProps = ConsumerType.GetProperties();
                 foreach (var prop in consumerProps)
                 {
-                    finalProps.Add($"consumer.{prop.Name}");
+                    finalProps.Add($"consumer.{prop.Name.ToLower()}");
                 }
                 
                 IEnumerable<SelectListItem> selectList = finalProps.Select(p => new SelectListItem

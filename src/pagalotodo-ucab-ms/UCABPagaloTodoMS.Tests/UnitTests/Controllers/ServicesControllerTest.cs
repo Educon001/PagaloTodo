@@ -252,12 +252,12 @@ public class ServicesControllerTest
         {
             new()
             {
-                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "payment.id",
                 Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             },
             new()
             {
-                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
+                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "consumer.id",
                 Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             }
         };
@@ -282,12 +282,12 @@ public class ServicesControllerTest
         {
             new()
             {
-                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+                Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "payment.id",
                 Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             },
             new()
             {
-                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Consumer.Id",
+                Name = "Campo#2", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "consumer.id",
                 Service = new Guid("12345678-1234-1234-1234-1234567890AC")
             }
         };
@@ -305,10 +305,10 @@ public class ServicesControllerTest
         Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
         FieldRequest fieldRequest = new()
         {
-            Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
+            Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "payment.amount",
             Service = new Guid("12345678-1234-1234-1234-1234567890AC")
         };
-        ServiceEntity serviceE = new ServiceEntity() {Id = new Guid("12345678-1234-1234-1234-1234567890AC")};
+        ServiceEntity serviceE = new ServiceEntity{Id = new Guid("12345678-1234-1234-1234-1234567890AC")};
         FieldResponse expectedResponse =
             FieldMapper.MapEntityToResponse(FieldMapper.MapRequestToEntity(fieldRequest, serviceE));
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))

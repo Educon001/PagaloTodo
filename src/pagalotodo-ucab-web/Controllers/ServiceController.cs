@@ -338,6 +338,6 @@ public class ServiceController : Controller
             Console.WriteLine(e);
             TempData["error"] = "There was an error updating the field";
         }
-        return RedirectToAction("Index");
+        return RedirectToRoute("showService", new {id = serviceId});
     }
 }
