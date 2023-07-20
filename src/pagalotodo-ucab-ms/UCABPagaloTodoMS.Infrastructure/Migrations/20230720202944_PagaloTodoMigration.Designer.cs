@@ -12,8 +12,8 @@ using UCABPagaloTodoMS.Infrastructure.Database;
 namespace UCABPagaloTodoMS.Infrastructure.Migrations
 {
     [DbContext(typeof(UCABPagaloTodoDbContext))]
-    [Migration("20230716120840_JorgeMigration")]
-    partial class JorgeMigration
+    [Migration("20230720202944_PagaloTodoMigration")]
+    partial class PagaloTodoMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,13 +89,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("15fc1c8a-aeb9-4dd3-a3ba-d2fb0d4e9870"),
-                            CreatedAt = new DateTime(2023, 7, 16, 12, 8, 39, 960, DateTimeKind.Utc).AddTicks(664),
+                            Id = new Guid("a982dc97-95cd-4553-85e4-8baf57b89e2e"),
+                            CreatedAt = new DateTime(2023, 7, 20, 20, 29, 43, 777, DateTimeKind.Utc).AddTicks(663),
                             CreatedBy = "APP",
                             Email = "pagalotodoucabaf@gmail.com",
                             IsDeleted = false,
                             Name = "admin",
-                            PasswordHash = "$PagalTodo$10000$u1opoYuYxSOdhIG4y7IbtIu9TdbwpLAyBfrsC4maqgJW2XP9",
+                            PasswordHash = "$PagalTodo$10000$SxMA0w46BRqcRD6FC9Ix5ZHXkm89H20KSDT4kv6m1V03Ks16",
                             Status = true,
                             Username = "admin"
                         });

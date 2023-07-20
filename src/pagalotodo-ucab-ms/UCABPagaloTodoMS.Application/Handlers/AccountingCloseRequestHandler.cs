@@ -135,19 +135,22 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
                 }
 
                 var stringValue = propValue!.ToString();
+                bool isString = true;
                 var formatted = stringValue;
-                if (!string.IsNullOrWhiteSpace(field.Format) && propValue is not string)
+                if (!string.IsNullOrWhiteSpace(field.Format))
                 {
-                    if (propValue is double && double.TryParse(stringValue, out double doubleValue))
+                    if (double.TryParse(stringValue, out double doubleValue))
                     {
                         formatted = doubleValue.ToString(field.Format);
+                        isString = false;
                     }
-                    else if (propValue is DateTime && DateTime.TryParse(stringValue, out DateTime dateValue))
+                    else if (DateTime.TryParse(stringValue, out DateTime dateValue))
                     {
                         formatted = dateValue.ToString(field.Format);
+                        isString = false;
                     }
                 }
-                else if(field.Length is not null)
+                if(field.Length is not null && isString)
                 {
                     formatted = formatted.Length < field.Length ? formatted.PadRight((int) field.Length - formatted.Length) : formatted.Remove((int)field.Length);
                 }

@@ -12,6 +12,18 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AccountingClosures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExecutedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountingClosures", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Admins",
                 columns: table => new
                 {
@@ -23,9 +35,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
@@ -38,6 +49,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConsumerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -46,9 +58,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
@@ -70,33 +81,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Providers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Valores",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Identificacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Valores", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,7 +99,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ServiceStatus = table.Column<int>(type: "int", nullable: false),
                     ServiceType = table.Column<int>(type: "int", nullable: false),
-                    ProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -122,7 +113,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         name: "FK_Services_Providers_ProviderId",
                         column: x => x.ProviderId,
                         principalTable: "Providers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -131,9 +123,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Identifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<float>(type: "real", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -147,7 +139,8 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         name: "FK_Debtors_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,8 +151,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Length = table.Column<long>(type: "bigint", nullable: true),
                     Format = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AttrReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -174,6 +166,31 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         name: "FK_Fields_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentFields",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Format = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentFields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PaymentFields_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
                         principalColumn: "Id");
                 });
 
@@ -182,8 +199,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<float>(type: "real", nullable: true),
-                    OriginAccount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: true),
+                    CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpirationMonth = table.Column<int>(type: "int", nullable: true),
+                    ExpirationYear = table.Column<int>(type: "int", nullable: true),
+                    CardholderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CardSecurityCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PaymentStatus = table.Column<int>(type: "int", nullable: true),
                     ConsumerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -209,12 +231,55 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PaymentDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PaymentDetails_Payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payments",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Admins",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Email", "IsDeleted", "Name", "PasswordHash", "Status", "UpdatedAt", "UpdatedBy", "Username" },
+                values: new object[] { new Guid("a982dc97-95cd-4553-85e4-8baf57b89e2e"), new DateTime(2023, 7, 20, 20, 29, 43, 777, DateTimeKind.Utc).AddTicks(663), "APP", "pagalotodoucabaf@gmail.com", false, "admin", "$PagalTodo$10000$SxMA0w46BRqcRD6FC9Ix5ZHXkm89H20KSDT4kv6m1V03Ks16", true, null, null, "admin" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Admins_Email",
+                table: "Admins",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_Username",
                 table: "Admins",
                 column: "Username",
                 unique: true,
                 filter: "[Username] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Consumers_Email",
+                table: "Consumers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Consumers_Username",
@@ -234,6 +299,16 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PaymentDetails_PaymentId",
+                table: "PaymentDetails",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentFields_ServiceId",
+                table: "PaymentFields",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_ConsumerId",
                 table: "Payments",
                 column: "ConsumerId");
@@ -242,6 +317,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 name: "IX_Payments_ServiceId",
                 table: "Payments",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Providers_Email",
+                table: "Providers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Providers_Username",
@@ -259,6 +341,9 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AccountingClosures");
+
+            migrationBuilder.DropTable(
                 name: "Admins");
 
             migrationBuilder.DropTable(
@@ -268,10 +353,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                 name: "Fields");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "PaymentDetails");
 
             migrationBuilder.DropTable(
-                name: "Valores");
+                name: "PaymentFields");
+
+            migrationBuilder.DropTable(
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Consumers");
