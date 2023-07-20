@@ -3,36 +3,35 @@
 @using UCABPagaloTodoWeb.Models.CurrentUser
 @model ServiceRequest
 
-<form method="post" asp-route="putService" asp-route-id="@ViewBag.Id">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2>Edit Service</h2>
-            <hr>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Name">Name</label>
-            <input asp-for="Name" class="form-control">
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Description">Description</label>
-            <input asp-for="Description" class="form-control">
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="ServiceType">Tipo</label>
-            <select name="ServiceType" id="ServiceType" asp-items="Html.GetEnumSelectList<ServiceTypeEnum>()" class="form-control" asp-for="ServiceType"></select>
-        </div>
-        <div class="mb-3">
-            <label asp-for="ServiceStatus">Status</label>
-            <select name="ServiceStatus" id="ServiceStatus" asp-items="Html.GetEnumSelectList<ServiceStatusEnum>()" class="form-control" asp-for="ServiceStatus"></select>
-        </div>
-        <input asp-for="Provider" type="hidden" value="@Model.Provider" />
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
-    </div>
-</form>
 
+@Html.Partial("InnerPageHeader", "Update Service")
+<section class="inner-page">
+    <div class="container">
+        <form method="post" asp-route="putService" asp-route-id="@ViewBag.Id">
+        <div class="mb-3">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" class="form-control">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ServiceType">Tipo</label>
+                    <select name="ServiceType" id="ServiceType" asp-items="Html.GetEnumSelectList<ServiceTypeEnum>()" class="form-control" asp-for="ServiceType"></select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ServiceStatus">Status</label>
+                    <select name="ServiceStatus" id="ServiceStatus" asp-items="Html.GetEnumSelectList<ServiceStatusEnum>()" class="form-control" asp-for="ServiceStatus"></select>
+                </div>
+                <input asp-for="Provider" type="hidden" value="@Model.Provider" />
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</section>
 @section Scripts
 {   @{
         <partial name="_ValidationScriptsPartial"/>

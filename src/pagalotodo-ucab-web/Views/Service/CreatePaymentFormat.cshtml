@@ -9,34 +9,31 @@
     <link rel="stylesheet" href="~/create-format-grid.css" asp-append-version="true" />
 </head>
 
-<div class="row pb-2">
-    <h2>Create Payment Format</h2>
-    <hr>
-</div>
-
-<form method="post" asp-route="createPaymentormatR" asp-route-id="@ViewBag.ServiceId" class="border p-3 mt-4">
-    <div id="htmlContainer" class="grid-container">
-        <div>
-            <h3>PAYMENT FIELD 0</h3>
-        </div>
+@Html.Partial("InnerPageHeader", "Create Payment Format")
+<section class="inner-page">
+    <div class="container">
+        <form method="post" asp-route="createPaymentormatR" asp-route-id="@ViewBag.ServiceId" class="border p-3 mt-4">
         <div class="form-group col-auto d-inline-block">
-            <label asp-for="@Model[0].Name">Name</label>
-            <input asp-for="@Model[0].Name" class="form-control">
-            <span asp-validation-for="@Model[0].Name" class="text-danger"></span>
-        </div>
-        <div class="form-group col-auto d-inline-block">
-            <label asp-for="@Model[0].Format">Formato</label>
-            <input asp-for="@Model[0].Format" class="form-control">
-            <span asp-validation-for="@Model[0].Format" class="text-danger"></span>
+                    <label asp-for="@Model[0].Name">Name</label>
+                    <input asp-for="@Model[0].Name" class="form-control">
+                    <span asp-validation-for="@Model[0].Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-auto d-inline-block">
+                    <label asp-for="@Model[0].Format">Formato</label>
+                    <input asp-for="@Model[0].Format" class="form-control">
+                    <span asp-validation-for="@Model[0].Format" class="text-danger"></span>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary" id="btnRenderHtml2">Create Payment Format</button>
+        </form>
+        <div class="container text-end">
+            <button class="btn btn-dark" id="btnRenderHtml">Add Payment Field</button>
+            <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
         </div>
     </div>
-        <br>
-        <button type="submit" class="btn btn-primary" id="btnRenderHtml2">Create Payment Format</button>
-</form>
-<div class="container text-end">
-    <button class="btn btn-dark" id="btnRenderHtml">Add Payment Field</button>
-    <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
-</div>
+</section>
+
+
 
 @section Scripts
 {   @{

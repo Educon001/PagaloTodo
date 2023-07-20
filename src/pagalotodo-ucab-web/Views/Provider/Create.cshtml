@@ -1,12 +1,11 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ProviderRequest
 
-<form method="post">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2>Create Provider</h2>
-            <hr>
-        </div>
+
+@Html.Partial("InnerPageHeader", "Create Provider")
+<section class="inner-page">
+<div class="container">
+    <form method="post">
         <div class="mb-3">
             <label asp-for="Username">Username</label>
             <input asp-for="Username" class="form-control">
@@ -22,7 +21,7 @@
             <label asp-for="PasswordHash">Password</label>
             <input asp-for="PasswordHash" class="form-control"  type="password">
             <span asp-validation-for="PasswordHash" class="text-danger"></span>
-            </div>
+        </div>
         <div class="mb-3">
             <label asp-for="Name">Nombre Proveedor</label>
             <input asp-for="Name" class="form-control">
@@ -58,9 +57,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
-    </div>
-</form>
-
+    </form>
+</div>
+</section>
 @section Scripts
 {   @{
         <partial name="_ValidationScriptsPartial"/>

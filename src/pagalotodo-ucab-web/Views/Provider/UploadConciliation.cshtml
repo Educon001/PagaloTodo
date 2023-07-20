@@ -1,6 +1,8 @@
 @model UploadConciliationViewModel
 
-<div class="container">
+@Html.Partial("InnerPageHeader", "Upload Conciliation")
+<section class="inner-page">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card rounded-lg shadow-sm">
@@ -33,6 +35,8 @@
         </div>
     </div>
 </div>
+</section>
+
 
 <script>
     const fileInput = document.getElementById('fileInput');
@@ -48,10 +52,6 @@
 </script>
 
 <style>
-    .container {
-        padding-top: 50px;
-    }
-
     .card {
         max-width: 500px;
         margin: 0 auto;

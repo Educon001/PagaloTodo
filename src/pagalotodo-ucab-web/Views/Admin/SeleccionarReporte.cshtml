@@ -4,272 +4,275 @@
     ViewData["Title"] = "Centro de Control de Reportes";
 }
 
-<div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h1 class="text-center mb-4 mt-2 h2">@ViewData["Title"]</h1>
-    </div>
-  </div>
-
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card mb-4">
-        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseOne">
-          <h5 class="mb-0">
-            Listado de prestadores de servicios registrados
-          </h5>
-        </div>
-        <div class="collapse" id="collapseOne">
-          <div class="card-body">
-            <p>Genera un listado de todos los prestadores de servicios registrados en el sistema.</p>
-            <a href="http://localhost/Reports/report/pagalotodo/Providers" class="btn btn-primary btn-block btn-sm w-100" target="_blank">Generar reporte</a>
-          </div>
+@Html.Partial("InnerPageHeader", "Reports")
+<section class="inner-page">
+  <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <h1 class="text-center mb-4 mt-2 h2">@ViewData["Title"]</h1>
         </div>
       </div>
-
-      <div class="card mb-4">
-        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseTwo">
-          <h5 class="mb-0">
-            Listado de prestadores de servicios con opciones de pago en estatus
-          </h5>
-        </div>
-        <div class="collapse" id="collapseTwo">
-          <div class="card-body">
-            <p>Genera un listado de todos los prestadores de servicios con opciones de pago en estatus (Inactivas, Próximamente y Publicadas).</p>
-            <form id="statusForm" method="get" target="_blank">
-              <div class="form-group">
-                <label for="estatus">Estatus:</label>
-                <select name="estatus" id="estatus" class="form-control">
-                  <option value="none">Seleccionar estatus</option>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                  <option value="Proximamente">Próximamente</option>
-                </select>
-                <label for="provider">Provider:</label>
-                <select name="provider" id="provider" class="form-control">
-                  <option value="none">Seleccionar proveedor</option>
-                  @foreach (var provider in Model.Providers)
-                  {
-                      <option value="@provider.Id">@provider.Name</option>
-                  }
-                </select>
+    
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseOne">
+              <h5 class="mb-0">
+                Listado de prestadores de servicios registrados
+              </h5>
+            </div>
+            <div class="collapse" id="collapseOne">
+              <div class="card-body">
+                <p>Genera un listado de todos los prestadores de servicios registrados en el sistema.</p>
+                <a href="http://localhost/Reports/report/pagalotodo/Providers" class="btn btn-primary btn-block btn-sm w-100" target="_blank">Generar reporte</a>
               </div>
-              <button id="generateReportButton" type="button" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
-            </form>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <script>
-        var estatusSelect = document.getElementById('estatus');
-        var providerSelect = document.getElementById('provider');
-        var generateReportButton = document.getElementById('generateReportButton');
-      
-        estatusSelect.addEventListener('change', enableDisableButton);
-        providerSelect.addEventListener('change', enableDisableButton);
-      
-        function enableDisableButton() {
-          if (estatusSelect.value !== 'none' && providerSelect.value !== 'none') {
-            generateReportButton.disabled = false;
-          } else {
-            generateReportButton.disabled = true;
-          }
-        }
-      
-        generateReportButton.addEventListener('click', function() {
-          var statusValue = estatusSelect.value;
-          var providerIdValue = providerSelect.value;
-          var url = 'http://localhost/Reports/report/pagalotodo/ProveedoresPorStatusServicio?Status=' + statusValue + '&ProviderId=' + providerIdValue;
-          window.open(url, '_blank');
-        });
-      </script>
-      
-      <div class="card mb-4">
-        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseThree">
-          <h5 class="mb-0">
-            Estado de cuenta de un prestador
-          </h5>
-        </div>
-        <div class="collapse" id="collapseThree">
-          <div class="card-body">
-            <p>Genera el estado de cuenta de un prestador de servicios.</p>
-            <form id="accountStatementForm" method="get" target="_blank">
-              <div class="form-group">
-                <label for="provider2">Proveedor:</label>
-                <select name="provider2" id="provider2" class="form-control">
-                  <option value="none">Seleccionar proveedor</option>
-                  @foreach (var provider in Model.Providers)
-                  {
-                      <option value="@provider.Id">@provider.Name</option>
-                  }
-                </select>
+    
+          <div class="card mb-4">
+            <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseTwo">
+              <h5 class="mb-0">
+                Listado de prestadores de servicios con opciones de pago en estatus
+              </h5>
+            </div>
+            <div class="collapse" id="collapseTwo">
+              <div class="card-body">
+                <p>Genera un listado de todos los prestadores de servicios con opciones de pago en estatus (Inactivas, Próximamente y Publicadas).</p>
+                <form id="statusForm" method="get" target="_blank">
+                  <div class="form-group">
+                    <label for="estatus">Estatus:</label>
+                    <select name="estatus" id="estatus" class="form-control">
+                      <option value="none">Seleccionar estatus</option>
+                      <option value="Activo">Activo</option>
+                      <option value="Inactivo">Inactivo</option>
+                      <option value="Proximamente">Próximamente</option>
+                    </select>
+                    <label for="provider">Provider:</label>
+                    <select name="provider" id="provider" class="form-control">
+                      <option value="none">Seleccionar proveedor</option>
+                      @foreach (var provider in Model.Providers)
+                      {
+                          <option value="@provider.Id">@provider.Name</option>
+                      }
+                    </select>
+                  </div>
+                  <button id="generateReportButton" type="button" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
+                </form>
               </div>
-              <button id="generateStatementButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
-            </form>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <script>
-        var providerSelect2 = document.getElementById('provider2');
-        var generateStatementButton = document.getElementById('generateStatementButton');
-      
-        providerSelect2.addEventListener('change', enableDisableButton);
-      
-        function enableDisableButton() {
-          if (providerSelect2.value !== 'none') {
-            generateStatementButton.disabled = false;
-          } else {
-            generateStatementButton.disabled = true;
-          }
-        }
-      
-        document.getElementById('accountStatementForm').addEventListener('submit', function(event) {
-          event.preventDefault();
-          var providerIdValue = providerSelect2.value;
-          var url = 'http://localhost/Reports/report/pagalotodo/EdoCuentaProveedor?Providerid=' + providerIdValue;
-          window.open(url, '_blank');
-        });
-      </script>
-
-
-      <div class="card mb-4">
-        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFour">
-          <h5 class="mb-0">
-            Pagos realizados por un consumidor en un lapso de tiempo
-          </h5>
-        </div>
-        <div class="collapse" id="collapseFour">
-          <div class="card-body">
-            <p>Genera un listado de los pagos realizados por un consumidor en un lapso de tiempo específico.</p>
-            <form id="paymentForm" method="get" target="_blank">
-              <div class="form-group">
-                <label for="consumer">Consumidor:</label>
-                <select name="consumer" id="consumer" class="form-control">
-                  <option value="none">Seleccionar consumidor</option>
-                  @foreach (var consumer in Model.Consumers)
-                  {
-                    <option value="@consumer.Id">@consumer.Name</option>
-                  }
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="startDate">Fecha de inicio:</label>
-                <input type="date" id="startDate" name="startDate" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="endDate">Fecha de fin:</label>
-                <input type="date" id="endDate" name="endDate" class="form-control" required>
-              </div>
-              <button id="generatePaymentReportButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
-            </form>
-          </div>
-        </div>
-      </div>
-      
-      <script>
-        var consumerSelect = document.getElementById('consumer');
-        var startDateInput = document.getElementById('startDate');
-        var endDateInput = document.getElementById('endDate');
-        var generatePaymentReportButton = document.getElementById('generatePaymentReportButton');
-      
-        consumerSelect.addEventListener('change', enableDisableButton);
-        startDateInput.addEventListener('change', validateDates);
-        endDateInput.addEventListener('change', validateDates);
-      
-        function enableDisableButton() {
-          if (consumerSelect.value !== 'none' && startDateInput.value && endDateInput.value) {
-            generatePaymentReportButton.disabled = false;
-          } else {
-            generatePaymentReportButton.disabled = true;
-          }
-        }
-      
-        function validateDates() {
-          if (consumerSelect.value !== 'none' && startDateInput.value && endDateInput.value) {
-            var startDate = new Date(startDateInput.value);
-            var endDate = new Date(endDateInput.value);
-            if (startDate > endDate) {
-              alert('La fecha de inicio debe ser menor que la fecha de fin.');
-              generatePaymentReportButton.disabled = true;
-            } else {
-              generatePaymentReportButton.disabled = false;
+          
+          <script>
+            var estatusSelect = document.getElementById('estatus');
+            var providerSelect = document.getElementById('provider');
+            var generateReportButton = document.getElementById('generateReportButton');
+          
+            estatusSelect.addEventListener('change', enableDisableButton);
+            providerSelect.addEventListener('change', enableDisableButton);
+          
+            function enableDisableButton() {
+              if (estatusSelect.value !== 'none' && providerSelect.value !== 'none') {
+                generateReportButton.disabled = false;
+              } else {
+                generateReportButton.disabled = true;
+              }
             }
-          } else {
-            generatePaymentReportButton.disabled = true;
-          }
-        }
-      
-        document.getElementById('paymentForm').addEventListener('submit', function(event) {
-          event.preventDefault();
-          var consumerId = consumerSelect.value;
-          var startDateValue = formatDate(startDateInput.value);
-          var endDateValue = formatDate(endDateInput.value);
-          var url = 'http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId=' + consumerId + '&StartDate=' + startDateValue + '&EndDate=' + endDateValue;
-          window.open(url, '_blank');
-        });
-      
-        function formatDate(dateString) {
-          var date = new Date(dateString);
-          var year = date.getFullYear();
-          var month = ("0" + (date.getMonth() + 1)).slice(-2);
-          var day = ("0" + date.getDate()).slice(-2);
-          return year + "-" + month + "-" + day;
-        }
-      </script>
-
-
-      <div class="card mb-4">
-        <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFive">
-          <h5 class="mb-0">
-            Listado de operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación
-          </h5>
-        </div>
-        <div class="collapse" id="collapseFive">
-          <div class="card-body">
-            <p>Genera un listado de todas las operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación.</p>
-            <form id="conciliationForm" method="get" target="_blank">
-              <div class="form-group">
-                <label for="provider3">Proveedor:</label>
-                <select name="provider3" id="provider3" class="form-control">
-                  <option value="none">Seleccionar proveedor</option>
-                  @foreach (var provider in Model.Providers)
-                  {
-                      <option value="@provider.Id">@provider.Name</option>
-                  }
-                </select>
+          
+            generateReportButton.addEventListener('click', function() {
+              var statusValue = estatusSelect.value;
+              var providerIdValue = providerSelect.value;
+              var url = 'http://localhost/Reports/report/pagalotodo/ProveedoresPorStatusServicio?Status=' + statusValue + '&ProviderId=' + providerIdValue;
+              window.open(url, '_blank');
+            });
+          </script>
+          
+          <div class="card mb-4">
+            <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseThree">
+              <h5 class="mb-0">
+                Estado de cuenta de un prestador
+              </h5>
+            </div>
+            <div class="collapse" id="collapseThree">
+              <div class="card-body">
+                <p>Genera el estado de cuenta de un prestador de servicios.</p>
+                <form id="accountStatementForm" method="get" target="_blank">
+                  <div class="form-group">
+                    <label for="provider2">Proveedor:</label>
+                    <select name="provider2" id="provider2" class="form-control">
+                      <option value="none">Seleccionar proveedor</option>
+                      @foreach (var provider in Model.Providers)
+                      {
+                          <option value="@provider.Id">@provider.Name</option>
+                      }
+                    </select>
+                  </div>
+                  <button id="generateStatementButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
+                </form>
               </div>
-              <button id="generateConciliationButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
-            </form>
+            </div>
           </div>
+          
+          <script>
+            var providerSelect2 = document.getElementById('provider2');
+            var generateStatementButton = document.getElementById('generateStatementButton');
+          
+            providerSelect2.addEventListener('change', enableDisableButton);
+          
+            function enableDisableButton() {
+              if (providerSelect2.value !== 'none') {
+                generateStatementButton.disabled = false;
+              } else {
+                generateStatementButton.disabled = true;
+              }
+            }
+          
+            document.getElementById('accountStatementForm').addEventListener('submit', function(event) {
+              event.preventDefault();
+              var providerIdValue = providerSelect2.value;
+              var url = 'http://localhost/Reports/report/pagalotodo/EdoCuentaProveedor?Providerid=' + providerIdValue;
+              window.open(url, '_blank');
+            });
+          </script>
+    
+    
+          <div class="card mb-4">
+            <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFour">
+              <h5 class="mb-0">
+                Pagos realizados por un consumidor en un lapso de tiempo
+              </h5>
+            </div>
+            <div class="collapse" id="collapseFour">
+              <div class="card-body">
+                <p>Genera un listado de los pagos realizados por un consumidor en un lapso de tiempo específico.</p>
+                <form id="paymentForm" method="get" target="_blank">
+                  <div class="form-group">
+                    <label for="consumer">Consumidor:</label>
+                    <select name="consumer" id="consumer" class="form-control">
+                      <option value="none">Seleccionar consumidor</option>
+                      @foreach (var consumer in Model.Consumers)
+                      {
+                        <option value="@consumer.Id">@consumer.Name</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="startDate">Fecha de inicio:</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="endDate">Fecha de fin:</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" required>
+                  </div>
+                  <button id="generatePaymentReportButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <script>
+            var consumerSelect = document.getElementById('consumer');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+            var generatePaymentReportButton = document.getElementById('generatePaymentReportButton');
+          
+            consumerSelect.addEventListener('change', enableDisableButton);
+            startDateInput.addEventListener('change', validateDates);
+            endDateInput.addEventListener('change', validateDates);
+          
+            function enableDisableButton() {
+              if (consumerSelect.value !== 'none' && startDateInput.value && endDateInput.value) {
+                generatePaymentReportButton.disabled = false;
+              } else {
+                generatePaymentReportButton.disabled = true;
+              }
+            }
+          
+            function validateDates() {
+              if (consumerSelect.value !== 'none' && startDateInput.value && endDateInput.value) {
+                var startDate = new Date(startDateInput.value);
+                var endDate = new Date(endDateInput.value);
+                if (startDate > endDate) {
+                  alert('La fecha de inicio debe ser menor que la fecha de fin.');
+                  generatePaymentReportButton.disabled = true;
+                } else {
+                  generatePaymentReportButton.disabled = false;
+                }
+              } else {
+                generatePaymentReportButton.disabled = true;
+              }
+            }
+          
+            document.getElementById('paymentForm').addEventListener('submit', function(event) {
+              event.preventDefault();
+              var consumerId = consumerSelect.value;
+              var startDateValue = formatDate(startDateInput.value);
+              var endDateValue = formatDate(endDateInput.value);
+              var url = 'http://localhost/Reports/report/pagalotodo/PagosConsumidorTiempo?ConsumerId=' + consumerId + '&StartDate=' + startDateValue + '&EndDate=' + endDateValue;
+              window.open(url, '_blank');
+            });
+          
+            function formatDate(dateString) {
+              var date = new Date(dateString);
+              var year = date.getFullYear();
+              var month = ("0" + (date.getMonth() + 1)).slice(-2);
+              var day = ("0" + date.getDate()).slice(-2);
+              return year + "-" + month + "-" + day;
+            }
+          </script>
+    
+    
+          <div class="card mb-4">
+            <div class="card-header" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFive">
+              <h5 class="mb-0">
+                Listado de operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación
+              </h5>
+            </div>
+            <div class="collapse" id="collapseFive">
+              <div class="card-body">
+                <p>Genera un listado de todas las operaciones aprobadas o rechazadas por el prestador de servicio durante la conciliación.</p>
+                <form id="conciliationForm" method="get" target="_blank">
+                  <div class="form-group">
+                    <label for="provider3">Proveedor:</label>
+                    <select name="provider3" id="provider3" class="form-control">
+                      <option value="none">Seleccionar proveedor</option>
+                      @foreach (var provider in Model.Providers)
+                      {
+                          <option value="@provider.Id">@provider.Name</option>
+                      }
+                    </select>
+                  </div>
+                  <button id="generateConciliationButton" type="submit" class="btn btn-primary btn-block btn-sm w-100" disabled>Generar reporte</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <script>
+            var providerSelect3 = document.getElementById('provider3');
+            var generateConciliationButton = document.getElementById('generateConciliationButton');
+          
+            providerSelect3.addEventListener('change', enableDisableButton);
+          
+            function enableDisableButton() {
+              if (providerSelect3.value !== 'none') {
+                generateConciliationButton.disabled = false;
+              } else {
+                generateConciliationButton.disabled = true;
+              }
+            }
+          
+            document.getElementById('conciliationForm').addEventListener('submit', function(event) {
+              event.preventDefault();
+              var providerIdValue = providerSelect3.value;
+              var url = 'http://localhost/reports/report/pagalotodo/OperacionesCerradas?ProviderId=' + providerIdValue;
+              window.open(url, '_blank');
+            });
+          </script>
+    
         </div>
       </div>
-      
-      <script>
-        var providerSelect3 = document.getElementById('provider3');
-        var generateConciliationButton = document.getElementById('generateConciliationButton');
-      
-        providerSelect3.addEventListener('change', enableDisableButton);
-      
-        function enableDisableButton() {
-          if (providerSelect3.value !== 'none') {
-            generateConciliationButton.disabled = false;
-          } else {
-            generateConciliationButton.disabled = true;
-          }
-        }
-      
-        document.getElementById('conciliationForm').addEventListener('submit', function(event) {
-          event.preventDefault();
-          var providerIdValue = providerSelect3.value;
-          var url = 'http://localhost/reports/report/pagalotodo/OperacionesCerradas?ProviderId=' + providerIdValue;
-          window.open(url, '_blank');
-        });
-      </script>
-
-    </div>
   </div>
-</div>
+</section>
 
 <!-- Incluye las bibliotecas de JavaScript necesarias para el funcionamiento deBootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -4,7 +4,9 @@
     Layout = "_Layout";
 }
 
-<div class="container-fluid p-4">
+@Html.Partial("InnerPageHeader", "My Services")
+<section class="inner-page">
+<div class="container">
     <table class="table table-bordered table-striped" id="servicesTable">
         <thead>
         <tr>
@@ -36,8 +38,8 @@
         </tbody>
     </table>
     <a asp-controller="Home" asp-action="Index2"  class="btn btn-secondary">Back</a>
-
 </div>
+</section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 

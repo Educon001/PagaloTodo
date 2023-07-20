@@ -2,63 +2,63 @@
 @using UCABPagaloTodoWeb.Models.CurrentUser
 @model ProviderRequest
 
-<form method="post" asp-route="putProvider" asp-route-id="@ViewBag.Id">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2>Edit Provider</h2>
-            <hr>
-        </div>
+
+@Html.Partial("InnerPageHeader", "Edit Provider")
+<section class="inner-page">
+<div class="container">
+    <form method="post" asp-route="putProvider" asp-route-id="@ViewBag.Id">
         <div asp-validation-summary="All"></div>
-        <div class="mb-3">
-            <label asp-for="Username">Username</label>
-            <input asp-for="Username" class="form-control" data-val="false">
-            <span asp-validation-for="Username" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Email">Email</label>
-            <input asp-for="Email" class="form-control">
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Name">Nombre Proveedor</label>
-            <input asp-for="Name" class="form-control">
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Rif">Rif</label>
-            <input asp-for="Rif" class="form-control">
-            <span asp-validation-for="Rif" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="AccountNumber">Numero de cuenta</label>
-            <input asp-for="AccountNumber" class="form-control">
-            <span asp-validation-for="AccountNumber" class="text-danger"></span>
-        </div>
-        @{
-            IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
-                new()
-                {
-                    Text = "Activo",
-                    Value = "true"
-                },
-                new()
-                {
-                    Text = "Inactivo",
-                    Value = "false"
-                }
-            };
-        }
-        <div class="mb-3">
-            <label asp-for="Status">Estatus</label>
-            <select name="Status" id="Status" asp-items="selectList" class="form-control" asp-for="Status"></select>
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        @if (CurrentUser.GetUser().UserType == "admin")
-        {
-            <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
-        }
-    </div>
-</form>
+            <div class="mb-3">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-control" data-val="false">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Name">Nombre Proveedor</label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Rif">Rif</label>
+                <input asp-for="Rif" class="form-control">
+                <span asp-validation-for="Rif" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AccountNumber">Numero de cuenta</label>
+                <input asp-for="AccountNumber" class="form-control">
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+            @{
+                IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
+                    new()
+                    {
+                        Text = "Activo",
+                        Value = "true"
+                    },
+                    new()
+                    {
+                        Text = "Inactivo",
+                        Value = "false"
+                    }
+                };
+            }
+            <div class="mb-3">
+                <label asp-for="Status">Estatus</label>
+                <select name="Status" id="Status" asp-items="selectList" class="form-control" asp-for="Status"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            @if (CurrentUser.GetUser().UserType == "admin")
+            {
+                <a asp-controller="Provider" asp-action="Index" class="btn btn-secondary">Back</a>
+            }
+    </form>
+</div>
+</section>
 @section Scripts
 {   @{
         <partial name="_ValidationScriptsPartial"/>

@@ -1,5 +1,8 @@
 @model AccountingCloseViewModel
 
+
+@Html.Partial("InnerPageHeader", "Accounting Close")
+<section class="inner-page">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -29,12 +32,9 @@
         </div>
     </div>
 </div>
+</section>
 
 <style>
-    .container {
-        padding-top: 50px;
-    }
-
     .card {
         max-width: 500px;
         margin: 0 auto;

@@ -4,48 +4,48 @@
     Layout = "_Layout";
 }
 
-<div class="container-fluid p-4">
-    <div class="row pt-4">
-        <h2>Payments</h2>
-    </div>
-    <table class="table table-bordered table-striped" id="paymentsTable">
-        <thead>
-        <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                Date
-            </th>
-            <th>
-                Service
-            </th>
-            <th>
-                Amount
-            </th>
-            <th>
-                Status
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var obj in Model)
-        {
+@Html.Partial("InnerPageHeader", "Payments");
+<section class="inner-page">
+    <div class="container">
+        <table class="table table-bordered table-striped" id="paymentsTable">
+            <thead>
             <tr>
-                @* <td> <a asp-controller="Consumer" asp-action="Show" asp-route-id="@obj.Id">@obj.Name</a></td> *@
-                <td><a asp-route="showPayment" asp-route-id="@obj.Id"></a> @obj.TransactionId</td>
-                <td>@obj.PaymentDate</td>
-                <td>@obj.Service?.Name</td>
-                <td>@("$"+obj.Amount)</td>
-                <td>@obj.PaymentStatus</td>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Service
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Status
+                </th>
             </tr>
-        }
-        </tbody>
-    </table>
-    <button>
-        <a asp-controller="Home" asp-action="Index2">BACK</a>
-    </button>
-</div>
+            </thead>
+            <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    @* <td> <a asp-controller="Consumer" asp-action="Show" asp-route-id="@obj.Id">@obj.Name</a></td> *@
+                    <td><a asp-route="showPayment" asp-route-id="@obj.Id"></a> @obj.TransactionId</td>
+                    <td>@obj.PaymentDate</td>
+                    <td>@obj.Service?.Name</td>
+                    <td>@("$"+obj.Amount)</td>
+                    <td>@obj.PaymentStatus</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <button>
+            <a asp-controller="Home" asp-action="Index2">BACK</a>
+        </button>
+    </div>
+</section>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

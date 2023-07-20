@@ -5,117 +5,148 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    @* <link rel="stylesheet" href="~/css/bootstrap.css"  > *@
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @* <link rel="stylesheet" href="~/create-format-grid.css" asp-append-version="true" /> *@
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link rel="stylesheet" href="~/UCABPagaloTodoWeb.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/UCABPagaloTodoWeb.styles.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/css/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/css/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="~/css/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index2">PagaloTodo</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor02">
-            <ul class="navbar-nav me-auto">
-                @if (CurrentUser.GetUser() != null && CurrentUser.GetUser().UserType == "admin")
-                {
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-route="paymentsIndex">Payments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Admin" asp-action="SeleccionarReporte">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Admin" asp-action="AccountingClose">Conciliations</a>
-                    </li>
-                }
-            @* <li class="nav-item dropdown"> *@
-            @*   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a> *@
-            @*   <div class="dropdown-menu"> *@
-            @*     <a class="dropdown-item" href="#">Action</a> *@
-            @*     <a class="dropdown-item" href="#">Another action</a> *@
-            @*     <a class="dropdown-item" href="#">Something else here</a> *@
-            @*     <div class="dropdown-divider"></div> *@
-            @*     <a class="dropdown-item" href="#">Separated link</a> *@
-            @*   </div> *@
-            @* </li> *@
-        </ul>
-           @if (CurrentUser.GetUser() != null)
-           {
-               <div>
-                   <a asp-controller="Home" asp-action="Index">
-                       Cerrar Sesion
-                   </a>
-               </div>
-               <div class="d-flex pr-2">
-                   <a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser().Id">
-                       <i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i>
-                   </a>
-               </div>
-           }
-          @* <form class="d-flex"> *@
-          @*   <input class="form-control me-sm-2" type="search" placeholder="Search"> *@
-          @*   <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> *@
-          @* </form> *@
-        </div>
-      </div>
-    </nav>
-    
-    @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
-    @*     <div class="container-fluid"> *@
-    @*         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PagaloTodo</a> *@
-    @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
-    @*                 aria-expanded="false" aria-label="Toggle navigation"> *@
-    @*             <span class="navbar-toggler-icon"></span> *@
-    @*         </button> *@
-    @*         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
-    @*             <ul class="navbar-nav flex-grow-1"> *@
-    @*                 <li class="nav-item"> *@
-    @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
-    @*                 </li> *@
-    @*                 <li class="nav-item"> *@
-    @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-    @*                 </li> *@
-    @*                 <li class="nav-item"> *@
-    @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Services</a> *@
-    @*                 </li> *@
-    @*             </ul> *@
-    @*         </div> *@
-    @*     </div> *@
-    @* </nav> *@
-</header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            <partial name="_Notification"/>
-            @RenderBody()
-        </main>
-    </div>
+    @if (CurrentUser.GetUser() != null)
+    {
+      <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - UCABPagaloTodoWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+          <h1 class="logo me-auto"><a asp-controller="Home" asp-action="Index2">PagaloTodoUCAB</a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+          <nav id="navbar" class="navbar">
+            <ul>
+              <li><a class="nav-link scrollto active" asp-controller="Home" asp-action="Index2">Home</a></li>
+              <li><a class="nav-link scrollto" href="#about">About</a></li>
+              @if (CurrentUser.GetUser().UserType == "admin")
+              {
+                <li class="dropdown"><a href="#"><span>Admin</span> <i class="bi bi-chevron-down"></i></a>
+                  <ul>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="" asp-route="paymentsIndex">Payments</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="" asp-controller="Admin" asp-action="AccountingClose">Conciliations</a>
+                    </li>
+                    @* <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a> *@
+                    @*     <ul> *@
+                    @*         <li><a href="#">Deep Drop Down 1</a></li> *@
+                    @*         <li><a href="#">Deep Drop Down 2</a></li> *@
+                    @*         <li><a href="#">Deep Drop Down 3</a></li> *@
+                    @*         <li><a href="#">Deep Drop Down 4</a></li> *@
+                    @*         <li><a href="#">Deep Drop Down 5</a></li> *@
+                    @*     </ul> *@
+                    @* </li> *@
+                  </ul>
+                </li>
+              }
+              @if (CurrentUser.GetUser()?.UserType == "consumer")
+              {
+                <li>
+                  <a class="nav-link scrollto" asp-controller="Consumer" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser()?.Id">
+                    Payments
+                  </a>
+                </li>
+              }
+              @if (CurrentUser.GetUser()?.UserType == "provider")
+              {
+                <li >
+                  <a class="nav-link scrollto" asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser().Id">
+                    My Services
+                  </a>
+                </li>
+                <li>
+                  <a asp-controller="Provider" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser().Id" class="nav-link scrollto">
+                    My Payments
+                  </a>
+                </li>
+                <li>
+                  <a asp-controller="Provider" asp-action="UploadConciliation" asp-route-id="@CurrentUser.GetUser().Id" class="nav-link scrollto">
+                    Upload Conciliation
+                  </a>
+                </li>
+              }
+              @if (CurrentUser.GetUser()?.UserType == "admin")
+              {
+                <li><a class="nav-link scrollto" asp-area="" asp-controller="Admin" asp-action="SeleccionarReporte">Reports</a></li>
+              }
+              <li><a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser()?.Id" class="nav-link scrollto"><i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i></a></li>
+              @if (CurrentUser.GetUser()?.UserType == "consumer")
+              {
+                <li><a asp-controller="Consumer" asp-action="SelectService" class="getstarted scrollto">PAY</a></li>
+              }
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+          </nav><!-- .navbar -->
         </div>
-    </footer>
+      </header>
+    }
+    @RenderBody()
+    @* <footer class="border-top footer text-muted"> *@
+    @* <div class="container"> *@
+    @*     &copy; 2023 - UCABPagaloTodoWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
+    @* </div> *@
+    @* </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <partial name="_Notification"/>
     @await RenderSectionAsync("Scripts", required: false)
+    @if (CurrentUser.GetUser() != null)
+    {
+      <!-- ======= Footer ======= -->
+      <!-- ======= Footer ======= -->
+      <footer id="footer">
+        <div class="footer-top">
+          <div class="container">
+            <div class="row">
+
+              <div class="col-lg-4 col-md-6 footer-contact">
+                <h3>PagaloTodoUCAB</h3>
+                <p>
+                  Made by UCAB Students
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container footer-bottom clearfix">
+          <div class="copyright">
+            &copy; Copyright <strong><span>PagaloTodoUCAB</span></strong>. All Rights Reserved
+          </div>
+        </div>
+      </footer><!-- End Footer -->   <!-- ======= Footer ======= -->
+    }
 </body>
 </html>

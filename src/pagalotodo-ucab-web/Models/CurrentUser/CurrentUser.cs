@@ -13,7 +13,7 @@ public static class CurrentUser
         }
     }
 
-    public static LoginModel GetUser()
+    public static LoginModel? GetUser()
     {
         return _loginModel;
     }

@@ -4,18 +4,9 @@
     Layout = "_Layout";
 }
 
-
-<div class="container-fluid p-4">
-    <div class="row pt-4">
-        <div class="col-6">
-            <h2>Consumers</h2>
-        </div>
-        <div class="col-6 text-end">
-            <a asp-controller="Consumer" asp-action="Create" class="btn btn-primary">
-                Create Consumer
-            </a>
-        </div>
-    </div>
+@Html.Partial("InnerPageHeader", "Create Consumer");
+<section class="inner-page">
+<div class="container">
     <table class="table table-bordered table-striped" id="consumersTable">
         <thead>
         <tr>
@@ -46,8 +37,13 @@
         }
         </tbody>
     </table>
+    <div>
+        <a asp-controller="Consumer" asp-action="Create" class="btn">
+            Create Consumer
+        </a>
+    </div>
 </div>
-
+</section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

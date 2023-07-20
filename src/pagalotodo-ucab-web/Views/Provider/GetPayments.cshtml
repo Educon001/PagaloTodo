@@ -4,14 +4,11 @@
     Layout = "_Layout";
 }
 
+@Html.Partial("InnerPageHeader", "Payments Recieved")
+<section class="inner-page">
+<div class="container">
 
-<div class="container-fluid p-4">
-    <div class="row pt-3">
-        <div class="col-3">
-            <h2>Payments</h2>
-        </div>
-        
-        <div class="col-3">
+    <div class="col-3">
             Lower Range: 
             @using (Html.BeginForm())
             {
@@ -31,7 +28,6 @@
                 @Html.TextBox("searchQuery", null, new { id = "searchField", placeholder = "Search..." })
             }
         </div>
-    </div>
     <br>
     <table class="table table-bordered table-striped">
         <thead>
@@ -67,10 +63,11 @@
         }
         </tbody>
     </table>
-    <button>
-        <a asp-controller="Home" asp-action="Index2">BACK</a>
-    </button>
+<button>
+    <a asp-controller="Home" asp-action="Index2">BACK</a>
+</button>
 </div>
+</section>
 
 <script defer>
   let inputBox = document.querySelector("#searchField");

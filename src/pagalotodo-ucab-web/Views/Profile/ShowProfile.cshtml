@@ -16,42 +16,48 @@
     }
 }
 
-<div class="container p-4">
-    @if (CurrentUser.GetUser().UserType == "admin")
-    {
-        <div><b>Username</b></div>
-        <div>admin</div>
-    }
-    @if (CurrentUser.GetUser().UserType == "consumer" || CurrentUser.GetUser().UserType == "provider")
-    {
-        <div><b>Username</b></div>
-        <div>@Model.Username</div>
-        <div><b>Name</b></div>
-        <div>@Model.Name</div>
-        @if (CurrentUser.GetUser().UserType == "consumer")
-        {
-            <div><b>Apellido</b></div>
-            <div>@Model.LastName</div>
-            <div><b>Cedula</b></div>
-            <div>@Model.ConsumerId</div>
-        }
-        <div><b>Email</b></div>
-        <div>@Model.Email</div>
-        @if (CurrentUser.GetUser().UserType == "provider")
-        {
-            <div><b>Rif</b></div>
-            <div>@Model.Rif</div>
-            <div><b>Account Number</b></div>
-            <div>@Model.AccountNumber</div>
-        }
-        <div><b>Status</b></div>
-        <div>@Model.Status</div>
-        <br>
-        @* <div> *@
-        @*     <a asp-route="@ruta" class="btn btn-primary" asp-route-id="@Model.Id">Modify Profile</a> *@
-        @* </div> *@
-    }
-        <div>
-            <a asp-route="@ruta" class="btn btn-primary" asp-route-id="@Model.Id">Change Password</a>
+    @Html.Partial("InnerPageHeader", "Show Profile")
+    <section class="inner-page">
+        <div class="container">
+            @if (CurrentUser.GetUser().UserType == "admin")
+            {
+                <div><b>Username</b></div>
+                <div>admin</div>
+            }
+            @if (CurrentUser.GetUser().UserType == "consumer" || CurrentUser.GetUser().UserType == "provider")
+            {
+                <div><b>Username</b></div>
+                <div>@Model.Username</div>
+                <div><b>Name</b></div>
+                <div>@Model.Name</div>
+                @if (CurrentUser.GetUser().UserType == "consumer")
+                {
+                    <div><b>Apellido</b></div>
+                    <div>@Model.LastName</div>
+                    <div><b>Cedula</b></div>
+                    <div>@Model.ConsumerId</div>
+                }
+                <div><b>Email</b></div>
+                <div>@Model.Email</div>
+                @if (CurrentUser.GetUser().UserType == "provider")
+                {
+                    <div><b>Rif</b></div>
+                    <div>@Model.Rif</div>
+                    <div><b>Account Number</b></div>
+                    <div>@Model.AccountNumber</div>
+                }
+                <div><b>Status</b></div>
+                <div>@Model.Status</div>
+                <br>
+            }
+            <br>
+            <div>
+                <a asp-route="@ruta" class="btn" asp-route-id="@Model.Id">Change Password</a>
+            </div>
+            <div>
+                <a asp-controller="Home" class="btn" asp-action="Index">
+                    Cerrar Sesion
+                </a>
+            </div>
         </div>
-</div>
+    </section>

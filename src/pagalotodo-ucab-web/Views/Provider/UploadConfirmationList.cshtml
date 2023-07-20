@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ConfirmationList
 
-<div class="container">
+@Html.Partial("InnerPageHeader", "Upload Confirmation List")
+<section class="inner-page">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card rounded-lg shadow-sm">
@@ -25,6 +27,7 @@
         </div>
     </div>
 </div>
+</section>
 
 @section Scripts {
     <script>

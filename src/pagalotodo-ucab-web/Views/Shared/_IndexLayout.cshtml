@@ -38,107 +38,78 @@
                 <ul>
                     <li><a class="nav-link scrollto active" asp-controller="Home" asp-action="Index2">Home</a></li>
                     <li><a class="nav-link scrollto" href="#about">About</a></li>
-                    <li><a class="nav-link scrollto" href="#services">Services</a></li>
-                    <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+                    @if (CurrentUser.GetUser().UserType == "admin")
+                    {
+                      <li class="dropdown"><a href="#"><span>Admin</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-route="paymentsIndex">Payments</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-controller="Admin" asp-action="AccountingClose">Conciliations</a>
-                            </li>
-                            @* <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a> *@
-                            @*     <ul> *@
-                            @*         <li><a href="#">Deep Drop Down 1</a></li> *@
-                            @*         <li><a href="#">Deep Drop Down 2</a></li> *@
-                            @*         <li><a href="#">Deep Drop Down 3</a></li> *@
-                            @*         <li><a href="#">Deep Drop Down 4</a></li> *@
-                            @*         <li><a href="#">Deep Drop Down 5</a></li> *@
-                            @*     </ul> *@
-                            @* </li> *@
+                          <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Service" asp-action="Index">Services</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Consumer" asp-action="Index">Consumers</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Provider" asp-action="Index">Providers</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-route="paymentsIndex">Payments</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Admin" asp-action="AccountingClose">Conciliations</a>
+                          </li>
+                          @* <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a> *@
+                          @*     <ul> *@
+                          @*         <li><a href="#">Deep Drop Down 1</a></li> *@
+                          @*         <li><a href="#">Deep Drop Down 2</a></li> *@
+                          @*         <li><a href="#">Deep Drop Down 3</a></li> *@
+                          @*         <li><a href="#">Deep Drop Down 4</a></li> *@
+                          @*         <li><a href="#">Deep Drop Down 5</a></li> *@
+                          @*     </ul> *@
+                          @* </li> *@
                         </ul>
-                    </li>
-                    <li><a class="nav-link scrollto" asp-area="" asp-controller="Admin" asp-action="SeleccionarReporte">Reports</a></li>
-                    <li><a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser().Id" class="nav-link scrollto"><i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i></a></li>
-                    <li><a class="getstarted scrollto" href="#about">PAY</a></li>
+                      </li>
+                    }
+                      @if (CurrentUser.GetUser()?.UserType == "consumer")
+                        {
+                          <li>
+                            <a class="nav-link scrollto" asp-controller="Consumer" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser()?.Id">
+                              Payments
+                            </a>
+                            </li>
+                        }
+                        @if (CurrentUser.GetUser()?.UserType == "provider")
+                        {
+                          <li >
+                            <a class="nav-link scrollto" asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser().Id">
+                              My Services
+                            </a>
+                          </li>
+                          <li>
+                            <a asp-controller="Provider" asp-action="GetPayments" asp-route-id="@CurrentUser.GetUser().Id" class="nav-link scrollto">
+                              My Payments
+                            </a>
+                          </li>
+                          <li>
+                              <a asp-controller="Provider" asp-action="UploadConciliation" asp-route-id="@CurrentUser.GetUser().Id" class="nav-link scrollto">
+                                  Upload Conciliation
+                              </a>
+                          </li>
+                        }
+                    @if (CurrentUser.GetUser()?.UserType == "admin")
+                    {
+                      <li><a class="nav-link scrollto" asp-area="" asp-controller="Admin" asp-action="SeleccionarReporte">Reports</a></li>
+                    }
+                    <li><a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser()?.Id" class="nav-link scrollto"><i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i></a></li>
+                    @if (CurrentUser.GetUser()?.UserType == "consumer")
+                    {
+                      <li><a asp-controller="Consumer" asp-action="SelectService" class="getstarted scrollto">PAY</a></li>
+                    }
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
         </div>
     }
-  
-  @* @if (CurrentUser.GetUser() != null) *@
-  @* { *@
-  @*     <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> *@
-  @*     <div class="container-fluid"> *@
-  @*         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index2">PagaloTodo</a> *@
-  @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation"> *@
-  @*             <span class="navbar-toggler-icon"></span> *@
-  @*         </button> *@
-  @*         <div class="collapse navbar-collapse" id="navbarColor02"> *@
-  @*             <ul class="navbar-nav me-auto"> *@
-  @*                 @if (CurrentUser.GetUser()?.UserType == "admin") *@
-  @*                 { *@
 
-  @*                 } *@
-  @*         $1$ <li class="nav-item dropdown"> #1# *@
-  @*         $1$   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a> #1# *@
-  @*         $1$   <div class="dropdown-menu"> #1# *@
-  @*         $1$     <a class="dropdown-item" href="#">Action</a> #1# *@
-  @*         $1$     <a class="dropdown-item" href="#">Another action</a> #1# *@
-  @*         $1$     <a class="dropdown-item" href="#">Something else here</a> #1# *@
-  @*         $1$     <div class="dropdown-divider"></div> #1# *@
-  @*         $1$     <a class="dropdown-item" href="#">Separated link</a> #1# *@
-  @*         $1$   </div> #1# *@
-  @*         $1$ </li> #1# *@
-  @*             </ul> *@
-  @*         <div> *@
-  @*             <a asp-controller="Home" asp-action="Index"> *@
-  @*                 Cerrar Sesion *@
-  @*             </a> *@
-  @*         </div> *@
-  @*         <div class="d-flex pr-2"> *@
-  @*             <a asp-route="showProfile" asp-route-id="@CurrentUser.GetUser().Id"> *@
-  @*                 <i class="bi bi-person-circle" style="font-size: 2rem; color: white;"></i> *@
-  @*             </a> *@
-  @*         </div> *@
-  @*         </div> *@
-  @*     </div> *@
-  @* </nav> *@
-  @* } *@
-
-
-  @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
-  @*     <div class="container-fluid"> *@
-  @*         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PagaloTodo</a> *@
-  @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
-  @*                 aria-expanded="false" aria-label="Toggle navigation"> *@
-  @*             <span class="navbar-toggler-icon"></span> *@
-  @*         </button> *@
-  @*         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
-  @*             <ul class="navbar-nav flex-grow-1"> *@
-  @*                 <li class="nav-item"> *@
-  @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
-  @*                 </li> *@
-  @*                 <li class="nav-item"> *@
-  @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-  @*                 </li> *@
-  @*                 <li class="nav-item"> *@
-  @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Services</a> *@
-  @*                 </li> *@
-  @*             </ul> *@
-  @*         </div> *@
-  @*     </div> *@
-  @* </nav> *@
 </header>
     @RenderBody()
     @* <footer class="border-top footer text-muted"> *@
@@ -165,28 +136,6 @@
                 <p>
                     Made by UCAB Students
                 </p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 footer-links">
-              <h4>Useful Links</h4>
-              <ul>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-              </ul>
-            </div>
-
-            <div class="col-lg-4 col-md-6 footer-links">
-              <h4>Our Services</h4>
-              <ul>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-                <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-              </ul>
             </div>
           </div>
         </div>

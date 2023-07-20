@@ -6,73 +6,67 @@
     ViewBag.Controlador = "Services";
 }
 
-@functions
-{
-    void RenderValue(string mystr)
-    {
-        <div>@(char.ToUpper(mystr[0]) + mystr.Substring(1))</div>
-    }
-}
-
-    <div class="container p-4">
-    <div><b>Id</b></div>
-    <div>@Model.Id</div>
-    <div><b>Name</b></div>
-    <div>@Model.Name</div>
-    <div><b>Description</b></div>
-    <div>@Model.Description</div>
-    <div><b>Service Status</b></div>
-    <div>@Model.ServiceStatus</div>
-    <div><b>Service Type</b></div>
-    <div>@Model.ServiceType</div>
-    <div><b>Proveedor</b></div>
-    <div>@Model.Provider?.Name</div>
-    <div><b>Conciliation Format</b></div>
-    <div>
-        @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
-        {
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Longitud
-                    </th>
-                    <th>
-                        Formato
-                    </th>
-                    <th>
-                        Referencia Atributo
-                    </th>
-                    <th></th>
-                </tr>
-                </thead>
-    
-                @foreach (var obj in @Model.ConciliationFormat)
-                {
+@Html.Partial("InnerPageHeader", "Show Service")
+<section class="inner-page">
+<div class="container">
+        <div><b>Id</b></div>
+        <div>@Model.Id</div>
+        <div><b>Name</b></div>
+        <div>@Model.Name</div>
+        <div><b>Description</b></div>
+        <div>@Model.Description</div>
+        <div><b>Service Status</b></div>
+        <div>@Model.ServiceStatus</div>
+        <div><b>Service Type</b></div>
+        <div>@Model.ServiceType</div>
+        <div><b>Proveedor</b></div>
+        <div>@Model.Provider?.Name</div>
+        <div><b>Conciliation Format</b></div>
+        <div>
+            @if (Model.ConciliationFormat!= null && Model.ConciliationFormat.Count > 0)
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
                     <tr>
-                        <td>@obj.Name</td>
-                        <td>@obj.Length</td>
-                        <td>@obj.Format</td>
-                        <td>@obj.AttrReference</td>
-                        <td>
-                            @if (CurrentUser.GetUser().UserType == "admin")
-                            {
-                                <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
-                            }
-                        </td>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Longitud
+                        </th>
+                        <th>
+                            Formato
+                        </th>
+                        <th>
+                            Referencia Atributo
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </table>
-        }
-        @if (Model.ConciliationFormat == null || Model.ConciliationFormat.Count == 0)
-        {
-            <div>No Fields registered</div>
-        }
-    </div>
-    <br>
+                    </thead>
+    
+                    @foreach (var obj in @Model.ConciliationFormat)
+                    {
+                        <tr>
+                            <td>@obj.Name</td>
+                            <td>@obj.Length</td>
+                            <td>@obj.Format</td>
+                            <td>@obj.AttrReference</td>
+                            <td>
+                                @if (CurrentUser.GetUser().UserType == "admin")
+                                {
+                                    <a asp-route="updateField" asp-route-id="@obj.Id" asp-route-serviceId="@Model.Id"><i class="bi bi-pencil-square"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+            @if (Model.ConciliationFormat == null || Model.ConciliationFormat.Count == 0)
+            {
+                <div>No Fields registered</div>
+            }
+        </div>
+        <br>
         @if (Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString())
         {
             <div><b>Confirmation List</b></div>
@@ -93,14 +87,14 @@
                             </th>
                         </tr>
                         </thead>
-                            @foreach (var obj in @Model.ConfirmationList)
-                            {
-                                <tr>
-                                    <td>@obj.Identifier</td>
-                                    <td>@obj.Amount</td>
-                                    <td>@obj.Status</td>
-                                </tr>
-                            }
+                        @foreach (var obj in @Model.ConfirmationList)
+                        {
+                            <tr>
+                                <td>@obj.Identifier</td>
+                                <td>@obj.Amount</td>
+                                <td>@obj.Status</td>
+                            </tr>
+                        }
                     </table>
                 }
                 @if (Model.ConfirmationList == null || Model.ConfirmationList.Count == 0)
@@ -109,22 +103,24 @@
                 }
             </div>
         }
+    <div>
+        @if (CurrentUser.GetUser()?.UserType == "admin")
+        {
+            <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
+            <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
+            <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
+        }
+        else if (CurrentUser.GetUser()?.UserType == "provider")
+        {
+            <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser()?.Id" class="btn btn-secondary">Back</a>
+        }
+        @if (CurrentUser.GetUser()?.UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() )
+        {
+            <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id"  class="btn btn-primary">Upload Confirmation List</a>
+        }
     </div>
-    
-<div>
-    @if (CurrentUser.GetUser().UserType == "admin")
-    {
-        <a asp-controller="Service" asp-action="Delete" class="btn btn-primary" asp-route-id="@Model.Id">DELETE</a>
-        <a asp-route="updateService" class="btn btn-primary" asp-route-id="@Model.Id">UPDATE</a>
-        <a asp-controller="Service" asp-action="Index" class="btn btn-secondary">Back</a>
-    }
-    else if (CurrentUser.GetUser().UserType == "provider")
-    {
-        <a asp-controller="Provider" asp-action="ShowMyServices" asp-route-id="@CurrentUser.GetUser().Id" class="btn btn-secondary">Back</a>
-    }
-    @if (CurrentUser.GetUser().UserType == "provider" && Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString() )
-    {
-        <a asp-controller="Provider" asp-action="UploadConfirmationList" asp-route-id="@Model.Id"  class="btn btn-primary">Upload Confirmation List</a>
-    }
-</div>
+    </div>
+</section>
+
+
 

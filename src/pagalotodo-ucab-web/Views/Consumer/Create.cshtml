@@ -1,64 +1,63 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ConsumerRequest
 
-<form method="post">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2>Create Consumer</h2>
-            <hr>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Username">Username</label>
-            <input asp-for="Username" class="form-control">
-            <span asp-validation-for="Username" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Email">Email</label>
-            <input asp-for="Email" class="form-control">
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Name">Nombre(s)</label>
-            <input asp-for="Name" class="form-control">
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="LastName">Apellidos</label>
-            <input asp-for="LastName" class="form-control">
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="PasswordHash">Password</label>
-            <input asp-for="PasswordHash" class="form-control" type="password">
-            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+@Html.Partial("InnerPageHeader", "Create Consumer");
+<section class="inner-page">
+    <div class="container">
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-control">
+                <span asp-validation-for="Username" class="text-danger"></span>
             </div>
-        <div class="mb-3">
-            <label asp-for="ConsumerId">Cedula</label>
-            <input asp-for="ConsumerId" class="form-control">
-            <span asp-validation-for="ConsumerId" class="text-danger"></span>
-        </div>
-        @{
-            IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
-                new()
-                {
-                    Text = "Activo",
-                    Value = "true"
-                },
-                new()
-                {
-                    Text = "Inactivo",
-                    Value = "false"
-                }
-            };
-        }
-        <div class="mb-3">
-            <label asp-for="Status">Estatus</label>
-            <select name="Status" id="Status" asp-items="selectList" class="form-control"></select>
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-        <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+            <div class="mb-3">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Name">Nombre(s)</label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LastName">Apellidos</label>
+                <input asp-for="LastName" class="form-control">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PasswordHash">Password</label>
+                <input asp-for="PasswordHash" class="form-control" type="password">
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                </div>
+            <div class="mb-3">
+                <label asp-for="ConsumerId">Cedula</label>
+                <input asp-for="ConsumerId" class="form-control">
+                <span asp-validation-for="ConsumerId" class="text-danger"></span>
+            </div>
+            @{
+                IEnumerable<SelectListItem> selectList = new List<SelectListItem>(){ 
+                    new()
+                    {
+                        Text = "Activo",
+                        Value = "true"
+                    },
+                    new()
+                    {
+                        Text = "Inactivo",
+                        Value = "false"
+                    }
+                };
+            }
+            <div class="mb-3">
+                <label asp-for="Status">Estatus</label>
+                <select name="Status" id="Status" asp-items="selectList" class="form-control"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-controller="Consumer" asp-action="Index" class="btn btn-secondary">Back</a>
+        </form>
     </div>
-</form>
+</section>
 
 @section Scripts
 {   @{
