@@ -140,6 +140,19 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
             };
             services[0].ConciliationFormat!.AddRange(fields);
 
+            //PaymentFields data
+            var paymentFields = new List<PaymentFieldEntity>()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Service = services[0],
+                    Name = "Test field",
+                    Format = ""
+                }
+            };
+            services[0].PaymentFormat!.AddRange(paymentFields);  
+            
             //Debtors data
             var debtors = new List<DebtorsEntity>()
             {
@@ -251,17 +264,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     ExecutedAt = new DateTime(2023, 6, 1)
                 }
             };
-            
-            //PaymentFields data
-            var paymentFields = new List<PaymentFieldEntity>()
-            {
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Service = new ServiceEntity()
-                }
-            };
-            
+
             //PaymentDetails data
             var paymentDetails = new List<PaymentDetailEntity>()
             {
@@ -283,6 +286,9 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
 
             //Fields setup
             mockContext.Setup(c => c.Fields).Returns(fields.AsQueryable().BuildMockDbSet().Object);
+
+            //PaymentFields setup
+            mockContext.Setup(c => c.PaymentFields).Returns(paymentFields.AsQueryable().BuildMockDbSet().Object);
 
             //Debtors setup
             mockContext.Setup(c => c.Debtors).Returns(debtors.AsQueryable().BuildMockDbSet().Object);

@@ -58,12 +58,14 @@ public class AdminControllerTest
     /// <summary>
     ///     Prueba de metodo UpdatePassword para administradores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void UpdatePasswordHashAdmin_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void UpdatePasswordHashAdmin_Returns_BadRequest(Type exceptionType)
     {
         var id = Guid.NewGuid();
         var password = new UpdatePasswordRequest() {PasswordHash = "string"};
-        var expectedException = new CustomException(new Exception("Test Exception"));
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePassword(id, password);
@@ -106,15 +108,17 @@ public class AdminControllerTest
     /// <summary>
     ///     Prueba de metodo AccountingClose BadRequest
     /// </summary>
-    [Fact]
-    public async void AccountingClose_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void AccountingClose_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("TestException");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetLastAccountingCloseQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.AccountingClose();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         Assert.IsType<string>(badRequestResult.Value);
-        Assert.Equal(expectedException.Message,badRequestResult.Value);
+        Assert.Equal(expectedException!.Message,badRequestResult.Value);
     }
 }

@@ -51,10 +51,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -85,10 +90,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
 
@@ -119,10 +129,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores con sus servicios. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores con sus servicios. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
 
@@ -153,10 +168,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -187,10 +207,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -221,10 +246,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -307,10 +337,15 @@ public class ProvidersController : BaseController<ProvidersController>
                 }
                 return Ok($"Se cargaron {success} archivos a la cola. Errores: {errors}");
             }
-            catch (Exception e)
+            catch (CustomException e)
             {
                 _logger.LogError("Ocurrio un error inesperado. Exception: " + e);
                 return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Ocurrio un error inesperado. Exception: " + e);
+                return BadRequest(e.Message + e.InnerException?.Message);
             }
         }
     }

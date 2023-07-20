@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Queries.Consumers;
 using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
@@ -162,20 +164,43 @@ public class LoginControllerTest
     /// <summary>
     ///     Prueba para verificar que el método Authenticatedevuelve un resultado BadRequest cuando se produce una excepción al autenticar al usuario.
     /// </summary>
-    [Fact]
-    public async Task Authenticate_ExceptionThrown_ReturnsBadRequestResult()
+    [Theory]
+    [InlineData(typeof(Exception), "Se ha producido un error al autenticar al usuario.")]
+    [InlineData(typeof(CustomException), "Test Exception")]
+    [InlineData(typeof(HttpRequestException), "Test Exception")]
+    public async Task Authenticate_ExceptionThrown_ReturnsBadRequestResult(Type exceptionType, string message)
     {
         // Arrange
         var loginRequest = new LoginRequest {Username = "test", PasswordHash = "Password.", UserType = "consumer"};
+        var expectedException = exceptionType==typeof(HttpRequestException) ? 
+            new HttpRequestException(null, null, HttpStatusCode.BadRequest) 
+            : (Exception)Activator.CreateInstance(exceptionType, message);
         _mediatorMock.Setup(m => m.Send(It.IsAny<LoginCommand>(), CancellationToken.None))
-            .ThrowsAsync(new Exception("Error de prueba"));
+            .ThrowsAsync(expectedException);
 
         // Act
         var response = await _controller.Authenticate(loginRequest);
 
         // Assert
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
-        Assert.Contains("Se ha producido un error al autenticar al usuario.", badRequestResult.Value.ToString());
+        Assert.Contains(expectedException!.Message, badRequestResult.Value!.ToString()!);
+    }
+    
+    [Fact]
+    public async Task Authenticate_ExceptionThrown_ReturnsUnauthorized()
+    {
+        // Arrange
+        var loginRequest = new LoginRequest {Username = "test", PasswordHash = "Password.", UserType = "consumer"};
+        var expectedException = new HttpRequestException("Test Exception", null, HttpStatusCode.Unauthorized);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<LoginCommand>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+
+        // Act
+        var response = await _controller.Authenticate(loginRequest);
+
+        // Assert
+        var unauthorizedResult = Assert.IsType<ObjectResult>(response.Result);
+        Assert.Contains(expectedException!.Message, unauthorizedResult.Value!.ToString()!);
     }
 
     /// <summary>
@@ -205,12 +230,13 @@ public class LoginControllerTest
     /// <summary>
     ///     Prueba de metodo de ForgotPassword con respuesta badRequest
     /// </summary>
-    [Fact]
-    public async void ForgotPassword_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void ForgotPassword_Returns_BadRequest(Type exceptionType)
     {
         var email = "prueba@prueba.com";
-        var consumerId = Guid.NewGuid();
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock
             .Setup(m => m.Send(It.IsAny<GetConsumerByEmailQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
@@ -264,5 +290,31 @@ public class LoginControllerTest
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains(token.ToString(), ex);
+    }
+    
+    [Fact]
+    public async void ResetPassword_Returns_BadRequest_Exception()
+    {
+        var token = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var dictionary = new Dictionary<string, object>()
+        {
+            {"UserId", userId}
+        };
+        object dictionaryObject = dictionary;
+        var request = new UpdatePasswordRequest()
+        {
+            PasswordHash = "NewPassword."
+        };
+        var expectedException = new Exception("Test Exception");
+        _cacheMock.Setup(m => m.TryGetValue(It.IsAny<object>(), out dictionaryObject))
+            .Returns(true);
+        _mediatorMock
+            .Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+        var response = await _controller.ResetPassword(token, request);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Equal(expectedException.Message, ex);
     }
 }

@@ -9,6 +9,8 @@ using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 using UCABPagaloTodoMS.Core.Enums;
+using System.Linq;
+using UCABPagaloTodoMS.Application.Exceptions;
 
 namespace UCABPagaloTodoMS.Controllers;
 
@@ -50,10 +52,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError($"Ocurrio un error al consultar los pagos. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Ocurrio un error al consultar los pagos. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -85,10 +92,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError($"Ocurrio un error al consultar los pagos del consumidor {id}. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Ocurrio un error al consultar los pagos del consumidor {id}. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -134,10 +146,15 @@ public class PaymentsController : BaseController<PaymentsController>
             }
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError($"Ocurrio un error al consultar los pagos del prestador {id}. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Ocurrio un error al consultar los pagos del prestador {id}. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -169,10 +186,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError($"Ocurrio un error al consultar los pagos del servicio {id}. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Ocurrio un error al consultar los pagos del servicio {id}. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -204,10 +226,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar registrar un pago. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un pago. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     
@@ -238,10 +265,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar registrar un pago. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un pago. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     
@@ -276,10 +308,15 @@ public class PaymentsController : BaseController<PaymentsController>
             }
             return Ok(responsesList);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("Ocurrio un error al intentar registrar un campo de Pago. Exception: " + ex.Message);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un campo de Pago. Exception: " + ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
     
@@ -311,10 +348,15 @@ public class PaymentsController : BaseController<PaymentsController>
             var response = await _mediator.Send(query);
             return Ok(response);
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError("Ocurrio un error al intentar registrar un campo de Pago. Exception: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
             _logger.LogError("Ocurrio un error en la consulta de un field dado el id. Exception: " + ex.Message);
-            return BadRequest(ex.Message);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 }

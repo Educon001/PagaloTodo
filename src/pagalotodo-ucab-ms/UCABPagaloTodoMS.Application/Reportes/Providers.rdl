@@ -20,7 +20,7 @@
       <rd:SecurityType>Integrated</rd:SecurityType>
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Server=DESKTOP-6BB6MO7;Database=pagalotodo;Trusted_Connection=True;TrustServerCertificate=true;</ConnectString>
+        <ConnectString>Server=localhost\SQLEXPRESS;Database=pagalotodo;Trusted_Connection=True;TrustServerCertificate=true;</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:DataSourceID>df397c9a-5ad5-4f6e-bb60-50d1b2457bca</rd:DataSourceID>

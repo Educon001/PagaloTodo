@@ -57,8 +57,8 @@ public class ConsumersController : BaseController<ConsumersController>
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ocurrio un error en la consulta de los consumidores. Exception: " + ex);
-                return BadRequest(ex.Message);
+                _logger.LogError("Ocurrio un error inesperado en la consulta de los consumidores. Exception: " + ex);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
 
@@ -89,10 +89,15 @@ public class ConsumersController : BaseController<ConsumersController>
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (CustomException ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error en la consulta de los prestadores. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -124,13 +129,13 @@ public class ConsumersController : BaseController<ConsumersController>
             }
             catch (CustomException ex)
             {
-                _logger.LogError("Ocurrio un error al cambiar la clave del consumer. Exception: " + ex);
+                _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un consumidor. Exception: " + ex);
-                return BadRequest(ex.Message+"\n"+ex.InnerException?.Message);            
+                return BadRequest(ex.Message + ex.InnerException?.Message);            
             }
         }
         
@@ -210,7 +215,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar modificar un consumidor. Exception: " + ex);
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         
@@ -249,7 +254,7 @@ public class ConsumersController : BaseController<ConsumersController>
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error al intentar registrar un prestador. Exception: " + ex);
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + ex.InnerException?.Message);
             }
         }
         

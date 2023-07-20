@@ -1,12 +1,12 @@
+using MediatR;
+using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
+namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 
 public class CreatePaymentDetailCommandHandler : IRequestHandler<CreatePaymentDetailCommand, Guid>
 {
@@ -42,12 +42,12 @@ public class CreatePaymentDetailCommandHandler : IRequestHandler<CreatePaymentDe
         var transaccion = _dbContext.BeginTransaction();
         try
         {
-            if (_dbContext.Payments.Find(request.Request.Payment) is not null)
+            PaymentEntity? paymentE = _dbContext.Payments.Find(request.Request.Payment);
+            if (paymentE is not null)
             {
                 _logger.LogInformation("CreatePaymentDetailCommandHandler.HandleAsync {Request}", request);
-                PaymentEntity? paymentE = _dbContext.Payments.Find(request.Request.Payment);
-                var entity = PaymentDetailMapper.MapRequestToEntity(request.Request, paymentE!);
-
+                var entity = PaymentDetailMapper.MapRequestToEntity(request.Request, paymentE);
+                
                 //PaymentDetails entity add
                 _dbContext.PaymentDetails.Add(entity);
                 await _dbContext.SaveEfContextChanges("APP");
