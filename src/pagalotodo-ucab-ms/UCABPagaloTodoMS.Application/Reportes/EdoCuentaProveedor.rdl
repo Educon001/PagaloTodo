@@ -11,7 +11,7 @@
       <am:Name>PBIRB</am:Name>
       <am:Version>15.7.1803.54</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2023-07-02T15:36:29.1729165Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2023-07-17T22:25:23.4536364Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -52,6 +52,7 @@ WHERE
   AND Providers.IsDeleted = 0
   AND Services.IsDeleted = 0
   AND Payments.IsDeleted = 0
+  AND Payments.PaymentStatus = 0
 GROUP BY
   Providers.Id,
   Providers.Name,
@@ -643,7 +644,7 @@ WHERE
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Total Ingresado: " &amp; SUM(Fields!Saldo.Value, "SaldoProveedor") &amp; " $"</Value>
+                    <Value>="Total Ingresado: " &amp; IIF(IsNothing(SUM(Fields!Saldo.Value, "SaldoProveedor")), 0, SUM(Fields!Saldo.Value, "SaldoProveedor")) &amp; " $"</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
