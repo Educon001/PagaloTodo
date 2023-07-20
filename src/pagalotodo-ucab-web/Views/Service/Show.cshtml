@@ -65,7 +65,10 @@
             {
                 <div>No Fields registered</div>
             }
-            <a asp-route="createFormat" class="btn btn-primary" asp-route-id="@Model.Id">AddFields</a>
+            @if (CurrentUser.GetUser()?.UserType == "admin")
+            {
+                <a asp-route="createFormat" class="btn btn-primary" asp-route-id="@Model.Id">AddFields</a>
+            }
         </div>
         <br>
         @if (Model.ServiceType == ServiceTypeEnum.PorConfirmacion.ToString())
