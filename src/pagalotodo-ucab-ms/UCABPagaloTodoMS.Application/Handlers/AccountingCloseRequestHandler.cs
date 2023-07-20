@@ -138,11 +138,11 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
                 var formatted = stringValue;
                 if (!string.IsNullOrWhiteSpace(field.Format) && propValue is not string)
                 {
-                    if (propValue is double && double.TryParse(stringValue, out double doubleValue))
+                    if (double.TryParse(stringValue, out double doubleValue))
                     {
                         formatted = doubleValue.ToString(field.Format);
                     }
-                    else if (propValue is DateTime && DateTime.TryParse(stringValue, out DateTime dateValue))
+                    else if (DateTime.TryParse(stringValue, out DateTime dateValue))
                     {
                         formatted = dateValue.ToString(field.Format);
                     }
