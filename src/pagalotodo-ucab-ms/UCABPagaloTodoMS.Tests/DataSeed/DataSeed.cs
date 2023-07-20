@@ -78,7 +78,8 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     ServiceType = ServiceTypeEnum.Directo,
                     Provider = providers[0],
                     Payments = new List<PaymentEntity>(),
-                    ConciliationFormat = new List<FieldEntity>()
+                    ConciliationFormat = new List<FieldEntity>(),
+                    PaymentFormat = new List<PaymentFieldEntity>()
                 },
                 new()
                 {
@@ -90,7 +91,8 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Provider = providers[1],
                     Payments = new List<PaymentEntity>(),
                     ConfirmationList = new List<DebtorsEntity>(),
-                    ConciliationFormat = new List<FieldEntity>()
+                    ConciliationFormat = new List<FieldEntity>(),
+                    PaymentFormat = new List<PaymentFieldEntity>()
                 }
             };
             providers[0].Services!.Add(services[0]);
@@ -250,6 +252,26 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                 }
             };
             
+            //PaymentFields data
+            var paymentFields = new List<PaymentFieldEntity>()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Service = new ServiceEntity()
+                }
+            };
+            
+            //PaymentDetails data
+            var paymentDetails = new List<PaymentDetailEntity>()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Payment = new PaymentEntity()
+                }
+            };
+            
             //Admins setup
             mockContext.Setup(c => c.Admins).Returns(admins.AsQueryable().BuildMockDbSet().Object);
             
@@ -273,7 +295,12 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
             
             //AccountingClose setup
             mockContext.Setup(c => c.AccountingClosures).Returns(accountingClosures.AsQueryable().BuildMockDbSet().Object);
-
+            
+            //PaymentFields setup
+            mockContext.Setup(c => c.PaymentFields).Returns(paymentFields.AsQueryable().BuildMockDbSet().Object);
+            
+            //PaymentDetails setup
+            mockContext.Setup(c => c.PaymentDetails).Returns(paymentDetails.AsQueryable().BuildMockDbSet().Object);
         }
     }
 }

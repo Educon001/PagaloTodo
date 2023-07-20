@@ -9,7 +9,6 @@ using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Authorization;
 using UCABPagaloTodoMS.Base;
 using UCABPagaloTodoMS.Core.Enums;
-using System.Linq;
 
 namespace UCABPagaloTodoMS.Controllers;
 

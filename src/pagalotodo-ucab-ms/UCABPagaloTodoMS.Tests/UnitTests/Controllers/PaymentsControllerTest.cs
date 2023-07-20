@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands;
 using UCABPagaloTodoMS.Application.Commands.Payments;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries.Payments;
 using UCABPagaloTodoMS.Application.Queries.Services;
@@ -13,6 +14,7 @@ using UCABPagaloTodoMS.Application.Requests;
 using UCABPagaloTodoMS.Application.Responses;
 using UCABPagaloTodoMS.Controllers;
 using UCABPagaloTodoMS.Core.Database;
+using UCABPagaloTodoMS.Core.Entities;
 using UCABPagaloTodoMS.Core.Enums;
 using Xunit;
 
@@ -224,6 +226,70 @@ public class PaymentsControllerTest
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePaymentStatusCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePaymentStatus(new Guid(),null);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+
+    /// <summary>
+    ///   Prueba de metodo get para formatos de pago
+    /// </summary>
+    [Fact]
+    public async void GetPaymentFormat_Returns_Ok()
+    {
+        var expectedResponse = _mockContext.Object.PaymentFields.Select(p => PaymentFieldMapper.MapEntityToResponse(p)).ToList();
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetPaymentFieldsByServiceIdQuery>(), CancellationToken.None))
+            .ReturnsAsync(expectedResponse);
+        var response = await _controller.GetPaymentFormat(new Guid());
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<List<PaymentFieldResponse>>(okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
+    }
+    
+    /// <summary>
+    ///   Prueba de metodo get para formatos de pago con respuesta BadRequest
+    /// </summary>
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetPaymentFormat_Returns_BadRequest(Type exceptionType)
+    {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
+        var expectedResponse = _mockContext.Object.PaymentFields.Select(p => PaymentFieldMapper.MapEntityToResponse(p)).ToList();
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetPaymentFieldsByServiceIdQuery>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+        var response = await _controller.GetPaymentFormat(new Guid());
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+    }
+    
+    /// <summary>
+    ///   Prueba de metodo crearpara formatos de pago
+    /// </summary>
+    [Fact]
+    public async void CreatePaymentFormat_Returns_Ok()
+    {
+        var expectedResponse = new Guid();
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreatePaymentFieldCommand>(), CancellationToken.None))
+            .ReturnsAsync(new Guid());
+        var response = await _controller.CreatePaymentFormat(new List<PaymentFieldRequest>{new()});
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.IsType<List<Guid>>(okResult.Value);
+    } 
+    
+    /// <summary>
+    ///   Prueba de metodo post para formatos de pago retornando BadRequest
+    /// </summary>
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void CreatePaymentFormat_Returns_BadRequest(Type exceptionType)
+    {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreatePaymentFieldCommand>(), CancellationToken.None))
+            .ThrowsAsync(expectedException);
+        var response = await _controller.CreatePaymentFormat(new List<PaymentFieldRequest>{new()});
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
         Assert.Contains("Test Exception", ex);

@@ -87,13 +87,13 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0babfd05-81dc-43fb-b189-c1e9b094e0d1"),
-                            CreatedAt = new DateTime(2023, 7, 15, 2, 4, 53, 131, DateTimeKind.Utc).AddTicks(2193),
+                            Id = new Guid("15fc1c8a-aeb9-4dd3-a3ba-d2fb0d4e9870"),
+                            CreatedAt = new DateTime(2023, 7, 16, 12, 8, 39, 960, DateTimeKind.Utc).AddTicks(664),
                             CreatedBy = "APP",
                             Email = "pagalotodoucabaf@gmail.com",
                             IsDeleted = false,
                             Name = "admin",
-                            PasswordHash = "$PagalTodo$10000$tGje5e0uqjA0bLGFajGTIV8kH+3vtsTG2wWnML7Zu3LeuBT5",
+                            PasswordHash = "$PagalTodo$10000$u1opoYuYxSOdhIG4y7IbtIu9TdbwpLAyBfrsC4maqgJW2XP9",
                             Status = true,
                             Username = "admin"
                         });

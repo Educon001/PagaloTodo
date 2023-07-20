@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Services;
+using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Application.Queries;
 using UCABPagaloTodoMS.Application.Queries.Services;
@@ -345,5 +346,50 @@ public class ServicesControllerTest
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         Assert.IsType<string>(badRequestResult.Value);
         Assert.Equal(expectedException.Message, badRequestResult.Value);
+    }
+
+    ///<summary>
+    ///     Prueba de metodo de GetFieldById
+    /// </summary>
+    [Fact]
+    public async void GetFieldById_Returns_Ok()
+    {
+        Guid id = Guid.NewGuid();
+        FieldResponse expectedResponse = new()
+            {Name = "My Service #1", Id = id};
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetFieldByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetFieldById(id);
+        var response = Assert.IsType<OkObjectResult>(result.Result);
+        //El tipo es de lista de ServiceResponse
+        Assert.IsType<FieldResponse>(response.Value);
+        Assert.Equal(expectedResponse, response.Value);
+        Assert.Equal(200, response.StatusCode);
+        _mediatorMock.Verify();
+    }
+    
+    ///<summary>
+    ///     Prueba de metodo de GetFieldById
+    /// </summary>
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetFieldById_Returns_BadRequest(Type exceptionType)
+    {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
+        Guid id = Guid.NewGuid();
+        FieldResponse expectedResponse = new()
+            {Name = "My Service #1", Id = id};
+
+        _mediatorMock.Setup(x => x.Send(It.IsAny<GetFieldByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(expectedException);
+        
+        var response  = await _controller.GetFieldById(id);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var ex = Assert.IsType<string>(badRequestResult.Value);
+        Assert.Contains("Test Exception", ex);
+        _mediatorMock.Verify();
     }
 }

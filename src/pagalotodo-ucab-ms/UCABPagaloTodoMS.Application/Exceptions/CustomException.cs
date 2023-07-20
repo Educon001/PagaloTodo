@@ -10,6 +10,10 @@ public class CustomException : Exception
     {
     }
     
+    public CustomException(string message) : base(message)
+    {
+    }
+    
     private static string SetMessage(Exception ex)
     {
         return ex.Message + (ex.InnerException is not null? "\n"  + ex.InnerException?.Message : "");
