@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Exceptions;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries;
 
+[ExcludeFromCodeCoverage]
 public class GetLastAccountingCloseQueryHandlerTest
 {
     private readonly GetLastAccountingCloseQueryHandler _handler;

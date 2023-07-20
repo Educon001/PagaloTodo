@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
+[ExcludeFromCodeCoverage]
 public class PaymentsControllerTest
 {
     private readonly PaymentsController _controller;

@@ -1,5 +1,8 @@
-﻿namespace UCABPagaloTodoMS.Infrastructure.Settings;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace UCABPagaloTodoMS.Infrastructure.Settings;
+
+[ExcludeFromCodeCoverage]
 public class AppSettings
 {
     public string? TermsOfService { get; set; }

@@ -1,8 +1,9 @@
-﻿using UCABPagaloTodoMS.Infrastructure.Settings;
+﻿using System.Diagnostics.CodeAnalysis;
+using UCABPagaloTodoMS.Infrastructure.Settings;
 
 namespace UCABPagaloTodoMS.Providers.Implementation
 {
-    
+    [ExcludeFromCodeCoverage]
     public static class GeneralStartup
     {
         public static IServiceCollection AddProviders(this IServiceCollection services, IConfiguration configuration,

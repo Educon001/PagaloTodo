@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Exceptions;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Queries.Payments;
 
+[ExcludeFromCodeCoverage]
 public class GetPaymentsByServiceIdQueryHandlerTest
 {
     private readonly GetPaymentsByServiceIdQueryHandler _handler;

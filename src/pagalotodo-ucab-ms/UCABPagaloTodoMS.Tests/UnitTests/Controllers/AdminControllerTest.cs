@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers;
 
+[ExcludeFromCodeCoverage]
 public class AdminControllerTest
 {
     private readonly AdminsController _controller;

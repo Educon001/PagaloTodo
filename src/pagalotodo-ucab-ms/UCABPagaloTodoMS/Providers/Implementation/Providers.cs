@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using UCABPagaloTodoMS.Core.Services;
@@ -9,6 +10,7 @@ using UCABPagaloTodoMS.Providers.Interface;
 
 namespace UCABPagaloTodoMS.Providers.Implementation
 {
+    [ExcludeFromCodeCoverage]
     public class Providers : IProviders
     {
         private const string AllowAllOriginsPolicy = "_AllowAllOriginsPolicy";

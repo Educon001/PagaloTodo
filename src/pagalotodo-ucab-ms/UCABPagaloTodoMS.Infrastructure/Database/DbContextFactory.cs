@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database;
 
+[ExcludeFromCodeCoverage]
 public class DbContextFactory : IDbContextFactory<UCABPagaloTodoDbContext>
 {
     private readonly string _dbConnectionString;

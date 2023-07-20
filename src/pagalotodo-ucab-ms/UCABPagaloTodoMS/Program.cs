@@ -3,7 +3,7 @@ using Destructurama;
 using Serilog;
 
 namespace UCABPagaloTodoMS;
-
+[ExcludeFromCodeCoverage]
 public static class Program
 {
     public static int Main(string[] args)

@@ -2,7 +2,7 @@
 
 namespace UCABPagaloTodoMS.Settings;
 
-
+[ExcludeFromCodeCoverage]
 public class AzurePostgresServerSettings
 {
     public string Host { get; set; }

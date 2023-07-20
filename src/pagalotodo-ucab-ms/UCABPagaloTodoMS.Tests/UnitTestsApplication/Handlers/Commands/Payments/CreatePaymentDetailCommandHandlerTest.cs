@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Commands.Payments;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers.Commands.Payments;
 
+[ExcludeFromCodeCoverage]
 public class CreatePaymentDetailCommandHandlerTest
 {
     private readonly CreatePaymentDetailCommandHandler _handler;

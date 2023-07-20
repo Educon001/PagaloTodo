@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UCABPagaloTodoMS.Application.Handlers;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace UCABPagaloTodoMS.Tests.UnitTestsApplication.Handlers;
 
+[ExcludeFromCodeCoverage]
 public class UploadConciliationResponseRequestHandlerTest
 {
     private readonly UploadConciliationResponseRequestHandler _handler;
