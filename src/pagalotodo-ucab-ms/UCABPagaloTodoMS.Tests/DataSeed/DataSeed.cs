@@ -150,7 +150,14 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
                     Id = Guid.NewGuid(),
                     Service = services[0],
                     Name = "Test field",
-                    Format = ""
+                    Format = "int"
+                }, 
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Service = services[0],
+                    Name = "Test field",
+                    Format = "string"
                 }
             };
             services[0].PaymentFormat!.AddRange(paymentFields);  
