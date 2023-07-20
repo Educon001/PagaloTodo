@@ -37,6 +37,11 @@
                     finalProps.Add($"consumer.{prop.Name.ToLower()}");
                 }
                 
+                foreach (PaymentFieldModel field in ViewBag.PaymentFormat)
+                {
+                    finalProps.Add($"paymentdetail.{field.Name.ToLower()}");
+                }
+                
                 IEnumerable<SelectListItem> selectList = finalProps.Select(p => new SelectListItem
                      {
                          Text = p,

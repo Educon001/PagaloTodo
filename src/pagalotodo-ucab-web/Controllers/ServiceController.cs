@@ -220,9 +220,21 @@ public class ServiceController : Controller
     }
 
     [Route("/{id:Guid}", Name="createFormat")]
-    public IActionResult CreateFormat(Guid id)
+    public async Task<IActionResult> CreateFormat(Guid id)
     {
         ViewBag.ServiceId = id;
+        var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+        var options = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        var responsePFormat = await client.GetAsync($"payments/paymentformat/{id}");
+        var items = await responsePFormat.Content.ReadAsStringAsync();
+        IEnumerable<PaymentFieldModel> paymentFields = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(items, options)!;
+        ViewBag.PaymentFormat = paymentFields;
         return View();
     }
 
@@ -243,6 +255,7 @@ public class ServiceController : Controller
 
             var response = await client.PostAsJsonAsync("payments/paymentformat", paymentFieldRequests);
             var result = await response.Content.ReadAsStringAsync();
+            
             TempData["success"] = "Payment Format Created Successfully";
         }
         catch (HttpRequestException e)
@@ -250,9 +263,9 @@ public class ServiceController : Controller
             Console.WriteLine(e);
             TempData["error"] = "There was an error creating the conciliation format";
         }
-        // return RedirectToAction("Index", "Service");
         return RedirectToRoute("CreateFormat", new { id });
     }
+    
 
     [ValidateAntiForgeryToken]
     [HttpPost]
@@ -268,7 +281,7 @@ public class ServiceController : Controller
             {
                 field.Service = id;
             }
-
+            
             var response = await client.PostAsJsonAsync("/services/format", fieldRequests);
             var result = await response.Content.ReadAsStringAsync();
             TempData["success"] = "Conciliation Format Created Successfully";
@@ -309,6 +322,12 @@ public class ServiceController : Controller
                 Length = fieldFinal.Length,
                 AttrReference = fieldFinal.AttrReference,
             };
+            
+            var responsePFormat = await client.GetAsync($"payments/paymentformat/{serviceId}");
+            var items = await responsePFormat.Content.ReadAsStringAsync();
+            IEnumerable<PaymentFieldModel> paymentFields = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(items, options)!;
+            ViewBag.PaymentFormat = paymentFields;
+            
             return View(fieldRequest);
         }
         catch (HttpRequestException e)
