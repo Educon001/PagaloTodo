@@ -1,13 +1,12 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UCABPagaloTodoMS.Application.Commands.Payments;
-using UCABPagaloTodoMS.Application.Commands.Services;
 using UCABPagaloTodoMS.Application.Exceptions;
 using UCABPagaloTodoMS.Application.Mappers;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands.Services;
+namespace UCABPagaloTodoMS.Application.Handlers.Commands.Payments;
 
 public class CreatePaymentFieldCommandHandler : IRequestHandler<CreatePaymentFieldCommand, Guid>
 {
@@ -43,11 +42,11 @@ public class CreatePaymentFieldCommandHandler : IRequestHandler<CreatePaymentFie
         var transaccion = _dbContext.BeginTransaction();
         try
         {
-            if (_dbContext.Services.Find(request.Request.Service) is not null)
+            ServiceEntity? serviceE = _dbContext.Services.Find(request.Request.Service);
+            if (serviceE is not null)
             {
                 _logger.LogInformation("CreatePaymentFieldCommandHandler.HandleAsync {Request}", request);
-                ServiceEntity? serviceE = _dbContext.Services.Find(request.Request.Service);
-                var entity = PaymentFieldMapper.MapRequestToEntity(request.Request, serviceE!);
+                var entity = PaymentFieldMapper.MapRequestToEntity(request.Request, serviceE);
 
                 //PaymentFields entity add
                 _dbContext.PaymentFields.Add(entity);

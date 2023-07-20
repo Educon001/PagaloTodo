@@ -58,10 +58,12 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo get para pagos con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetPayments_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetPayments_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetPaymentsQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.GetPayments(null, null);
@@ -90,10 +92,12 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo get para pagos por consumidor con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetPaymentsByConsumerId_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetPaymentsByConsumerId_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetPaymentsByConsumerIdQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.GetPaymentsByConsumerId(new Guid(), null, null);
@@ -123,10 +127,12 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo get para pagos por prestador con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetPaymentsByProviderId_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetPaymentsByProviderId_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetServicesByProviderIdQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.GetPaymentsByProviderId(new Guid(),null, null);
@@ -155,10 +161,12 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo get para pagos por servicio con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetPaymentsByServiceId_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetPaymentsByServiceId_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetPaymentsByServiceIdQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.GetPaymentsByServiceId(new Guid(), null, null);
@@ -186,11 +194,13 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo post para pagos con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void PostPayment_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void PostPayment_Returns_BadRequest(Type exceptionType)
     {
         var payment = new PaymentRequest() {Amount = 10};
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreatePaymentCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.PostPayment(payment);
@@ -219,10 +229,12 @@ public class PaymentsControllerTest
     /// <summary>
     ///     Prueba de metodo patch para pagos con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void UpdatePaymentStatus_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void UpdatePaymentStatus_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePaymentStatusCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePaymentStatus(new Guid(),null);

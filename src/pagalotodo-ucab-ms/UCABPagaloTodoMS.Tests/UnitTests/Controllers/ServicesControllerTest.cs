@@ -59,11 +59,14 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task GetServices_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task GetServices_Returns_Error(Type exceptionType)
     {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(x => x.Send(It.IsAny<GetServicesQuery>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var result = await _controller.GetServices();
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
@@ -84,10 +87,12 @@ public class ServicesControllerTest
         Assert.Equal(expectedResponse, okResult.Value);
     }
 
-    [Fact]
-    public async Task GetServicesByProviderId_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task GetServicesByProviderId_Returns_Error(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetServicesByProviderIdQuery>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.GetServiceByProviderId(Guid.NewGuid());
@@ -115,12 +120,15 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task GetServiceById_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task GetServiceById_Returns_Error(Type exceptionType)
     {
         Guid id = Guid.NewGuid();
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(x => x.Send(It.IsAny<GetServiceByIdQuery>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
 
         var result = await _controller.GetServiceById(id);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -141,12 +149,15 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task DeleteService_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task DeleteService_Returns_Error(Type exceptionType)
     {
         var id = Guid.NewGuid();
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(x => x.Send(It.IsAny<DeleteServiceCommand>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var response = await _controller.DeleteService(id);
         var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         Assert.Equal(400, badResult.StatusCode);
@@ -171,13 +182,17 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task CreateService_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task CreateService_Returns_Error(Type exceptionType)
     {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         ServiceRequest service = new()
-            {Name = "My Service #2", Description = "Whatever # 2", Provider = Guid.NewGuid()};
+            {Name = "My Service", Description = "Whatever", ServiceStatus = ServiceStatusEnum.Activo,
+                ServiceType = ServiceTypeEnum.Directo, Provider = Guid.NewGuid()};
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreateServiceCommand>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var result = await _controller.CreateService(service);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
@@ -206,10 +221,13 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task UpdateService_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task UpdateService_Returns_Error(Type exceptionType)
     {
         Guid id = Guid.NewGuid();
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         ServiceRequest service = new()
         {
             Name = "ferreLeon",
@@ -217,7 +235,7 @@ public class ServicesControllerTest
             ServiceType = ServiceTypeEnum.Directo, ServiceStatus = ServiceStatusEnum.Inactivo
         };
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateServiceCommand>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var result = await _controller.UpdateService(service, id);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
@@ -252,9 +270,12 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task CreateFormat_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task CreateFormat_Returns_Error(Type exceptionType)
     {
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         List<FieldRequest> fieldRequests = new List<FieldRequest>
         {
             new()
@@ -269,7 +290,7 @@ public class ServicesControllerTest
             }
         };
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreateFieldCommand>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var result = await _controller.CreateFormat(fieldRequests);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
@@ -297,17 +318,20 @@ public class ServicesControllerTest
         _mediatorMock.Verify();
     }
 
-    [Fact]
-    public async Task Update_Field_Returns_Error()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async Task Update_Field_Returns_Error(Type exceptionType)
     {
         Guid id = new Guid("12345678-1234-1234-1234-1234567890AC");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         FieldRequest fieldRequest = new()
         {
             Name = "Campo#1", Length = 10, Format = "XXXXXXXXXXX", AttrReference = "Payment.Id",
             Service = new Guid("12345678-1234-1234-1234-1234567890AC")
         };
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateFieldCommand>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+            .ThrowsAsync(expectedException);
         var result = await _controller.UpdateField(fieldRequest, id);
         var response = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, response.StatusCode);
@@ -335,11 +359,13 @@ public class ServicesControllerTest
     /// <summary>
     ///     Prueba de metodo UploadConciliationResponse BadRequest
     /// </summary>
-    [Fact]
-    public async void UploadConfirmationList_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void UploadConfirmationList_Returns_BadRequest(Type exceptionType)
     {
         var mockFile = new Mock<IFormFile>();
-        var expectedException = new Exception("Test exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         mockFile.Setup(f => f.CopyToAsync(It.IsAny<MemoryStream>(),default))
             .Throws(expectedException);
         var response = await _controller.UploadConfirmationList(Guid.Empty, mockFile.Object);

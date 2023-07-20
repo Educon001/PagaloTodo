@@ -73,12 +73,12 @@ public class LoginController : BaseController<LoginController>
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
             _logger.LogError("La cuenta del usuario está inactiva. Exception: " + ex);
-            return Unauthorized("La cuenta del usuario está inactiva. Exception: ");
+            return Unauthorized($"La cuenta del usuario está inactiva. Exception: {ex.Message}");
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
         {
             _logger.LogError("Las credenciales de inicio de sesión son inválidas. Exception: " + ex);
-            return BadRequest("Las credenciales de inicio de sesión son inválidas. Exception: ");
+            return BadRequest($"Las credenciales de inicio de sesión son inválidas. Exception: {ex.Message}");
         }
         catch (CustomException ex)
         {
@@ -123,10 +123,15 @@ public class LoginController : BaseController<LoginController>
             var response = await _mediator.Send(request);
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (CustomException ex)
         {
             _logger.LogError("ForgotPassword Exception. Exception: " + ex);
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ForgotPassword Exception. Exception: " + ex);
+            return BadRequest(ex.Message + ex.InnerException?.Message);
         }
     }
 
@@ -158,10 +163,15 @@ public class LoginController : BaseController<LoginController>
             _cache.Remove(token);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (CustomException e)
         {
             _logger.LogError("ResetPassword Exception. Exception: " + e);
             return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("ResetPassword Exception. Exception: " + e);
+            return BadRequest(e.Message + e.InnerException?.Message);
         }
     }
 }

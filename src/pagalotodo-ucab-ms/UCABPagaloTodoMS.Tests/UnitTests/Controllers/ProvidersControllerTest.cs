@@ -54,10 +54,12 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo get para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetProviders_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetProviders_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetProvidersQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetProviders();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -83,10 +85,12 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo get para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetProviderById_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetProviderById_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetProviderByIdQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetProviderById(Guid.Empty);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -114,10 +118,12 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo get para prestadores con servicios con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void GetProvidersWithServices_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void GetProvidersWithServices_Returns_BadRequest(Type exceptionType)
     {
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetProvidersWithServicesQuery>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.GetProvidersWithServices();
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -143,11 +149,13 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo post para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void PostProviders_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void PostProviders_Returns_BadRequest(Type exceptionType)
     {
         var provider = new ProviderRequest() {Name = "Test Provider"};
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreateProviderCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.PostProvider(provider);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -172,11 +180,13 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo Delete para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void DeleteProviders_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void DeleteProviders_Returns_BadRequest(Type exceptionType)
     {
         var id = Guid.NewGuid();
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProviderCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.DeleteProvider(id);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -203,12 +213,14 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo Update para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void UpdateProviders_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void UpdateProviders_Returns_BadRequest(Type exceptionType)
     {
         var id = Guid.NewGuid();
         var provider = new ProviderRequest() {Name = "Test Provider"};
-        var expectedException = new Exception("Test Exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProviderCommand>(), CancellationToken.None)).ThrowsAsync(expectedException);
         var response = await _controller.UpdateProvider(id,provider);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
@@ -235,18 +247,20 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo UpdatePassword para prestadores con respuesta BadRequest
     /// </summary>
-    [Fact]
-    public async void UpdatePasswordHashProviders_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception), "Error al cambiar la clave del consumer.")]
+    [InlineData(typeof(CustomException), "Test Exception")]
+    public async void UpdatePasswordHashProviders_Returns_BadRequest(Type exceptionType, string message)
     {
         var id = Guid.NewGuid();
         var password = new UpdatePasswordRequest() {PasswordHash = "string"};
-        var expectedException = new CustomException(new Exception("Test Exception"));
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, message);
         _mediatorMock.Setup(m => m.Send(It.IsAny<UpdatePasswordCommand>(), CancellationToken.None))
             .ThrowsAsync(expectedException);
         var response = await _controller.UpdatePassword(id, password);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var ex = Assert.IsType<string>(badRequestResult.Value);
-        Assert.Contains("Test Exception", ex);
+        Assert.Contains(expectedException!.Message, ex);
     }
 
     /// <summary>
@@ -276,19 +290,21 @@ public class ProvidersControllerTest
     /// <summary>
     ///     Prueba de metodo UploadConciliationResponse BadRequest
     /// </summary>
-    [Fact]
-    public async void UploadConciliationResponse_Returns_BadRequest()
+    [Theory]
+    [InlineData(typeof(Exception))]
+    [InlineData(typeof(CustomException))]
+    public async void UploadConciliationResponse_Returns_BadRequest(Type exceptionType)
     {
         var mockFile = new Mock<IFormFile>();
         var fileList = new List<IFormFile>()
         {
             mockFile.Object
         };
-        var expectedException = new Exception("Test exception");
+        var expectedException = (Exception)Activator.CreateInstance(exceptionType, "Test Exception");
         mockFile.Setup(f => f.Length).Throws(expectedException);
         var response = await _controller.UploadConciliationResponse(fileList);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         Assert.IsType<string>(badRequestResult.Value);
-        Assert.Equal(expectedException.Message, badRequestResult.Value);
+        Assert.Equal(expectedException!.Message, badRequestResult.Value);
     }
 }
