@@ -52,13 +52,7 @@ public class CreateFieldCommandHandler : IRequestHandler<CreateFieldCommand, Gui
                 _dbContext.Fields.Add(entity);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaccion.Commit();
-
-                //service entity modify
-                // ServiceEntity serviceEntity = entity.Service!;
-                // serviceEntity.ConciliationFormat!.Add(FieldMapper.MapRequestToEntity(request.Request, _dbContext)); 
-                // _dbContext.Services.Update(serviceEntity);
-                // await _dbContext.SaveEfContextChanges("APP");
-                // transaccion.Commit();
+                
 
                 _logger.LogInformation("CreateFieldCommandHandler.HandleAsync {Response}", entity.Id);
                 return entity.Id;

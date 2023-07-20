@@ -359,4 +359,59 @@ public class ServiceController : Controller
         }
         return RedirectToRoute("showService", new {id = serviceId});
     }
+
+    [HttpPost]
+    [Route("addField/{serviceId:guid}/{id:guid}", Name = "addField")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> addConField(Guid id, Guid serviceId)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            ViewBag.Id = id;
+            ViewBag.serviceId = serviceId;
+
+            var responsePFormat = await client.GetAsync($"payments/paymentformat/{serviceId}");
+            var items = await responsePFormat.Content.ReadAsStringAsync();
+            IEnumerable<PaymentFieldModel> paymentFields = JsonSerializer.Deserialize<IEnumerable<PaymentFieldModel>>(items, options)!;
+            ViewBag.PaymentFormat = paymentFields;
+            
+            return View();
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            return NotFound();
+        }
+    }
+    
+    [HttpPost]
+    [Route("addFieldR/{serviceId:guid}/{id:guid}", Name = "addFieldR")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> addConField(FieldRequest field, Guid id, Guid serviceId)
+    {
+        try
+        {
+            field.Service = serviceId;
+            var client = _httpClientFactory.CreateClient("PagaloTodoApi");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", CurrentUser.GetUser().Token);
+            var response = await client.PostAsJsonAsync($"/services/fields/{id}", field);
+            var result = await response.Content.ReadAsStringAsync();
+            TempData["success"] = "Field Updated Successfully";
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e);
+            TempData["error"] = "There was an error updating the field";
+        }
+        return RedirectToRoute("showService", new {id = serviceId});
+    }
 }

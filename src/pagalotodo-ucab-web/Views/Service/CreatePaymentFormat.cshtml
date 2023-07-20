@@ -22,9 +22,34 @@
                     <input asp-for="@Model[0].Name" class="form-control">
                     <span asp-validation-for="@Model[0].Name" class="text-danger"></span>
                 </div>
+               @{
+                    IEnumerable<SelectListItem> datatypes = new List<SelectListItem>()
+                    {
+                        new()
+                        {
+                            Text = "int",
+                            Value = "int"
+                        },
+                        new()
+                        {
+                            Text = "double",
+                            Value = "double"
+                        },
+                        new()
+                        {
+                            Text = "string",
+                            Value = "string"
+                        },
+                        new()
+                        {
+                            Text = "date",
+                            Value = "date"
+                        },
+                    }; 
+                }
                 <div class="form-group col-auto d-inline-block">
-                    <label asp-for="@Model[0].Format">Formato</label>
-                    <input asp-for="@Model[0].Format" class="form-control">
+                    <label asp-for="@Model[0].Format">Tipo</label>
+                    <select asp-for="@Model[0].Format" class="form-control" asp-items="datatypes"></select>
                     <span asp-validation-for="@Model[0].Format" class="text-danger"></span>
                 </div>
                 <br>

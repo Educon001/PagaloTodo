@@ -1,0 +1,71 @@
+@using System.Reflection
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FieldRequest
+
+@Html.Partial("InnerPageHeader", "Update Field")
+<section class="inner-page">
+    <div class="container">
+        <form method="post" asp-route="putField" asp-route-id="@ViewBag.Id" asp-route-serviceId="@ViewBag.serviceId">
+            <div class="form-group">
+                <label asp-for="@Model.Name">Name</label>
+                <input asp-for="@Model.Name" class="form-control">
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Format">Formato</label>
+                <input asp-for="@Model.Format" class="form-control">
+                <span asp-validation-for="@Model.Format" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Length">Longitud</label>
+                <input asp-for="@Model.Length" class="form-control">
+                <span asp-validation-for="@Model.Length" class="text-danger"></span>
+            </div>
+            @{
+                List<string> finalProps = new List<string>();
+                Type PaymentType = typeof(PaymentModel);
+                PropertyInfo[] paymentProps = PaymentType.GetProperties();
+                foreach (var prop in paymentProps)
+                {
+                    finalProps.Add($"payment.{prop.Name.ToLower()}");
+                }
+                
+                Type ConsumerType = typeof(ConsumerModel);
+                PropertyInfo[] consumerProps = ConsumerType.GetProperties();
+                foreach (var prop in consumerProps)
+                {
+                    finalProps.Add($"consumer.{prop.Name.ToLower()}");
+                }
+                
+                foreach (PaymentFieldModel field in ViewBag.PaymentFormat)
+                {
+                    finalProps.Add($"paymentdetail.{field.Name.ToLower()}");
+                }
+                
+                IEnumerable<SelectListItem> selectList = finalProps.Select(p => new SelectListItem
+                     {
+                         Text = p,
+                         Value = p
+                     });
+                ViewBag.List = selectList;
+            }
+            <div class="form-group">
+                <label asp-for="@Model.AttrReference">Referencia</label>
+                <select asp-for="@Model.AttrReference" asp-items="selectList" class="form-control"></select>
+                <span asp-validation-for="@Model.AttrReference" class="text-danger"></span>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" id="btnRenderHtml2">Update</button>
+        </form>
+        <a asp-controller="Service" asp-action="Index">
+            <button class="btn-secondary">Back</button>
+        </a>
+    </div>
+</section>
+@section Scripts
+{   @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
+
+<partial name="_ValidationScriptsPartial"/>
