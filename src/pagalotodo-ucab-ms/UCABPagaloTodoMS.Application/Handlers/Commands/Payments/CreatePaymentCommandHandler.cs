@@ -70,7 +70,6 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             var entity = PaymentMapper.MapRequestToEntity(request.Request, service, consumer);
             entity.TransactionId = Guid.NewGuid().ToString();
             _dbContext.Payments.Add(entity);
-            await _dbContext.SaveEfContextChanges("APP");
             var id = entity.Id;
             if (request.Request.PaymentDetails is not null)
             {
@@ -79,7 +78,12 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
                     detail.Payment = id;
                     
                     //Verificar si el detalle esta en la entidad de PaymentFields
-                    await _dbContext.PaymentFields.SingleAsync(c => c.Service == entity.Service && c.Name == detail.Name);
+                    var field = await _dbContext.PaymentFields.SingleAsync(c => c.Service == entity.Service && c.Name == detail.Name);
+                    if (field.Format is not null)
+                    {
+                        var validator = new PaymentDetailValidator(field.Format);
+                        validator.ValidateAndThrow(detail);
+                    }
                     var entityPDetail = PaymentDetailMapper.MapRequestToEntity(detail, entity);
 
                     //PaymentDetails entity add
