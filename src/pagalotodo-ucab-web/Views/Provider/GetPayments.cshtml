@@ -7,27 +7,28 @@
 @Html.Partial("InnerPageHeader", "Payments Recieved")
 <section class="inner-page">
 <div class="container">
-
-    <div class="col-3">
-            Lower Range: 
-            @using (Html.BeginForm())
-            {
-                @Html.TextBox("dateLower", null, new { id = "dateLower", type = "date"})
-            }
-        </div>
-        <div class="col-3">
-            Upper Range:
+    <div class="row pt-3">
+            <div class="col-3">
+                Lower Range:
                 @using (Html.BeginForm())
                 {
-                    @Html.TextBox("dateUpper", null, new { id = "dateUpper", type = "date"})
+                    @Html.TextBox("dateLower", null, new { id = "dateLower", type = "date" })
                 }
             </div>
-        <div class="col-3 text-end">
-            @using (Html.BeginForm())
-            {
-                @Html.TextBox("searchQuery", null, new { id = "searchField", placeholder = "Search..." })
-            }
-        </div>
+            <div class="col-3">
+                Upper Range:
+                @using (Html.BeginForm())
+                {
+                    @Html.TextBox("dateUpper", null, new { id = "dateUpper", type = "date" })
+                }
+            </div>
+            <div class="col-3 text-end">
+                @using (Html.BeginForm())
+                {
+                    @Html.TextBox("searchQuery", null, new { id = "searchField", placeholder = "Search..." })
+                }
+            </div>
+    </div>
     <br>
     <table class="table table-bordered table-striped">
         <thead>
@@ -63,9 +64,9 @@
         }
         </tbody>
     </table>
-<button>
-    <a asp-controller="Home" asp-action="Index2">BACK</a>
-</button>
+    <button>
+        <a asp-controller="Home" asp-action="Index2">BACK</a>
+    </button>
 </div>
 </section>
 
