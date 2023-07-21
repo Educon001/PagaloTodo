@@ -19,6 +19,11 @@ public class FieldValidator : AbstractValidator<FieldRequest>
             .Must(ValidAttribute).WithMessage("Atributo invalido");
     }
 
+    /// <summary>
+    /// Validar si el campo es de las clases payment, consumer o paymentdetail y validar que en dicha tabla este el atributo
+    /// </summary>
+    /// <param name="attr"></param>
+    /// <returns>bool</returns>
     private bool ValidAttribute(string attr)
     {
         var table = attr.Split(".")[0];
