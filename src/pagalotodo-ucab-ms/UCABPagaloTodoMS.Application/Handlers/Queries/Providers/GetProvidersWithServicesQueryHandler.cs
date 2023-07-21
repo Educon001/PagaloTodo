@@ -41,6 +41,10 @@ public class GetProvidersWithServicesQueryHandler : IRequestHandler<GetProviders
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of all providers from the database, including their associated services.
+    /// </summary>
+    /// <returns>A list of all providers and their associated services retrieved from the database.</returns>
     private async Task<List<ProviderResponse>> HandleAsync()
     {
         try

@@ -41,6 +41,11 @@ public class GetProviderByIdQueryHandler : IRequestHandler<GetProviderByIdQuery,
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of a provider from the database by ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the provider to retrieve.</param>
+    /// <returns>The provider information retrieved from the database.</returns>
     private async Task<ProviderResponse> HandleAsync(GetProviderByIdQuery request)
     {
         try

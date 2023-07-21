@@ -40,6 +40,11 @@ public class GetConsumerByIdQueryHandler : IRequestHandler<GetConsumerByIdQuery,
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of a consumer from the database by ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the consumer to retrieve.</param>
+    /// <returns>The consumer information retrieved from the database.</returns>
     private async Task<ConsumerResponse> HandleAsync(GetConsumerByIdQuery request)
     {
         try

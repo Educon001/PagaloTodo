@@ -38,6 +38,11 @@ public class GetFieldByIdQueryHandler : IRequestHandler<GetFieldByIdQuery, Field
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of a field from the database by ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the field to retrieve.</param>
+    /// <returns>The field information retrieved from the database.</returns>
     private async Task<FieldResponse> HandleAsync(GetFieldByIdQuery request)
     {
         try

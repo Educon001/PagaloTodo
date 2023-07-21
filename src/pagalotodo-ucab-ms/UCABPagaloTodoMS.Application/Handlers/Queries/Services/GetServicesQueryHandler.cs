@@ -38,6 +38,10 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, List<Se
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of all services from the database.
+    /// </summary>
+    /// <returns>A list of all services retrieved from the database.</returns>
     private async Task<List<ServiceResponse>> HandleAsync()
     {
         try

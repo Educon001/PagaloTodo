@@ -37,6 +37,11 @@ public class CreateFieldCommandHandler : IRequestHandler<CreateFieldCommand, Gui
         }
     }
 
+    /// <summary>
+    /// Handles the update of a field in the database.
+    /// </summary>
+    /// <param name="request">The request containing the field information to update.</param>
+    /// <returns>The ID of the updated field.</returns>
     private async Task<Guid> HandleAsync(CreateFieldCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

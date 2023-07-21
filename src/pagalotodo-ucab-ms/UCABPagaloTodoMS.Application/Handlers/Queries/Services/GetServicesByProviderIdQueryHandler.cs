@@ -38,6 +38,11 @@ public class GetServicesByProviderIdQueryHandler : IRequestHandler<GetServicesBy
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of services from the database by provider ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the provider.</param>
+    /// <returns>A list of services associated with the specified provider ID.</returns>
     private async Task<List<ServiceResponse>> HandleAsync(GetServicesByProviderIdQuery request)
     {
         try

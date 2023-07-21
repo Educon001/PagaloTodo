@@ -32,6 +32,11 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
         }
     }
     
+    /// <summary>
+    /// Handles the update of a service in the database.
+    /// </summary>
+    /// <param name="request">The request containing the service information to update.</param>
+    /// <returns>The updated service information.</returns>
     private async Task<ServiceResponse> HandleAsync(UpdateServiceCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

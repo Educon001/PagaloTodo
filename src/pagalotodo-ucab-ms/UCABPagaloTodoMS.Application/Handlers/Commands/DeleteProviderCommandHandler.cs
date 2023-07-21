@@ -35,6 +35,11 @@ public class DeleteProviderCommandHandler : IRequestHandler<DeleteProviderComman
         }
     }
 
+    /// <summary>
+    /// Handles the deletion of a provider from the database.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the provider to delete.</param>
+    /// <returns>The ID of the deleted provider.</returns>
     private async Task<Guid> HandleAsync(DeleteProviderCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

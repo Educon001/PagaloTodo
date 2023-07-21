@@ -42,6 +42,11 @@ public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderComman
         }
     }
 
+    /// <summary>
+    /// Handles the update of a provider in the database.
+    /// </summary>
+    /// <param name="request">The request containing the provider information to update.</param>
+    /// <returns>The updated provider information.</returns>
     private async Task<ProviderResponse> HandleAsync(UpdateProviderCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

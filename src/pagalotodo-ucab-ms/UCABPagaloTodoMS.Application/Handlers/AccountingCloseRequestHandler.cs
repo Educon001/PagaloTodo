@@ -46,6 +46,11 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
         }
     }
 
+    /// <summary>
+    /// Handles the processing of an accounting close request, generating CSV files for each payment associated with each service of each provider in the request, and sending those CSV files to the corresponding provider email addresses.
+    /// </summary>
+    /// <param name="request">The accounting close request.</param>
+    /// <returns>A message indicating the number of files generated, providers processed, and errors encountered during the processing.</returns>
     private async Task<string> HandleAsync(AccountingCloseRequest request)
     {
         try
@@ -95,6 +100,11 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
         }
     }
 
+    /// <summary>
+    /// Generates a CSV file for the payments associated with a service, based on the service's conciliation format and payment details.
+    /// </summary>
+    /// <param name="service">The service for which to generate the CSV file.</param>
+    /// <returns>A CSV response containing the generated CSV file.</returns>
     private CsvResponse GenerateCsv(ServiceResponse service)
     {
         using var stream = new MemoryStream();
@@ -168,6 +178,10 @@ public class AccountingCloseRequestHandler : IRequestHandler<AccountingCloseRequ
                 ".csv"), stream.ToArray());
     }
 
+    /// <summary>
+    /// Adds an entry for the executed accounting close to the database.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     private async Task<Unit> AddAccountingClose()
     {
         var transaction = _dbContext.BeginTransaction();

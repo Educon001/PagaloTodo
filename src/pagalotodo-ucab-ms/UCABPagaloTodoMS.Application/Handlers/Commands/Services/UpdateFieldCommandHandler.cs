@@ -31,6 +31,11 @@ public class UpdateFieldCommandHandler : IRequestHandler<UpdateFieldCommand, Fie
         }
     }
 
+    /// <summary>
+    /// Handles the update of a field in the database.
+    /// </summary>
+    /// <param name="request">The request containing the field information to update.</param>
+    /// <returns>The updated field information.</returns>
     private async Task<FieldResponse> HandleAsync(UpdateFieldCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

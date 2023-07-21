@@ -38,6 +38,11 @@ public class GetPaymentsQueryHandler : IRequestHandler<GetPaymentsQuery, List<Pa
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of payments from the database.
+    /// </summary>
+    /// <param name="request">The request containing optional date range.</param>
+    /// <returns>A list of payments based on the specified date range.</returns>
     private async Task<List<PaymentResponse>> HandleAsync(GetPaymentsQuery request)
     {
         try

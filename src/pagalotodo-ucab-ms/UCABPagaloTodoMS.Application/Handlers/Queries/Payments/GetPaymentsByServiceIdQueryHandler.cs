@@ -38,6 +38,11 @@ public class GetPaymentsByServiceIdQueryHandler : IRequestHandler<GetPaymentsByS
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of payments from the database by service ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the service and optional date range.</param>
+    /// <returns>A list of payments associated with the specified service ID and date range.</returns>
     private async Task<List<PaymentResponse>> HandleAsync(GetPaymentsByServiceIdQuery request)
     {
         try

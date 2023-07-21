@@ -37,6 +37,11 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
         }
     }
 
+    /// <summary>
+    /// Handles the creation of a service in the database.
+    /// </summary>
+    /// <param name="request">The request containing the service information.</param>
+    /// <returns>The ID of the newly created service.</returns>
     private async Task<Guid> HandleAsync(CreateServiceCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

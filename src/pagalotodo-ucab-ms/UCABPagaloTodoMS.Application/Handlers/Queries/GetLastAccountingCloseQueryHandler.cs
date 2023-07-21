@@ -31,6 +31,10 @@ public class GetLastAccountingCloseQueryHandler : IRequestHandler<GetLastAccount
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of the date and time of the last executed accounting closure from the database.
+    /// </summary>
+    /// <returns>The date and time of the last executed accounting closure.</returns>
     private async Task<DateTime> HandleAsync()
     {
         try

@@ -39,6 +39,10 @@ public class ConsumersQueryHandler : IRequestHandler<ConsumersQuery, List<Consum
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of all consumers from the database.
+    /// </summary>
+    /// <returns>A list of all consumers retrieved from the database.</returns>
     private async Task<List<ConsumerResponse>> HandleAsync()
     {
         try

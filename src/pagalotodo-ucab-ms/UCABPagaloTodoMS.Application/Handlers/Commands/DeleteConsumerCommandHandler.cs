@@ -30,6 +30,13 @@ public class DeleteConsumerCommandHandler : IRequestHandler<DeleteConsumerComman
         }
     }
 
+    /// <summary>
+    /// Handles the deletion of a consumer from the database.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the consumer to delete.</param>
+    /// <returns>The ID of the deleted consumer.</returns>
+    /// <exception cref="KeyNotFoundException">Thrown when the specified consumer is not found in the database.</exception>
+    /// <exception cref="CustomException">Thrown when an error occurs while deleting the consumer from the database.</exception>
     private async Task<Guid> HandleAsync(DeleteConsumerCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

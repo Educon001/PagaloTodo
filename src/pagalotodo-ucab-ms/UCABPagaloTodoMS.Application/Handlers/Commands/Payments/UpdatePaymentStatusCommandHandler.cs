@@ -36,6 +36,11 @@ public class UpdatePaymentStatusCommandHandler : IRequestHandler<UpdatePaymentSt
         }
     }
 
+    /// <summary>
+    /// Handles the update of a payment's status in the database.
+    /// </summary>
+    /// <param name="request">The request containing the payment ID and new payment status.</param>
+    /// <returns>A message indicating the success of the update.</returns>
     private async Task<string> HandleAsync(UpdatePaymentStatusCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

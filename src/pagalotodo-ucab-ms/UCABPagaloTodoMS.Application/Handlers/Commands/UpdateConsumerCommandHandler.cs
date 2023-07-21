@@ -42,6 +42,11 @@ public class UpdateConsumerCommandHandler : IRequestHandler<UpdateConsumerComman
         }
     }
 
+    /// <summary>
+    /// Handles the update of a consumer in the database.
+    /// </summary>
+    /// <param name="request">The request containing the consumer information to update.</param>
+    /// <returns>The updated consumer information.</returns>
     private async Task<ConsumerResponse> HandleAsync(UpdateConsumerCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

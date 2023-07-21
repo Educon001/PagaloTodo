@@ -40,6 +40,12 @@ public class CreateProviderCommandHandler : IRequestHandler<CreateProviderComman
         }
     }
 
+    /// <summary>
+    /// Handles the creation of a new provider in the database.
+    /// </summary>
+    /// <param name="request">The request containing the provider information to create.</param>
+    /// <returns>The ID of the newly created provider.</returns>
+    /// <exception cref="Exception">Thrown when an error occurs while creating the provider in the database.</exception>
     private async Task<Guid> HandleAsync(CreateProviderCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

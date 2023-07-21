@@ -38,6 +38,11 @@ public class GetFieldsByServiceIdQueryHandler : IRequestHandler<GetFieldsByServi
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of fields from the database by service ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the service.</param>
+    /// <returns>A list of fields associated with the specified service ID.</returns>
     private async Task<List<FieldResponse>> HandleAsync(GetFieldsByServiceIdQuery request)
     {
         try

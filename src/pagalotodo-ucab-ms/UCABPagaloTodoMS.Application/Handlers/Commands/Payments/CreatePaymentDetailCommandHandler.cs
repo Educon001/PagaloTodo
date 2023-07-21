@@ -37,6 +37,11 @@ public class CreatePaymentDetailCommandHandler : IRequestHandler<CreatePaymentDe
         }
     }
 
+    /// <summary>
+    /// Handles the creation of a payment detail in the database.
+    /// </summary>
+    /// <param name="request">The request containing the payment detail information.</param>
+    /// <returns>The ID of the newly created payment detail.</returns>
     private async Task<Guid> HandleAsync(CreatePaymentDetailCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

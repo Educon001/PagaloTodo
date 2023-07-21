@@ -40,6 +40,10 @@ public class GetProvidersQueryHandler : IRequestHandler<GetProvidersQuery, List<
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of all providers from the database.
+    /// </summary>
+    /// <returns>A list of all providers retrieved from the database.</returns>
     private async Task<List<ProviderResponse>> HandleAsync()
     {
         try

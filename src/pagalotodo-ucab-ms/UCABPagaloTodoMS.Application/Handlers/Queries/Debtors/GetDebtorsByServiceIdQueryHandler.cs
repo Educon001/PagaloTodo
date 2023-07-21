@@ -38,6 +38,11 @@ public class GetDebtorsByServiceIdQueryHandler : IRequestHandler<GetDebtorsBySer
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of debtors from the database by service ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the service.</param>
+    /// <returns>A list of debtors associated with the specified service ID.</returns>
     private async Task<List<DebtorsResponse>> HandleAsync(GetDebtorsByServiceIdQuery request)
     {
         try

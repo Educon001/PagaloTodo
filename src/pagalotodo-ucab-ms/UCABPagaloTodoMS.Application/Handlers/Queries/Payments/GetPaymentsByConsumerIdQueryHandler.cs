@@ -39,6 +39,11 @@ public class GetPaymentsByConsumerIdQueryHandler : IRequestHandler<GetPaymentsBy
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of payments from the database by consumer ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the consumer and optional date range.</param>
+    /// <returns>A list of payments associated with the specified consumer ID and date range.</returns>
     private async Task<List<PaymentResponse>> HandleAsync(GetPaymentsByConsumerIdQuery request)
     {
         try

@@ -38,6 +38,11 @@ public class GetServiceByIdQueryHandler : IRequestHandler<GetServiceByIdQuery, S
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of a service from the database by ID.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the service to retrieve.</param>
+    /// <returns>The service information retrieved from the database.</returns>
     private async Task<ServiceResponse> HandleAsync(GetServiceByIdQuery request)
     {
         try

@@ -29,6 +29,11 @@ public class DeleteServiceCommandHandler : IRequestHandler<DeleteServiceCommand,
         }
     }
 
+    /// <summary>
+    /// Handles the deletion of a service from the database.
+    /// </summary>
+    /// <param name="request">The request containing the ID of the service to delete.</param>
+    /// <returns>The ID of the deleted service.</returns>
     private async Task<Guid> HandleAsync(DeleteServiceCommand request)
     {
         var transaccion = _dbContext.BeginTransaction();

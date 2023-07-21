@@ -40,6 +40,11 @@ public class GetConsumerByEmailQueryHandler : IRequestHandler<GetConsumerByEmail
         }
     }
 
+    /// <summary>
+    /// Handles the retrieval of a consumer ID from the database by email address.
+    /// </summary>
+    /// <param name="request">The request containing the email address of the consumer to retrieve.</param>
+    /// <returns>The ID of the consumer retrieved from the database.</returns>
     private async Task<Guid> HandleAsync(GetConsumerByEmailQuery request)
     {
         try
