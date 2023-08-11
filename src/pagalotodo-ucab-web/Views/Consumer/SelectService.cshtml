@@ -2,7 +2,7 @@
 
 @{
     List<ServiceModel> services = ViewBag.Message;
-    IEnumerable<SelectListItem> selectList = services.Select(p => new SelectListItem
+    IEnumerable<SelectListItem> selectList = services.Where(p=>p.ServiceStatus == "Activo").Select(p => new SelectListItem
     {
         Text = $"{p.Name}",
         Value = p.Id.ToString()

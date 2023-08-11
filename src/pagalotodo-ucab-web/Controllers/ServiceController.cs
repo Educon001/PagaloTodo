@@ -253,10 +253,13 @@ public class ServiceController : Controller
                 paymentField.Service = id;
             }
 
-            var response = await client.PostAsJsonAsync("payments/paymentformat", paymentFieldRequests);
-            var result = await response.Content.ReadAsStringAsync();
+            if (paymentFieldRequests.Count > 0 && paymentFieldRequests[0].Name != null)
+            {
+                var response = await client.PostAsJsonAsync("payments/paymentformat", paymentFieldRequests);
+                var result = await response.Content.ReadAsStringAsync();
             
-            TempData["success"] = "Payment Format Created Successfully";
+                TempData["success"] = "Payment Format Created Successfully";
+            }
         }
         catch (HttpRequestException e)
         {
